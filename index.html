@@ -1,98 +1,73 @@
 <html>
-
 <head>
+    <meta charset="utf-8">
 
-	<meta charset="utf-8" />
+    <title>2017 Lenten Fish Fry Map</title>
 
-	<title>2016 Lenten Fish Fry Map</title>
-	<!--Mapbox + Leafleft-->
-	<script src='js/mapbox.js'></script>
-	<script src='js/leaflet-omnivore.min.js'></script>
-	<link href="css/leaflet.css" rel="stylesheet" type="text/css" />
-	<script src="js/L.Control.Sidebar.js"></script>
-	<link href="css/L.Control.Sidebar.css" rel="stylesheet" type="text/css" />
-	<!--jQuery-->
-	<script src='js/jquery-1.11.0.min.js'></script>
-	<!--Mapbox Directions API v0.4.0-->
-	<script src='js/mapbox.directions.js'></script>
-	<link rel='stylesheet' href='css/mapbox.directions.css' type='text/css' />
-	<!--Mapbox Marker Clustering-->
-	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
-	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-	<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
-
-	<!--custom-->
+	<!--CSS-->
+    <link rel="stylesheet" href="css/leaflet.css"  type="text/css">
+	<link rel="stylesheet" href="css/L.Control.Sidebar.css"  type="text/css">
+	<link rel='stylesheet' href='css/mapbox.directions.css' type='text/css'>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' type="text/css">
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' type="text/css">
 	<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-	<link href="css/app.css" rel="stylesheet" type="text/css" />
+	<link href="css/app.css" rel="stylesheet" type="text/css">
 
-
+	<!--JS-->
+	<script src='js/jquery-1.11.0.min.js' type="text/javascript"></script>
+    <script src='js/mapbox.js' type="text/javascript"></script>
+    <script src='js/leaflet-omnivore.min.js' type="text/javascript"></script>
+    <script src="js/L.Control.Sidebar.js" type="text/javascript"></script>
+    <script src='js/mapbox.directions.js' type="text/javascript"></script>
+	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js' type="text/javascript"></script>
+	<!--script src="js/app.js" type="text/javascript"></script-->	
+	
 </head>
 
 <body>
-
-
-	<div id="sidebar">
-		<div>
-			<h1><a href="https://www.facebook.com/PittsburghLentenFishFryMap/">2016 Pittsburgh</br>Lenten Fish Fry Map</a></h1>
-			<h3>Helping you find your local fish fry this Lenten season!</h3>
-			<!--
-			<p>Lent 2016 begins February 10. Show some community love, and enjoy fish sandwiches, pierogies/pirohi, haluski, baked goods, and other Pittsburgh fare.</p>
-			<p>The map is a fun project we've been doing--along with help from all of you--since 2012. Listing on the map is free, and the work is all volunteer. We collect fish fry information from all local media outlets as well as individuals who send us information.</p>
-			<p>If your fish fry isn't listed, send us time, date, and any menu information, and we'll get it on the map.</p>
-			-->
-
-		</div>
-
-		<hr>
-		<div id='filters' class='filter-ui'>
-			<p>
-				Other than fish, these are the things I'm looking for in a Fish Fry:
-			</p>
-			<div>
-				<h3>
-					<input type='checkbox' checked class='filter' name='filter' id='lunch' value='lunch'/>
-					<label for='lunch'>Open for Lunch</label>
-				</h3>
-			</div>
-			<div>
-				<h3>
-					<input type='checkbox' checked class='filter' name='filter' id='pierogie' value='pierogie' />
-					<label for='pierogie'>Homemade Pierogies</label>
-				</h3>
-			</div>
-			<div>
-				<h3>
-					<input type='checkbox' checked class='filter' name='filter' id='booze' value='booze' />
-					<label for='booze'>Serves Alcohol</label>
-				</h3>
-			</div>
-		</div>
-		<hr>
-		<div id='info' class='info'>
-			<!--fish fry info shows here:-->
-		</div>
-
+    <div id="sidebar">
+        <div>
+            <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><h1>2017</h1><h2>Pittsburgh Lenten Fish Fry Map</h2></a>
+            <p>Helping you find your local fish fry this Lenten season!</p>
+        </div>
+        <hr>
+        <div id='filters' class='filter-ui'>
+            <p>Other than fish, these are the things I'm looking for in a Fish Fry:</p>
+            <div>
+                <p><strong><input type='checkbox' checked class='filter' name='filter' id='lunch' value='lunch'> <label for='lunch'>Open for Lunch</label></strong></p>
+            </div>
+            <div>
+                <p><strong><input type='checkbox' checked class='filter' name='filter' id='homemade_pierogies' value='homemade_pierogies'> <label for='homemade_pierogies'>Homemade Pierogies</label></strong></p>
+            </div>
+            <div>
+                <p><strong><input type='checkbox' checked class='filter' name='filter' id='alcohol' value='alcohol'> <label for='alcohol'>Serves Alcohol</label></strong></p>
+            </div>
+            <div>
+                <p><strong><input type='checkbox' checked class='filter' name='filter' id='take_out' value='take_out'> <label for='take_out'>Takeout Available</label></strong></p>
+            </div>
+        </div>
+		
+        <hr>
+		
+        <div id='info' class='info'>
+            <!--fish fry info shows here:-->
+        </div>
+		
 		<!--Directions-->
-		<div id='inputs'></div>
-		<div id='errors'></div>
-		<div id='directions'>
-			<div id='routes'></div>
-			<div id='instructions'></div>
-		</div>
-
-	</div>
-
-
-
-
+        <div id='inputs'></div>
+        <div id='errors'></div>
+        <div id='directions'>
+            <div id='routes'></div>
+            <div id='instructions'></div>
+        </div>
+    </div>
+	
 	<!--LEAFLET MAP-->
-	<div id="map" class='custom-popup'></div>
-
+    <div id="map" class='custom-popup'></div>
 	<script>
-
 		// get the info div
 		var info = document.getElementById('info');
-
+		
 		// get all the checkboxes
 		var checkboxes = document.getElementsByClassName('filter');
 		//uncheck all checkboxes all by default
@@ -101,72 +76,113 @@
 				checkboxes[i].checked = false;
 			}
 		}
-
-
+		
+		
 		// -------------------------
 		// MAP
-
+		
 		// get the mapbox library
 		L.mapbox.accessToken = 'pk.eyJ1IjoiY2JndGhvcjYyNCIsImEiOiJzZ2NaNmo4In0.hbXzZPAvaCO5GLu45bptTw';
-
+		
 		// initialize the map
 		var map = L.map('map').setView([40.4452, -79.9866], 10);
-			//.addControl(L.mapbox.geocoderControl('mapbox.places'));
-			//.addControl(L.mapbox.shareControl());
+		//.addControl(L.mapbox.geocoderControl('mapbox.places'));
+		//.addControl(L.mapbox.shareControl());
 		// var markerList = document.getElementById('marker-list');
-
+		
 		//map.attributionControl.setPosition('bottomleft');
-
+		
 		// get the Stamen Mapstack tile layer and add to map
 		L.tileLayer('http://{s}.sm.mapstack.stamen.com/((toner-lite,$000%5B@80%5D,$8ad3f4%5Bhsl-color%5D,mapbox-water%5Bdestination-in%5D),(toner,$fff%5Bdifference%5D,$fdb930%5Bhsl-color%5D,mapbox-water%5Bdestination-out%5D),(toner-hybrid,$fff%5Bdifference%5D,$fdb930%5Bhsl-color%5D),(terrain-background,$000%5B@40%5D,$ffffff%5Bhsl-color%5D,mapbox-water%5Bdestination-out%5D)%5Blighter@40%5D)/{z}/{x}/{y}.png', {
 			attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
 			maxZoom: 18,
 			minZoom: 8,
 		}).addTo(map);
-
-
+		
+		
 		// -------------------------
 		// LOAD DATA
-
+		
 		var customLayer = L.mapbox.featureLayer(null, {
-    pointToLayer: function(feature, latlng) {
-      var marker = L.marker(latlng, {icon:
-        L.mapbox.marker.icon({
-          'marker-size': 'medium',
-          'marker-symbol': 'warehouse',
-          'marker-color': '#fdb930'})
-        });
-			var church = L.marker(latlng, {icon:
-        L.mapbox.marker.icon({
-          'marker-size': 'medium',
-          'marker-symbol': 'religious-christian',
-          'marker-color': '#fdb930'})
-        });
-				if (feature.properties["Church?"] === 'Yes')
-					return church
-				else
-					return marker
+			pointToLayer: function(feature, latlng) {
+				var marker = L.marker(latlng, {
+					icon: L.mapbox.marker.icon({
+						'marker-size': 'medium',
+						'marker-symbol': 'warehouse',
+						'marker-color': '#fdb930'
+					})
+				});
+				var church = L.marker(latlng, {
+					icon: L.mapbox.marker.icon({
+						'marker-size': 'medium',
+						'marker-symbol': 'religious-christian',
+						'marker-color': '#fdb930'
+					})
+				});
+				if (feature.properties.venue_type === 'Church') {
+					return church;
+				} else {
+					return marker;
+				}
 			}
-		})
+		});
 
 		// ingest kml and return geojson in a featureLayer object called 'runLayer'
-		var runLayer = omnivore.kml('data_src/FishFryMap_20160325_0945_fixed.kml', null, customLayer)
-			.addTo(map);
+		//var runLayer = omnivore.kml('data_src/FishFryMap_20160325_0945_fixed.kml', null, customLayer)
+		var runLayer = L.geoJson(null, {
+			pointToLayer: function(feature, latlng) {
+				var marker = L.marker(latlng, {
+					icon: L.mapbox.marker.icon({
+						'marker-size': 'medium',
+						'marker-symbol': 'warehouse',
+						'marker-color': '#fdb930'
+					})
+				});
+				var church = L.marker(latlng, {
+					icon: L.mapbox.marker.icon({
+						'marker-size': 'medium',
+						'marker-symbol': 'religious-christian',
+						'marker-color': '#fdb930'
+					})
+				});
+				if (feature.properties.venue_type === 'Church') {
+					return church;
+				} else {
+					return marker;
+				}
+			}
+		}).addTo(map);
 
+		$.ajax({
+			type:"GET",
+			url:"http://fishfry.codeforpgh.com/api/fishfrys/?publish=True",
+			dataType: 'json',
+			success: function(result){
+				console.log("success");
+				runLayer.addData(result);
+				console.log(result);
+			},
+			error: function(error){
+				console.log("error");
+				console.log(error);
+			}
+		});
+
+		
 		// -------------------------
 		// RENDER AND INTERACT WITH DATA
-
+		
 		// add marker and bind a pop-up to runLayer
 		// uses 'name' and 'Address' properties of data
 		runLayer.on('layeradd', function(e) {
-			var marker = e.layer
+			var marker = e.layer;
 			var feature = marker.feature;
 			var content =
-			'<h3>'+feature.properties.name+'<\/h3>'+
-			'<p>'+feature.properties.Address+'<\/p>';
-			marker.bindPopup(content)
+				'<h3>' + feature.properties.venue_name + '<\/h3>' +
+				'<p>' + feature.properties.venue_address + '<\/p>';
+			marker.bindPopup(content);
 		});
-
+		
 		// show the previously bound pop-up on mouseover
 		runLayer.on('mouseover', function(e) {
 			e.layer.openPopup();
@@ -174,58 +190,44 @@
 		runLayer.on('mouseout', function(e) {
 			e.layer.closePopup();
 		});
-
-
+		
+		
 		// -------------------------
 		// DIRECTIONS
-
+		
 		// create the initial directions object, from which the layer
 		// and inputs will pull data.
+		/*
 		var directions = L.mapbox.directions();
-
+		
 		var directionsLayer = L.mapbox.directions.layer(directions)
-				.addTo(map);
+			.addTo(map);
 		var directionsInputControl = L.mapbox.directions.inputControl('inputs', directions)
-				.addTo(map);
+			.addTo(map);
 		var directionsErrorsControl = L.mapbox.directions.errorsControl('errors', directions)
-				.addTo(map);
+			.addTo(map);
 		var directionsRoutesControl = L.mapbox.directions.routesControl('routes', directions)
-				.addTo(map);
+			.addTo(map);
 		var directionsInstructionsControl = L.mapbox.directions.instructionsControl('instructions', directions)
-				.addTo(map);
-
-		/* Dummy origin marker for testing
-		var origin = {
-			"type": "Feature",
-			"geometry": {
-				"type": "Point",
-				"coordinates": [-79.8,40.5]
-			},
-			"properties": {
-				"title": 'You',
-				"description": '',
-				"marker-color": "#ff0000",
-				"marker-size": "large",
-				"marker-symbol": "heart"
-			}
-		};
+			.addTo(map);
 		*/
-
+		
 		/* We a point is clicked...
-		// generate the feature description in the info div
-		// AND populate a temporary destination geojson with xy of feature
-		// AND use that to set the destination value of the directions object
-		*/
+			// generate the feature description in the info div
+			// AND populate a temporary destination geojson with xy of feature
+			// AND use that to set the destination value of the directions object
+			*/
 		runLayer.on('click', function(e) {
 			// Force the popup closed.
 			// e.layer.closePopup();
 			var f = e.layer.feature;
 			var content =
-				'<h2>' + f.properties.name + '<\/h2>' +
-				'<p>' + f.properties.description + '<\/p><hr>' +
+				'<h2>' + f.properties.venue_name + '</h2>' +
+				'<p>' + 'description text here' + '</p><hr>' +
 				'<h3>Directions<\/h3>' +
-				'<p>Take me to get some delicious fish from <strong>' + f.properties.name + '<\/strong> at <strong>' + f.properties.Address + '<\/strong>:<\/p>';
+				'<p>Take me to get some delicious fish from <strong>' + f.properties.venue_name + '</strong> at <strong>' + f.properties.venue_address + '</strong>:</p>';
 			info.innerHTML = content;
+			/*
 			var destination = {
 				"type": "Feature",
 				"geometry": {
@@ -241,87 +243,95 @@
 				}
 			};
 			directions.setDestination(destination).query();
+			*/
 		});
-
+		
 		// clear the info div when clicking away from markers
 		map.on('click', empty);
 		empty();
+		
+		
 		function empty() {
 			info.innerHTML = '<div><p><strong>Click a marker for info about a fish fry and to get directions</strong></p></div>';
-			}
-
+		}
+		
 		// -------------------------
 		// FILTER DATA
-
+		
 		$("input[type='checkbox']").click(function() {
 			//setFilter applies the showFeature function to every feature in runLayer
-			runLayer.setFilter(showFeatures)
+			runLayer.setFilter(showFeatures);
 		});
-
+		
 		function showFeatures(feature) {
 			//console.log("__________________")
 			//console.log(">>> ", feature.properties.name)
 			/*
-			This function is applied to every feature by the setFilter function.
-			It can only can pass to setFilter a boolean: true or false.
-			That means we have to figure out whether the feature's properties matches
-			the checkboxes.
-			If the feature properties match the corresponding checkbox fields, return true
-			if there is a mismatch between any checkbox and feature property, return false
-			We're only interested in the checking properties against checked checkboxes -
-			we ignore the unchecked checkboxes in the test
-			if no checkboxes are checked (all checkboxes return false), then all
-			features are shown - this function will just return true.
-			*/
-			checkboxed = []
-
+				This function is applied to every feature by the setFilter function.
+				It can only can pass to setFilter a boolean: true or false.
+				That means we have to figure out whether the feature's properties matches
+				the checkboxes.
+				If the feature properties match the corresponding checkbox fields, return true
+				if there is a mismatch between any checkbox and feature property, return false
+				We're only interested in the checking properties against checked checkboxes -
+				we ignore the unchecked checkboxes in the test
+				if no checkboxes are checked (all checkboxes return false), then all
+				features are shown - this function will just return true.
+				*/
+			checkboxed = [];
+		
 			// our filters (future: turn these into a function):
-
-			var lunch_box = $("#lunch").prop("checked")
-			var lunch_prop = feature.properties["Serves Lunch?"] === "Yes"
-			var lunch = (lunch_box === lunch_prop)
-			if (lunch_box) checkboxed.push(lunch)
+		
+			var lunch_box = $("#lunch").prop("checked");
+			var lunch_prop = feature.properties.lunch === true;
+			var lunch = (lunch_box === lunch_prop);
+			if (lunch_box) checkboxed.push(lunch);
 				//console.log("lunch ", lunch)
-
-			var pier_box = $("#pierogie").prop("checked")
-			var pier_prop = feature.properties["Homemade Pierogies?"] === "Yes"
-			var pier = (pier_box === pier_prop)
-			if (pier_box) checkboxed.push(pier)
+		
+			var pier_box = $("#homemade_pierogies").prop("checked");
+			var pier_prop = feature.properties.homemade_pierogies === true;
+			var pier = (pier_box === pier_prop);
+			if (pier_box) checkboxed.push(pier);
 				//console.log("pierogie ", pier)
-
-			var booze_box = $("#booze").prop("checked")
-			var booze_prop = feature.properties["Alcohol?"] === "Yes"
-			var booze = (booze_box === booze_prop)
-			if (booze_box) checkboxed.push(booze)
+		
+			var booze_box = $("#alcohol").prop("checked");
+			var booze_prop = feature.properties.alcohol === true;
+			var booze = (booze_box === booze_prop);
+			if (booze_box) checkboxed.push(booze);
+			
+			var take_out_box = $("#take_out").prop("checked");
+			var take_out_prop = feature.properties.take_out === true;
+			var take_out = (take_out_box === take_out_prop);
+			if (take_out_box) checkboxed.push(take_out);
 				//console.log("booze ", booze)
-
+		
 			// the business of filtering:
 			// if no filters are applied, then show the feature
 			if (lunch_box == false && booze_box == false && pier_box == false) {
 				//console.log("All boxes unchecked")
 				show = true
 			} else
-				//console.log(checkboxed, (checkboxed.indexOf(false) != -1))
-				/* if one or more filters are applied, check to see if the attributes of
-				the feature match only those filters checked (and don't worry about the
-				unchecked filters).	Get the match results for those with checked-boxes,
-				and if there if there are any non-matches, the feature returns false
-				*/
-				if (checkboxed.indexOf(false) != -1)
-					show = false
-				else
-					// if all true checkboxes have matching properties with "Yes", feature is true
-					show = true
-
+			//console.log(checkboxed, (checkboxed.indexOf(false) != -1))
+			/* if one or more filters are applied, check to see if the attributes of
+					the feature match only those filters checked (and don't worry about the
+					unchecked filters).	Get the match results for those with checked-boxes,
+					and if there if there are any non-matches, the feature returns false
+					*/
+			if (checkboxed.indexOf(false) != -1)
+				show = false
+			else
+			// if all true checkboxes have matching properties with "Yes", feature is true
+				show = true
+		
 			//console.log("setFilter on", feature.properties.title, show)
 			// return the show attribute to setFilter for this feature (true or false
 			// based on the logic above)
-			return show
+				return show
 		}
-
+		
 		// -------
 		// SIDEBAR
-
+		
 		// create sidebar and add to map
 		var sidebar = L.control.sidebar('sidebar', {
 			closeButton: false,
@@ -331,16 +341,14 @@
 		setTimeout(function() {
 			sidebar.show();
 		}, 500);
-
-
-	//directions.setDestination(destination).query();
-	console.log(directions);
-
-
+		
+		
+		//directions.setDestination(destination).query();
+		//console.log(directions);
 	</script>
-	<a href="https://github.com/openpgh/openpgh.github.io/tree/master/fishfrymap"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
+	<!--a href="https://github.com/CodeForPittsburgh/fishfrymap"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a-->
+	
 
-
+	
 </body>
-
 </html>
