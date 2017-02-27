@@ -329,12 +329,12 @@
           <div class="modal-header">
             <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h3 class="modal-title text-primary" id="feature-title"></h3>
-            <h3 class="modal-title text-default small" id="feature-subtitle"></h3>
+            <h4 class="modal-title text-default" id="feature-subtitle"></h4>
           </div>
           <div class="modal-body" id="feature-info">
           </div>
           <div class="modal-footer">
-            <p class="small text-muted">Do you have info on this Fish Fry that we don't? Send us a message on our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/" target="_blank">Facebook</a>page.</p>
+            <p class="small text-muted">Do you have info on this Fish Fry that we don't? Send us a message on our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/" target="_blank">Facebook</a> page.</p>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div><!-- /.modal-content -->
@@ -347,11 +347,13 @@
           <div class="modal-header">
             <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">
-              Bootleaft developed by <a href='http://bryanmcbride.com'>bryanmcbride.com</a>
+              Map Attribution
             </h4>
           </div>
           <div class="modal-body">
-            <div id="attribution"></div>
+            <div id="attribution">
+              
+            </div>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -371,25 +373,25 @@
       </div>
       <div class="row">
         <div class="col-sm-6">
-          <h3><small>Menu</small></h3>
+          <h4>Menu</h4>
           {{#if menu}}<p>{{menu}}</p>
-          {{else}}<p class="small">Menu not available.</p>
+          {{else}}<p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. Check with the venue for their menu.</p>
           {{/if}}
         </div>
         <div class="col-sm-6">
-          <h3><small>Upcoming Dates</small></h3>
+          <h4>Upcoming Dates</h4>
           <ul class="list-unstyled">
           {{#if events}}
             {{#each events}}
               <li><small>{{this}}</small></li>
             {{/each}}
           {{else}}
-              <p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. Check with the venue for dates/times.</p>
+              <p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. If it's not in the description above, check with the venue for dates/times.</p>
           {{/if}}
           </ul>
         </div>
       </div>
-      <hr>
+      <br>
       <div class="row">
         <div class="col-sm-12">
           <table class='table table-condensed well'>
@@ -403,7 +405,7 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <h3><small>Contact</small></h3>
+          <h4>Contact</h4>
           <table class='table table-condensed well'>
             <tr><th>Phone</th><td>{{phone}}</td></tr>
             <tr><th>Website</th><td><a class='url-break' href='{{website}}' target='_blank'>{{website}}</a></td></tr>
