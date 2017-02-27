@@ -144,7 +144,7 @@
                 <h4>Code for Pittsburgh</h4>
                 <p>Code for Pittsburgh, the Pittsburgh region’s <a href="https://www.codeforamerica.org/">Code for America Brigade</a>, makes the Pittsburgh region a better place through the use of information and technology. Despite the name, we’re not only focused on computer programming! We are a grass-roots organization that works as a civic relationship-builder and is inclusive of different interests, skill-sets, and communities. For more information, head over to <a href="http://www.codeforpgh.com">www.codeforpgh.com</a>.</p>
                 <h4>Built with Open Source Software</h4>
-                <p>The Fish Fry Map is built on <a href='https://github.com/bmcbride'>Bootleaf</a>, an amazing, simple, responsive template for building web mapping applications with <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Open source, MIT licensed, and available on <a href="https://github.com/bmcbride/bootleaf" target="_blank">GitHub</a>. Bootleaft was created by <a href="https://github.com/bmcbride">Bryan McBride.</a></p>
+                <p>The Fish Fry Map is built on <a href='https://github.com/bmcbride'>Bootleaf</a>, an amazing, simple, responsive template for building web mapping applications with <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Open source, MIT licensed, and available on <a href="https://github.com/bmcbride/bootleaf" target="_blank">GitHub</a>. Bootleaft was created by <a href="https://github.com/bmcbride">Bryan McBride.</a> We've adapted it for this project.</p>
               </div>
               <div id="disclaimer" class="tab-pane fade">
                 <p>This map and the data and software behind it is maintained entirely by volunteers.</p>
@@ -330,7 +330,8 @@
             <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title text-primary" id="feature-title"></h4>
           </div>
-          <div class="modal-body" id="feature-info"></div>
+          <div class="modal-body" id="feature-info">
+          </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
@@ -353,6 +354,56 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <!-- modal info template for Handlebars -->
+    <script id="info-template" type="text/x-handlebars-template">
+      <div class="row">
+        <div class="col-sm-6">
+          <h4>{{venue_address}}</h4>
+        </div>
+        <div class="col-sm-6">
+          <p>Upcoming Dates/Times (placeholder)</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h3><small>About</small></h3>
+          {{#if etc}}<p>{{etc}}</p>
+          {{else}}<p class="small">No notes about the Fish Fry.</p>
+          {{/if}}
+          {{#if venue_notes}}<p>{{venue_notes}}</p>
+          {{/if}}
+        </div>
+        <div class="col-md-6">
+          <h3><small>Menu</small></h3>
+          {{#if menu}}<p>{{menu}}</p>
+          {{else}}<p class="small">Menu not available.</p>
+          {{/if}}
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-12">
+          <table class='table table-condensed well'>
+            <tr><th>Homemade Pierogies?</th><td>{{homemade_pierogies}}</td></tr>
+            <tr><th>Alcohol Served?</th><td>{{alcohol}}</td></tr>
+            <tr><th>Lunch Provided?</th><td>{{lunch}}</td></tr>
+            <tr><th>Take-out Available?</th><td>{{take_out}}</td></tr>
+            <tr><th>Handicap Accessible?</th><td>{{handicap}}</td></tr>
+          <table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <h3><small>Contact</small></h3>
+          <table class='table table-condensed well'>
+            <tr><th>Phone</th><td>{{phone}}</td></tr>
+            <tr><th>Website</th><td><a class='url-break' href='{{website}}' target='_blank'>{{website}}</a></td></tr>
+            <tr><th>Email</th><td><a class='url-break' href='mailto:{{email}}' target='_blank'>{{email}}</a></td></tr>
+          <table>
+        </div>
+      </div>
+    </script>
 
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>

@@ -10,6 +10,12 @@ var iconLookup = {
   "Unsure / N/A" : iconPath + "Unsure_NA.png",
   "" : iconPath + "Unsure_NA.png"
 };
+var booleanLookup = {
+  'true': 'Yes',
+  'false': 'No',
+  'null': 'Unsure / N/A',
+  '': 'Unsure / N/A'
+};
 
 $(window).resize(function() {
   sizeLayerControl();
@@ -42,12 +48,6 @@ $("#login-btn").click(function() {
 
 $("#full-extent-btn").click(function() {
   map.fitBounds(fishfrys.getBounds());
-  /*
-   *map.setView(
-    [40.4452, -79.9866],
-    10
-  );
-  */
   $(".navbar-collapse.in").collapse("hide");
   return false;
 });
@@ -183,6 +183,15 @@ var markerClusters = new L.MarkerClusterGroup({
   disableClusteringAtZoom: 14
 });
 
+function attrClean(attr){
+  if (attr) { 
+    return attr;
+  } else {
+    return "";
+  }
+}
+
+
 /* Empty layer placeholder to add to layer control for listening when to add/remove fishfrys to markerClusters layer */
 var fishFryLayer = L.geoJson(null);
 var fishfrys = L.geoJson(null, {
@@ -202,11 +211,31 @@ var fishfrys = L.geoJson(null, {
   onEachFeature: function (feature, layer) {
     // create feature pop-up modal content
     if (feature.properties) {
-      var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Name</th><td>" + feature.properties.venue_name + "</td></tr>" + "<tr><th>Phone</th><td>" + feature.properties.phone + "</td></tr>" + "<tr><th>Address</th><td>" + feature.properties.venue_address + "</td></tr>" + "<tr><th>Website</th><td><a class='url-break' href='" + feature.properties.website + "' target='_blank'>" + feature.properties.website + "</a></td></tr>" + "<table>";
+      //var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Name</th><td>" + feature.properties.venue_name + "</td></tr>" + "<tr><th>Phone</th><td>" + feature.properties.phone + "</td></tr>" + "<tr><th>Address</th><td>" + feature.properties.venue_address + "</td></tr>" + "<tr><th>Website</th><td><a class='url-break' href='" + feature.properties.website + "' target='_blank'>" + feature.properties.website + "</a></td></tr>" + "<table>";
+      // assemble the info-modal content using Handlebars
+      var source = $("#info-template").html();
+      var template = Handlebars.compile(source);
       layer.on({
         click: function (e) {
           $("#feature-title").html(feature.properties.venue_name);
-          $("#feature-info").html(content);
+          // build content for the info-modal
+          var infoContent = {
+            // for strings, us attrClean to return empty string if value is null
+            phone: attrClean(feature.properties.phone),
+            venue_address: attrClean(feature.properties.venue_address),
+            website: attrClean(feature.properties.website),
+            etc: attrClean(feature.properties.etc),
+            menu: attrClean(feature.properties.menu),
+            venue_notes: attrClean(feature.properties.venue_notes),
+            // for booleans, us booleanLookup to return human text
+            lunch: booleanLookup[feature.properties.lunch],        
+            homemade_pierogies: booleanLookup[feature.properties.lunch],
+            alcohol: booleanLookup[feature.properties.alcohol],
+            take_out: booleanLookup[feature.properties.take_out],
+            handicap: booleanLookup[feature.properties.handicap]
+          };
+          
+          $("#feature-info").html(template(infoContent));
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
         }
@@ -229,8 +258,19 @@ var fishfrys = L.geoJson(null, {
  * Request the GeoJSON, add it to the layer and add the layer to the map
  */
 $.getJSON("http://fishfry.codeforpgh.com/api/fishfrys/?publish=True", function (data) {
-  // add a new icon property to the geojson using the lookup.
+  console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
+  // once we get the data, we need to do a few things to each feature:
   $(data.features).each(function(i,e){
+    
+    // rewrite web urls to make sure they have http/s in front
+    if (e.properties.website) {
+      var str = e.properties.website;
+      if ((str.search("http://") == -1) && (str.search("https://") == -1)) {
+        e.properties.website = "http://" + str;
+      }
+    }
+    
+    // add a new icon property to the geojson using iconLookup
     if (e.properties.venue_type) {
       if (iconLookup[e.properties.venue_type]) {
         // use the lookup to get the approp. icon url, make a property
@@ -241,7 +281,9 @@ $.getJSON("http://fishfry.codeforpgh.com/api/fishfrys/?publish=True", function (
     } else {
       e.properties.icon = iconLookup[""];
     }
+    
   });
+  
   // proceed with adding it to the map
   fishfrys.addData(data);
   map.addLayer(fishFryLayer);
