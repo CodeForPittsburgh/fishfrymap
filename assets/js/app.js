@@ -269,6 +269,7 @@ var fishfrys = L.geoJson(null, {
             etc: attrClean(feature.properties.etc),
             menu: attrClean(feature.properties.menu),
             venue_notes: attrClean(feature.properties.venue_notes),
+            venue_type: attrClean(feature.properties.venue_type),
             // for booleans, us booleanLookup to return human text
             lunch: booleanLookup[feature.properties.lunch],        
             homemade_pierogies: booleanLookup[feature.properties.lunch],
