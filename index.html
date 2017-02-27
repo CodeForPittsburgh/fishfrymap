@@ -1,354 +1,372 @@
-<html>
-<head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>2017 Pittsburgh Lenten Fish Fry Map</title>
 
-    <title>2017 Lenten Fish Fry Map</title>
+    <link rel="stylesheet" href="assets/css/sandstone-bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.css">
+    <link rel="stylesheet" href="assets/leaflet-markercluster/MarkerCluster.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css">
+    <link rel="stylesheet" href="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css">
+    <link rel="stylesheet" href="assets/leaflet-zoomhome/leaflet.zoomhome.css">
+    <link rel="stylesheet" href="assets/css/app.css">
 
-	<!--CSS-->
-    <link rel="stylesheet" href="css/leaflet.css"  type="text/css">
-	<link rel="stylesheet" href="css/L.Control.Sidebar.css"  type="text/css">
-	<link rel='stylesheet' href='css/mapbox.directions.css' type='text/css'>
-    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' type="text/css">
-    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' type="text/css">
-	<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-	<link href="css/app.css" rel="stylesheet" type="text/css">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon-152.png">
+    <link rel="icon" sizes="196x196" href="assets/img/favicon-196.png">
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+  </head>
 
-	<!--JS-->
-	<script src='js/jquery-1.11.0.min.js' type="text/javascript"></script>
-    <script src='js/mapbox.js' type="text/javascript"></script>
-    <script src='js/leaflet-omnivore.min.js' type="text/javascript"></script>
-    <script src="js/L.Control.Sidebar.js" type="text/javascript"></script>
-    <script src='js/mapbox.directions.js' type="text/javascript"></script>
-	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js' type="text/javascript"></script>
-	<!--script src="js/app.js" type="text/javascript"></script-->	
-	
-</head>
-
-<body>
-    <div id="sidebar">
-        <div>
-            <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><h1>2017</h1><h2>Pittsburgh Lenten Fish Fry Map</h2></a>
-            <p>Helping you find your local fish fry this Lenten season!</p>
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div class="navbar-icon-container">
+            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+            <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-filter fa-lg white"></i></a>
+          </div>
+          <a class="navbar-brand hidden-xs" href="#">2017 Pittsburgh Lenten Fish Fry Map</a>
+          <a class="navbar-brand hidden-md hidden-sm hidden-lg" href="#">2017 Fish Fry Map</a>
         </div>
-        <hr>
-        <div id='filters' class='filter-ui'>
-            <p>Other than fish, these are the things I'm looking for in a Fish Fry:</p>
-            <div>
-                <p><strong><input type='checkbox' checked class='filter' name='filter' id='lunch' value='lunch'> <label for='lunch'>Open for Lunch</label></strong></p>
+        <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right" role="search">
+            <div class="form-group has-feedback">
+                <input id="searchbox" type="text" placeholder="Search All Fish Frys" class="form-control">
+                <span id="searchicon" class="fa fa-search form-control-feedback"></span>
             </div>
-            <div>
-                <p><strong><input type='checkbox' checked class='filter' name='filter' id='homemade_pierogies' value='homemade_pierogies'> <label for='homemade_pierogies'>Homemade Pierogies</label></strong></p>
-            </div>
-            <div>
-                <p><strong><input type='checkbox' checked class='filter' name='filter' id='alcohol' value='alcohol'> <label for='alcohol'>Serves Alcohol</label></strong></p>
-            </div>
-            <div>
-                <p><strong><input type='checkbox' checked class='filter' name='filter' id='take_out' value='take_out'> <label for='take_out'>Takeout Available</label></strong></p>
-            </div>
-        </div>
-		
-        <hr>
-		
-        <div id='info' class='info'>
-            <!--fish fry info shows here:-->
-        </div>
-		
-		<!--Directions-->
-        <div id='inputs'></div>
-        <div id='errors'></div>
-        <div id='directions'>
-            <div id='routes'></div>
-            <div id='instructions'></div>
-        </div>
+          </form>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-filter white"></i>&nbsp;&nbsp;Fish Fry Filter</a></li>
+            <!--li class="visible-xs-block"><a id="filterNav-btn" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" ><i class="fa fa-filter"></i>&nbsp;&nbsp;Filter Fish Frys</a></li-->
+            <!--li class="dropdown">
+              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a id="full-extent-btn" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" ><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+                <li><a id="legend-btn" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" ><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
+                <li class="divider hidden-xs"></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
+              </ul>
+            </li-->
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+            <!--li class="dropdown">
+                <a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown"><i class="fa fa-cloud-download white"></i>&nbsp;&nbsp;Download <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="data/boroughs.geojson" download="boroughs.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Boroughs</a></li>
+                  <li><a href="data/subways.geojson" download="subways.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Subway Lines</a></li>
+                  <li><a href="data/DOITT_THEATER_01_13SEPT2010.geojson" download="theaters.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Theaters</a></li>
+                  <li><a href="data/DOITT_MUSEUM_01_13SEPT2010.geojson" download="museums.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Museums</a></li>
+                </ul>
+            </li-->
+          </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
     </div>
-	
-	<!--LEAFLET MAP-->
-    <div id="map" class='custom-popup'></div>
-	<script>
-		// get the info div
-		var info = document.getElementById('info');
-		
-		// get all the checkboxes
-		var checkboxes = document.getElementsByClassName('filter');
-		//uncheck all checkboxes all by default
-		for (var i = 0; i < checkboxes.length; i++) {
-			if (checkboxes[i].type == 'checkbox') {
-				checkboxes[i].checked = false;
-			}
-		}
-		
-		
-		// -------------------------
-		// MAP
-		
-		// get the mapbox library
-		L.mapbox.accessToken = 'pk.eyJ1IjoiY2JndGhvcjYyNCIsImEiOiJzZ2NaNmo4In0.hbXzZPAvaCO5GLu45bptTw';
-		
-		// initialize the map
-		var map = L.map('map').setView([40.4452, -79.9866], 10);
-		//.addControl(L.mapbox.geocoderControl('mapbox.places'));
-		//.addControl(L.mapbox.shareControl());
-		// var markerList = document.getElementById('marker-list');
-		
-		//map.attributionControl.setPosition('bottomleft');
-		
-		// get the Stamen Mapstack tile layer and add to map
-		L.tileLayer('http://{s}.sm.mapstack.stamen.com/((toner-lite,$000%5B@80%5D,$8ad3f4%5Bhsl-color%5D,mapbox-water%5Bdestination-in%5D),(toner,$fff%5Bdifference%5D,$fdb930%5Bhsl-color%5D,mapbox-water%5Bdestination-out%5D),(toner-hybrid,$fff%5Bdifference%5D,$fdb930%5Bhsl-color%5D),(terrain-background,$000%5B@40%5D,$ffffff%5Bhsl-color%5D,mapbox-water%5Bdestination-out%5D)%5Blighter@40%5D)/{z}/{x}/{y}.png', {
-			attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
-			maxZoom: 18,
-			minZoom: 8,
-		}).addTo(map);
-		
-		
-		// -------------------------
-		// LOAD DATA
-		
-		var customLayer = L.mapbox.featureLayer(null, {
-			pointToLayer: function(feature, latlng) {
-				var marker = L.marker(latlng, {
-					icon: L.mapbox.marker.icon({
-						'marker-size': 'medium',
-						'marker-symbol': 'warehouse',
-						'marker-color': '#fdb930'
-					})
-				});
-				var church = L.marker(latlng, {
-					icon: L.mapbox.marker.icon({
-						'marker-size': 'medium',
-						'marker-symbol': 'religious-christian',
-						'marker-color': '#fdb930'
-					})
-				});
-				if (feature.properties.venue_type === 'Church') {
-					return church;
-				} else {
-					return marker;
-				}
-			}
-		});
 
-		// ingest kml and return geojson in a featureLayer object called 'runLayer'
-		//var runLayer = omnivore.kml('data_src/FishFryMap_20160325_0945_fixed.kml', null, customLayer)
-		var runLayer = L.geoJson(null, {
-			pointToLayer: function(feature, latlng) {
-				var marker = L.marker(latlng, {
-					icon: L.mapbox.marker.icon({
-						'marker-size': 'medium',
-						'marker-symbol': 'warehouse',
-						'marker-color': '#fdb930'
-					})
-				});
-				var church = L.marker(latlng, {
-					icon: L.mapbox.marker.icon({
-						'marker-size': 'medium',
-						'marker-symbol': 'religious-christian',
-						'marker-color': '#fdb930'
-					})
-				});
-				if (feature.properties.venue_type === 'Church') {
-					return church;
-				} else {
-					return marker;
-				}
-			}
-		}).addTo(map);
+    <div id="container" style="margin-top:10px;padding-bottom:10px;">
+      <div id="sidebar">
+        <div class="sidebar-wrapper">
+          <div class="panel panel-default" id="features">
+            <div class="panel-heading">
+              <h3 class="panel-title">Fish Fry Filter
+              <button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn"><i class="fa fa-chevron-left"></i></button></h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <!--div class="col-md-8">
+                  <input type="text" class="form-control search" placeholder="Search" />
+                </div-->
+                <div class="col-md-12">
+                <!--div class="col-xs-4 col-md-4"-->
+                  <!--button type="button" class="btn btn-primary pull-right sort" data-sort="feature-name" id="sort-btn"><i class="fa fa-sort"></i>&nbsp;&nbsp;Sort</button-->
+                  <!--button id="filterModal-btn" type="button" class="btn btn-primary pull-right" ><i class="fa fa-filter"></i>&nbsp;&nbsp;Filter</button-->
+                  <a class="btn btn-default btn-block btn-sm" id="filterSidebar-btn" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" role="button"><i class="fa fa-filter"></i> Filter</a>
+                </div>
+              </div>
+            </div>
+            <div class="sidebar-table">
+              <table class="table table-hover" id="feature-list">
+                <thead class="hidden">
+                  <tr>
+                    <th>Icon</th>
+                  <tr>
+                  <tr>
+                    <th>Name</th>
+                  <tr>
+                  <tr>
+                    <th>Chevron</th>
+                  <tr>
+                </thead>
+                <tbody class="list"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="map"></div>
+    </div>
+    <div id="loading">
+      <div class="loading-indicator">
+        <div class="progress progress-striped active">
+          <div class="progress-bar progress-bar-info progress-bar-full"></div>
+        </div>
+      </div>
+    </div>
 
-		$.ajax({
-			type:"GET",
-			url:"http://fishfry.codeforpgh.com/api/fishfrys/?publish=True",
-			dataType: 'json',
-			success: function(result){
-				console.log("success");
-				runLayer.addData(result);
-				console.log(result);
-			},
-			error: function(error){
-				console.log("error");
-				console.log(error);
-			}
-		});
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">About the Pittsburgh Lenten Fish Fry Map</h4>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-tabs nav-justified" id="aboutTabs">
+              <li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-question-circle"></i> About the project</a></li>
+              <li><a href="#contact" data-toggle="tab"><i class="fa fa-envelope"></i> Contact us</a></li>
+              <li><a href="#disclaimer" data-toggle="tab"><i class="fa fa-exclamation-circle"></i> Disclaimer</a></li>
+            </ul>
+            <div class="tab-content" id="aboutTabsContent">
+              <div class="tab-pane fade active in" id="about">
+                <h4>Fish Fry Map</h4>
+                <p>The Pittsburgh Lenten Fish Fry Map is the brainchild of <a href="https://twitter.com/hollenbarmer">Hollen Barmer</a>, who has tirelessly dedicated time the past few years to inventorying the rich array of Lenten Fish Fry events that occur every spring in Western Pennsylvania. This year, Code for Pittsburgh is helping.</p>
+                <h4>Code for Pittsburgh</h4>
+                <p>Code for Pittsburgh, the Pittsburgh region’s <a href="https://www.codeforamerica.org/">Code for America Brigade</a>, makes the Pittsburgh region a better place through the use of information and technology. Despite the name, we’re not only focused on computer programming! We are a grass-roots organization that works as a civic relationship-builder and is inclusive of different interests, skill-sets, and communities. For more information, head over to <a href="http://www.codeforpgh.com">www.codeforpgh.com</a>.</p>
+                <h4>Built with Open Source Software</h4>
+                <p>The Fish Fry Map is built on <a href='https://github.com/bmcbride'>Bootleaf</a>, an amazing, simple, responsive template for building web mapping applications with <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Open source, MIT licensed, and available on <a href="https://github.com/bmcbride/bootleaf" target="_blank">GitHub</a>. Bootleaft was created by <a href="https://github.com/bmcbride">Bryan McBride.</a></p>
+              </div>
+              <div id="disclaimer" class="tab-pane fade">
+                <p>This map and the data and software behind it is maintained entirely by volunteers.</p>
+                <p>While we try our best to verify all details about Fish Frys, some details may be incomplete. Please check with the Fish Fry venue ahead of time to verify any details that are crucial to you having an enjoyable, fulfilling Fish Fry experience.</p>
+              </div>
+              <div class="tab-pane fade" id="contact">
+                  <div class="well well-sm">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p>Head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/">Facebook page</a> to suggest a Fish Fry, share Fish Fry photos and news, and discuss all things Fish Fry!</p>
+                        <p>If you're interested in helping curate Fish Fry data or build the software behind the map, head over to the project page on <a href="https://github.com/CodeForPittsburgh/fishfryform">GitHub</a>, and dig in.</p>
+                      </div>
+                    </div>
+                  </div>
+                <!--form id="contact-form">
+                  <div class="well well-sm">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label for="first-name">First Name:</label>
+                          <input type="text" class="form-control" id="first-name">
+                        </div>
+                        <div class="form-group">
+                          <label for="last-name">Last Name:</label>
+                          <input type="text" class="form-control" id="last-email">
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email:</label>
+                          <input type="text" class="form-control" id="email">
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <label for="message">Message:</label>
+                        <textarea class="form-control" rows="8" id="message"></textarea>
+                      </div>
+                      <div class="col-md-12">
+                        <p>
+                          <button type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Submit</button>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </form-->
+              </div>
+              <!--
+              <div class="tab-pane fade" id="boroughs-tab">
+                <p>Borough data courtesy of <a href="http://www.nyc.gov/html/dcp/pdf/bytes/nybbwi_metadata.pdf" target="_blank">New York City Department of City Planning</a></p>
+              </div>
+              <div class="tab-pane fade" id="subway-lines-tab">
+                <p><a href="http://spatialityblog.com/2010/07/08/mta-gis-data-update/#datalinks" target="_blank">MTA Subway data</a> courtesy of the <a href="http://www.urbanresearch.org/about/cur-components/cuny-mapping-service" target="_blank">CUNY Mapping Service at the Center for Urban Research</a></p>
+              </div>
+              <div class="tab-pane fade" id="theaters-tab">
+                <p>Theater data courtesy of <a href="https://data.cityofnewyork.us/Recreation/Theaters/kdu2-865w" target="_blank">NYC Department of Information & Telecommunications (DoITT)</a></p>
+              </div>
+              <div class="tab-pane fade" id="museums-tab">
+                <p>Museum data courtesy of <a href="https://data.cityofnewyork.us/Recreation/Museums-and-Galleries/sat5-adpb" target="_blank">NYC Department of Information & Telecommunications (DoITT)</a></p>
+              </div>
+              -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
-		
-		// -------------------------
-		// RENDER AND INTERACT WITH DATA
-		
-		// add marker and bind a pop-up to runLayer
-		// uses 'name' and 'Address' properties of data
-		runLayer.on('layeradd', function(e) {
-			var marker = e.layer;
-			var feature = marker.feature;
-			var content =
-				'<h3>' + feature.properties.venue_name + '<\/h3>' +
-				'<p>' + feature.properties.venue_address + '<\/p>';
-			marker.bindPopup(content);
-		});
-		
-		// show the previously bound pop-up on mouseover
-		runLayer.on('mouseover', function(e) {
-			e.layer.openPopup();
-		});
-		runLayer.on('mouseout', function(e) {
-			e.layer.closePopup();
-		});
-		
-		
-		// -------------------------
-		// DIRECTIONS
-		
-		// create the initial directions object, from which the layer
-		// and inputs will pull data.
-		/*
-		var directions = L.mapbox.directions();
-		
-		var directionsLayer = L.mapbox.directions.layer(directions)
-			.addTo(map);
-		var directionsInputControl = L.mapbox.directions.inputControl('inputs', directions)
-			.addTo(map);
-		var directionsErrorsControl = L.mapbox.directions.errorsControl('errors', directions)
-			.addTo(map);
-		var directionsRoutesControl = L.mapbox.directions.routesControl('routes', directions)
-			.addTo(map);
-		var directionsInstructionsControl = L.mapbox.directions.instructionsControl('instructions', directions)
-			.addTo(map);
-		*/
-		
-		/* We a point is clicked...
-			// generate the feature description in the info div
-			// AND populate a temporary destination geojson with xy of feature
-			// AND use that to set the destination value of the directions object
-			*/
-		runLayer.on('click', function(e) {
-			// Force the popup closed.
-			// e.layer.closePopup();
-			var f = e.layer.feature;
-			var content =
-				'<h2>' + f.properties.venue_name + '</h2>' +
-				'<p>' + 'description text here' + '</p><hr>' +
-				'<h3>Directions<\/h3>' +
-				'<p>Take me to get some delicious fish from <strong>' + f.properties.venue_name + '</strong> at <strong>' + f.properties.venue_address + '</strong>:</p>';
-			info.innerHTML = content;
-			/*
-			var destination = {
-				"type": "Feature",
-				"geometry": {
-					"type": "Point",
-					"coordinates": [f.geometry.coordinates[0], f.geometry.coordinates[1]]
-				},
-				"properties": {
-					"title": f.properties.name,
-					"description": f.properties.Address,
-					"marker-color": "#3ca0d3",
-					"marker-size": "large",
-					"marker-symbol": "b"
-				}
-			};
-			directions.setDestination(destination).query();
-			*/
-		});
-		
-		// clear the info div when clicking away from markers
-		map.on('click', empty);
-		empty();
-		
-		
-		function empty() {
-			info.innerHTML = '<div><p><strong>Click a marker for info about a fish fry and to get directions</strong></p></div>';
-		}
-		
-		// -------------------------
-		// FILTER DATA
-		
-		$("input[type='checkbox']").click(function() {
-			//setFilter applies the showFeature function to every feature in runLayer
-			runLayer.setFilter(showFeatures);
-		});
-		
-		function showFeatures(feature) {
-			//console.log("__________________")
-			//console.log(">>> ", feature.properties.name)
-			/*
-				This function is applied to every feature by the setFilter function.
-				It can only can pass to setFilter a boolean: true or false.
-				That means we have to figure out whether the feature's properties matches
-				the checkboxes.
-				If the feature properties match the corresponding checkbox fields, return true
-				if there is a mismatch between any checkbox and feature property, return false
-				We're only interested in the checking properties against checked checkboxes -
-				we ignore the unchecked checkboxes in the test
-				if no checkboxes are checked (all checkboxes return false), then all
-				features are shown - this function will just return true.
-				*/
-			checkboxed = [];
-		
-			// our filters (future: turn these into a function):
-		
-			var lunch_box = $("#lunch").prop("checked");
-			var lunch_prop = feature.properties.lunch === true;
-			var lunch = (lunch_box === lunch_prop);
-			if (lunch_box) checkboxed.push(lunch);
-				//console.log("lunch ", lunch)
-		
-			var pier_box = $("#homemade_pierogies").prop("checked");
-			var pier_prop = feature.properties.homemade_pierogies === true;
-			var pier = (pier_box === pier_prop);
-			if (pier_box) checkboxed.push(pier);
-				//console.log("pierogie ", pier)
-		
-			var booze_box = $("#alcohol").prop("checked");
-			var booze_prop = feature.properties.alcohol === true;
-			var booze = (booze_box === booze_prop);
-			if (booze_box) checkboxed.push(booze);
-			
-			var take_out_box = $("#take_out").prop("checked");
-			var take_out_prop = feature.properties.take_out === true;
-			var take_out = (take_out_box === take_out_prop);
-			if (take_out_box) checkboxed.push(take_out);
-				//console.log("booze ", booze)
-		
-			// the business of filtering:
-			// if no filters are applied, then show the feature
-			if (lunch_box == false && booze_box == false && pier_box == false) {
-				//console.log("All boxes unchecked")
-				show = true
-			} else
-			//console.log(checkboxed, (checkboxed.indexOf(false) != -1))
-			/* if one or more filters are applied, check to see if the attributes of
-					the feature match only those filters checked (and don't worry about the
-					unchecked filters).	Get the match results for those with checked-boxes,
-					and if there if there are any non-matches, the feature returns false
-					*/
-			if (checkboxed.indexOf(false) != -1)
-				show = false
-			else
-			// if all true checkboxes have matching properties with "Yes", feature is true
-				show = true
-		
-			//console.log("setFilter on", feature.properties.title, show)
-			// return the show attribute to setFilter for this feature (true or false
-			// based on the logic above)
-				return show
-		}
-		
-		// -------
-		// SIDEBAR
-		
-		// create sidebar and add to map
-		var sidebar = L.control.sidebar('sidebar', {
-			closeButton: false,
-			position: 'left'
-		});
-		map.addControl(sidebar);
-		setTimeout(function() {
-			sidebar.show();
-		}, 500);
-		
-		
-		//directions.setDestination(destination).query();
-		//console.log(directions);
-	</script>
-	<!--a href="https://github.com/CodeForPittsburgh/fishfrymap"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a-->
-	
+    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title"> Other than fish, these are the things I'm looking for in a Fish Fry: </h3>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <div class="checkbox">
+                  <label>
+                    <h4>
+                      <input class="filter" id='lunch'type="checkbox">Open for Lunch <i class="fa fa-cutlery" aria-hidden="true"></i> <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    </h4>
+                  </label>
+                </div>
+                <hr>
+                <div class="checkbox">
+                  <label>
+                    <h4>
+                    <input class="filter" id='homemade_pierogies'type="checkbox">Homemade Pierogies !!!
+                    </h4>
+                  </label>
+                </div>
+                <hr>
+                <div class="checkbox">
+                  <label>
+                    <h4>
+                    <input class="filter" id='alcohol'type="checkbox">Serves Alcohol <i class="fa fa-beer" aria-hidden="true"></i>
+                    </h4>
+                  </label>
+                </div>
+                <hr>
+                <div class="checkbox">
+                  <label>
+                    <h4>
+                    <input class="filter" id='take_out'type="checkbox">Takeout Available <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    </h4>
+                  </label>
+                </div>
+                <hr>
+                <div class="checkbox">
+                  <label>
+                    <h4>
+                    <input class="filter" id='handicap'type="checkbox">Handicap Accessible <i class="fa fa-wheelchair" aria-hidden="true"></i>
+                    </h4>
+                  </label>
+                </div>
+              </div>
+              </h4>
+            </div>
+            <div class="row">
+              <div class="col-sm-8 col-sm-offset-2">
+                <h4><small>Note that while we try our best to verify all details about Fish Frys, some details may be incomplete. Please  check with the Fish Fry venue ahead of time and rely on the above filters at your own discretion. </small></h4>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
-	
-</body>
+    <div class="modal fade" id="legendModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Map Legend</h4>
+          </div>
+          <div class="modal-body">
+            <p>Map Legend goes here...</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Login</h4>
+          </div>
+          <div class="modal-body">
+            <form id="contact-form">
+              <fieldset>
+                <div class="form-group">
+                  <label for="name">Username:</label>
+                  <input type="text" class="form-control" id="username">
+                </div>
+                <div class="form-group">
+                  <label for="email">Password:</label>
+                  <input type="password" class="form-control" id="password">
+                </div>
+              </fieldset>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" data-dismiss="modal">Login</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="featureModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title text-primary" id="feature-title"></h4>
+          </div>
+          <div class="modal-body" id="feature-info"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="attributionModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">
+              Developed by <a href='http://bryanmcbride.com'>bryanmcbride.com</a>
+            </h4>
+          </div>
+          <div class="modal-body">
+            <div id="attribution"></div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.5/typeahead.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/leaflet.markercluster.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
+    <script src="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js"></script>
+    <script src="assets/leaflet-geojsonfilter/leaflet.geojsonfilter.js"></script>
+    <script src="assets/leaflet-zoomhome/leaflet.zoomhome.min.js"></script>
+    
+    
+    <script src="assets/js/app.js"></script>
+  </body>
 </html>
