@@ -191,6 +191,48 @@ function attrClean(attr){
   }
 }
 
+/**
+ * parse the events object that comes from the geojson into something
+ * we can use to make readable text. use moment js
+ * This could be moved to server-side and returned natively by the API.
+ */
+var now = moment();
+function parseDateTimes(fishfry_events){
+  var sortList = [];  
+  $.each(fishfry_events, function(k,v){
+    // read each dateimte/pair into moment js objects "begin" and "end"
+    var begin = moment(v.dt_start);
+    var end = moment(v.dt_end);
+    // push those objects to a list that we'll work with, but only if they
+    // end after this week
+    if (end.isAfter(now,'day')) {
+      sortList.push([begin, end]);
+    }
+  });
+  //console.log(sortList);
+  // sort the array based on the first element in each element
+  sortList.sort(function(a,b) {
+    if (a[0].isBefore(b[0])) {return -1;}
+    if (a[0].isAfter(b[0])) {return 1;}
+    return 0;
+  });
+  //console.log(sortList);
+
+  var eventList = [];
+  var s;
+  $.each(sortList, function(i,a){
+    // compare them - if on same day, write to content a human-friendly string
+    if (moment(a[0]).isSame(a[1], 'day')) {
+      s = a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
+    } else {
+      s = "Regular events from " + a[0].format("dddd, MMMM Do") + " to " + a[1].format("dddd, MMMM Do") + "; check with venue for days and times";
+    }
+    eventList.push(s);
+  });
+  //console.log(eventList);
+  return eventList;
+}
+
 
 /* Empty layer placeholder to add to layer control for listening when to add/remove fishfrys to markerClusters layer */
 var fishFryLayer = L.geoJson(null);
@@ -218,11 +260,11 @@ var fishfrys = L.geoJson(null, {
       layer.on({
         click: function (e) {
           $("#feature-title").html(feature.properties.venue_name);
-          // build content for the info-modal
+          $("#feature-subtitle").html(feature.properties.venue_address);
+          // build Handlebars content object for the info-modal
           var infoContent = {
             // for strings, us attrClean to return empty string if value is null
             phone: attrClean(feature.properties.phone),
-            venue_address: attrClean(feature.properties.venue_address),
             website: attrClean(feature.properties.website),
             etc: attrClean(feature.properties.etc),
             menu: attrClean(feature.properties.menu),
@@ -232,7 +274,9 @@ var fishfrys = L.geoJson(null, {
             homemade_pierogies: booleanLookup[feature.properties.lunch],
             alcohol: booleanLookup[feature.properties.alcohol],
             take_out: booleanLookup[feature.properties.take_out],
-            handicap: booleanLookup[feature.properties.handicap]
+            handicap: booleanLookup[feature.properties.handicap],
+            // events is a list that is parsed by function
+            events: parseDateTimes(feature.properties.events)
           };
           
           $("#feature-info").html(template(infoContent));
