@@ -142,15 +142,14 @@ function syncSidebar() {
 /**
  * Basemap Layers
  */
-var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
-});
-
-var mapStack =L.tileLayer(//'http://{s}.sm.mapstack.stamen.com/((toner-lite,$000%5B@80%5D,$8ad3f4%5Bhsl-color%5D,mapbox-water%5Bdestination-in%5D),(toner,$fff%5Bdifference%5D,$fdb930%5Bhsl-color%5D,mapbox-water%5Bdestination-out%5D),(toner-hybrid,$fff%5Bdifference%5D,$fdb930%5Bhsl-color%5D),(terrain-background,$000%5B@40%5D,$ffffff%5Bhsl-color%5D,mapbox-water%5Bdestination-out%5D)%5Blighter@40%5D)/{z}/{x}/{y}.png'
+var mapStack =L.tileLayer(
 'http://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png', {
   attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
   maxZoom: 18,
+});
+var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
 });
 var usgsImagery = L.layerGroup([L.tileLayer("http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}", {
   maxZoom: 15,
@@ -180,7 +179,7 @@ var markerClusters = new L.MarkerClusterGroup({
   spiderfyOnMaxZoom: true,
   showCoverageOnHover: false,
   zoomToBoundsOnClick: true,
-  disableClusteringAtZoom: 14
+  disableClusteringAtZoom: 6
 });
 
 function attrClean(attr){
@@ -237,8 +236,9 @@ function parseDateTimes(fishfry_events){
 /* Empty layer placeholder to add to layer control for listening when to add/remove fishfrys to markerClusters layer */
 var fishFryLayer = L.geoJson(null);
 var fishfrys = L.geoJson(null, {
+  // filter function: show only features where publish==true
   filter: function(feature, layer) {
-    return feature.properties.publish
+    return feature.properties.publish;
   },
   pointToLayer: function(feature, latlng) {
     return L.marker(latlng, {
@@ -258,15 +258,18 @@ var fishfrys = L.geoJson(null, {
     if (feature.properties) {
       //var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Name</th><td>" + feature.properties.venue_name + "</td></tr>" + "<tr><th>Phone</th><td>" + feature.properties.phone + "</td></tr>" + "<tr><th>Address</th><td>" + feature.properties.venue_address + "</td></tr>" + "<tr><th>Website</th><td><a class='url-break' href='" + feature.properties.website + "' target='_blank'>" + feature.properties.website + "</a></td></tr>" + "<table>";
       // assemble the info-modal content using Handlebars
-      var source = $("#info-template").html();
-      var template = Handlebars.compile(source);
+      var infoTemplate = $("#info-template").html();
+      var infoTemplateCompiled = Handlebars.compile(infoTemplate);
       layer.on({
         click: function (e) {
-          $("#feature-title").html(feature.properties.venue_name);
-          $("#feature-subtitle").html(feature.properties.venue_address);
+          //$("#feature-title").html(feature.properties.venue_name);
+          //$("#feature-subtitle").html(feature.properties.venue_address);
+  
           // build Handlebars content object for the info-modal
           var infoContent = {
             // for strings, us attrClean to return empty string if value is null
+            venue_name: attrClean(feature.properties.venue_name),
+            venue_address: attrClean(feature.properties.venue_address),
             phone: attrClean(feature.properties.phone),
             website: attrClean(feature.properties.website),
             etc: attrClean(feature.properties.etc),
@@ -283,7 +286,7 @@ var fishfrys = L.geoJson(null, {
             events: parseDateTimes(feature.properties.events)
           };
           
-          $("#feature-info").html(template(infoContent));
+          $("#feature-info").html(infoTemplateCompiled(infoContent));
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
         }
@@ -309,7 +312,7 @@ var fishfrys = L.geoJson(null, {
  */
 //$.getJSON("http://fishfry.codeforpgh.com/api/fishfrys/?publish=True", function (data) {
   //console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
-$.getJSON("https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap.geojson", function (data) {
+$.getJSON("/data/fishfrymap.geojson", function (data) {
   console.log("Fish Frys successfully loaded");
   // once we get the data, we need to do a few things to each feature:
   $(data.features).each(function(i,e){
@@ -345,9 +348,9 @@ $.getJSON("https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master
  * MAP SETUP
  */
 map = L.map("map", {
-  zoom: 8,
+  zoom: 10,
   center: [40.4452, -79.9866],
-  layers: [cartoLight, markerClusters, highlight],
+  layers: [mapStack, markerClusters, highlight],
   // these are added later:
   zoomControl: false,
   attributionControl: false
@@ -465,16 +468,14 @@ if (document.body.clientWidth <= 767) {
 }
 
 var baseLayers = {
-  "Street Map": cartoLight,
   "Black n' Gold": mapStack,
+  "Street Map": cartoLight,
   "Aerial Imagery": usgsImagery
 };
 
 var groupedOverlays = {
   "Fish Frys": {
-    //"<img src='assets/img/favicon-76.png' width='24' height='28'>&nbsp;Fish Frys": fishFryLayer
     "&nbsp;On/Off": fishFryLayer
-    //"<img src='assets/img/museum.png' width='24' height='28'>&nbsp;Museums": museumLayer
   }
   /*
   "Reference": {

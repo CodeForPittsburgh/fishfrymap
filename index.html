@@ -325,18 +325,7 @@
 
     <div class="modal fade" id="featureModal" tabindex="-1" role="dialog">
       <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 class="modal-title text-primary" id="feature-title"></h3>
-            <h4 class="modal-title text-default" id="feature-subtitle"></h4>
-          </div>
-          <div class="modal-body" id="feature-info">
-          </div>
-          <div class="modal-footer">
-            <p class="small text-muted">Do you have info on this Fish Fry that we don't? Send us a message on our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/" target="_blank">Facebook</a> page.</p>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+        <div class="modal-content" id="feature-info">
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -365,58 +354,71 @@
 
     <!-- modal info template used by Handlebars -->
     <script id="info-template" type="text/x-handlebars-template">
-      <div class="row">
-        <div class="col-sm-12">
-          {{#if etc}}
-          <p>{{etc}}</p>
-          {{/if}}
-          {{#if venue_notes}}
-          <p>{{venue_notes}}</p>
-          {{/if}}
+      <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div id="feature-info-header">
+            <h3 class="modal-title text-primary" id="feature-title">{{venue_name}}</h3>
+            <h4 class="modal-title text-default" id="feature-subtitle">{{venue_address}}&nbsp;<small><a href="https://www.google.com/maps/dir//{{venue_address}}" target="_blank">Get directions &rarr;</a></small></h4>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-6">
-          <h4>Menu</h4>
-          {{#if menu}}<p>{{menu}}</p>
-          {{else}}<p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. Check with the venue for their menu.</p>
-          {{/if}}
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            {{#if etc}}
+            <p>{{etc}}</p>
+            {{/if}}
+            {{#if venue_notes}}
+            <p>{{venue_notes}}</p>
+            {{/if}}
+          </div>
         </div>
-        <div class="col-sm-6">
-          <h4>Upcoming Dates</h4>
-          <ul class="list-unstyled">
-          {{#if events}}
-            {{#each events}}
-              <li><small>{{this}}</small></li>
-            {{/each}}
-          {{else}}
-              <p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. If it's not in the description above, check with the venue for dates/times.</p>
-          {{/if}}
-          </ul>
+        <div class="row">
+          <div class="col-sm-6">
+            <h4>Menu</h4>
+            {{#if menu}}<p>{{menu}}</p>
+            {{else}}<p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. Check with the venue for their menu.</p>
+            {{/if}}
+          </div>
+          <div class="col-sm-6">
+            <h4>Upcoming Dates</h4>
+            <ul class="list-unstyled">
+            {{#if events}}
+              {{#each events}}
+                <li><small>{{this}}</small></li>
+              {{/each}}
+            {{else}}
+                <p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. If it's not in the description above, check with the venue for dates/times.</p>
+            {{/if}}
+            </ul>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-12">
+            <table class='table table-condensed well'>
+              <tr><th>Homemade Pierogies?</th><td>{{homemade_pierogies}}</td></tr>
+              <tr><th>Alcohol Served?</th><td>{{alcohol}}</td></tr>
+              <tr><th>Lunch Provided?</th><td>{{lunch}}</td></tr>
+              <tr><th>Take-out Available?</th><td>{{take_out}}</td></tr>
+              <tr><th>Handicap Accessible?</th><td>{{handicap}}</td></tr>
+              <tr><th>Type of Venue?</th><td>{{venue_type}}</td></tr>
+            <table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Contact</h4>
+            <table class='table table-condensed well'>
+              <tr><th>Phone</th><td>{{phone}}</td></tr>
+              <tr><th>Website</th><td><a class='url-break' href='{{website}}' target='_blank'>{{website}}</a></td></tr>
+              <tr><th>Email</th><td><a class='url-break' href='mailto:{{email}}' target='_blank'>{{email}}</a></td></tr>
+            <table>
+          </div>
         </div>
       </div>
-      <br>
-      <div class="row">
-        <div class="col-sm-12">
-          <table class='table table-condensed well'>
-            <tr><th>Homemade Pierogies?</th><td>{{homemade_pierogies}}</td></tr>
-            <tr><th>Alcohol Served?</th><td>{{alcohol}}</td></tr>
-            <tr><th>Lunch Provided?</th><td>{{lunch}}</td></tr>
-            <tr><th>Take-out Available?</th><td>{{take_out}}</td></tr>
-            <tr><th>Handicap Accessible?</th><td>{{handicap}}</td></tr>
-            <tr><th>Type of Venue?</th><td>{{venue_type}}</td></tr>
-          <table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <h4>Contact</h4>
-          <table class='table table-condensed well'>
-            <tr><th>Phone</th><td>{{phone}}</td></tr>
-            <tr><th>Website</th><td><a class='url-break' href='{{website}}' target='_blank'>{{website}}</a></td></tr>
-            <tr><th>Email</th><td><a class='url-break' href='mailto:{{email}}' target='_blank'>{{email}}</a></td></tr>
-          <table>
-        </div>
+      <div class="modal-footer">
+        <p class="small text-muted">Do you have info on this Fish Fry that we don't? Send us a message on our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/" target="_blank">Facebook</a> page.</p>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </script>
 
