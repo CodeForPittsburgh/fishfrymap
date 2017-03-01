@@ -152,6 +152,11 @@ var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net
   maxZoom: 19,
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
 });
+var mapboxImagery = L.tileLayer("https://api.mapbox.com/styles/v1/civicmapper/citn32v7h002v2iprmp4xzjkr/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2l2aWNtYXBwZXIiLCJhIjoiY2l6cmdnaXc4MDExNTJ2b2F3NThkZm5wNiJ9.N8lpb_oxpIX22eTk1-hI2w",{
+  maxZoom: 19,
+  attribution: "&copy; Mapbox &copy; OpenStreetMap &copy; DigitalGlobe"
+});
+/*
 var usgsImagery = L.layerGroup([L.tileLayer("http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}", {
   maxZoom: 15,
 }), L.tileLayer.wms("http://raster.nationalmap.gov/arcgis/services/Orthoimagery/USGS_EROS_Ortho_SCALE/ImageServer/WMSServer?", {
@@ -162,6 +167,7 @@ var usgsImagery = L.layerGroup([L.tileLayer("http://basemap.nationalmap.gov/arcg
   transparent: true,
   attribution: "Aerial Imagery courtesy USGS"
 })]);
+*/
 
 /**
  * Overlay Layers
@@ -492,7 +498,7 @@ if (document.body.clientWidth <= 767) {
 var baseLayers = {
   "Black n' Gold": mapStack,
   "Street Map": cartoLight,
-  "Aerial Imagery": usgsImagery
+  "Aerial Imagery": mapboxImagery
 };
 
 var groupedOverlays = {
