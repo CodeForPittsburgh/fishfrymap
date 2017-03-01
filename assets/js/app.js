@@ -8,7 +8,8 @@ var iconLookup = {
   "Fire Department" : iconPath + "Fire_Department.png",
   "Restaurant" : iconPath + "Restaurant.png",
   "Unsure / N/A" : iconPath + "Unsure_NA.png",
-  "" : iconPath + "Unsure_NA.png"
+  "" : iconPath + "Unsure_NA.png",
+  "unpublished" : iconPath + "yellowpoint75.png"
 };
 var booleanLookup = {
   'true': 'Yes',
@@ -237,21 +238,36 @@ function parseDateTimes(fishfry_events){
 var fishFryLayer = L.geoJson(null);
 var fishfrys = L.geoJson(null, {
   // filter function: show only features where publish==true
+  /*
   filter: function(feature, layer) {
+    // filter by publish here
+    // to add: include only those occurring in future
     return feature.properties.publish;
   },
+  */
   pointToLayer: function(feature, latlng) {
-    return L.marker(latlng, {
-      icon: L.icon({
-        // feature.properties.icon is added to fishfrys in this script
-        iconUrl: feature.properties.icon,
-        iconSize:     [38, 95], // size of the icon
-        //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-      }),
-      title: feature.properties.venue_name,
-      riseOnHover: true,
-    });
+    if (feature.properties.publish) {
+      return L.marker(latlng, {
+        icon: L.icon({
+          // feature.properties.icon is added to fishfrys in this script
+          iconUrl: feature.properties.icon,
+          iconSize:     [38, 95], // size of the icon
+          //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+          //popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        }),
+        title: feature.properties.venue_name,
+        riseOnHover: true,
+      });
+    } else {
+      return L.marker(latlng, {
+        icon: L.icon({
+          iconUrl: feature.properties.icon,
+          iconSize: [10, 10],
+        }),
+        title: feature.properties.venue_name,
+        riseOnHover: true,
+      });
+    }
   },
   onEachFeature: function (feature, layer) {
     // create feature pop-up modal content
@@ -285,6 +301,9 @@ var fishfrys = L.geoJson(null, {
             // events is a list that is parsed by function
             events: parseDateTimes(feature.properties.events)
           };
+          if (!feature.properties.publish) {
+            infoContent.notify = 'This Fish Fry has not yet been verified this year. If you have info about this location for 2017, please head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><u>Facebook page</u></a> and help us out. Thanks!';
+          }
           
           $("#feature-info").html(infoTemplateCompiled(infoContent));
           $("#featureModal").modal("show");
@@ -326,17 +345,20 @@ $.getJSON("https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master
     }
     
     // add a new icon property to the geojson using iconLookup
-    if (e.properties.venue_type) {
-      if (iconLookup[e.properties.venue_type]) {
-        // use the lookup to get the approp. icon url, make a property
-        e.properties.icon = iconLookup[e.properties.venue_type];
+    if (!e.properties.publish) {
+      e.properties.icon = iconLookup.unpublished;
+    } else {
+      if (e.properties.venue_type) {
+        if (iconLookup[e.properties.venue_type]) {
+          // use the lookup to get the approp. icon url, make a property
+          e.properties.icon = iconLookup[e.properties.venue_type];
+        } else {
+          e.properties.icon = iconLookup[""];
+        }
       } else {
         e.properties.icon = iconLookup[""];
       }
-    } else {
-      e.properties.icon = iconLookup[""];
     }
-    
   });
   
   // proceed with adding it to the map
