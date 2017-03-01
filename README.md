@@ -1,31 +1,30 @@
-BootLeaf
-========
+# Pittsburgh Lenten Fish Fry Map
 
-A simple, responsive template for building web mapping applications with [Bootstrap](http://getbootstrap.com/), [Leaflet](http://leafletjs.com/), and [typeahead.js](http://twitter.github.io/typeahead.js/).
+<p>The Pittsburgh Lenten Fish Fry Map is the brainchild of <a href="https://twitter.com/hollenbarmer">Hollen Barmer</a>, who has tirelessly dedicated time the past few years to inventorying the rich array of Lenten Fish Fry events that occur every spring in Western Pennsylvania. This year, Code for Pittsburgh is helping.</p>
 
-### Demo:
-http://bmcbride.github.io/bootleaf/
+## Credits
+<p>The Fish Fry Map is built on <a href='https://github.com/bmcbride'>Bootleaf</a>, an amazing, simple, responsive template for building web mapping applications with <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Open source, MIT licensed, and available on <a href="https://github.com/bmcbride/bootleaf" target="_blank">GitHub</a>. Bootleaf was created by <a href="https://github.com/bmcbride">Bryan McBride.</a> We've adapted it for this project.</p>
 
-### Features:
-* Fullscreen mobile-friendly map template with responsive Navbar and modal placeholders
-* jQuery loading of external GeoJSON files
-* Logical multiple layer marker clustering via the [leaflet marker cluster plugin](https://github.com/Leaflet/Leaflet.markercluster)
-* Elegant client-side multi-layer feature search with autocomplete using [typeahead.js](http://twitter.github.io/typeahead.js/)
-* Responsive sidebar feature list with sorting and filtering via [list.js](http://listjs.com/)
-* Marker icons included in grouped layer control via the [grouped layer control plugin](https://github.com/ismyrnow/Leaflet.groupedlayercontrol)
+### Basemaps:
 
-### Screenshots:
+* **Street Map** basemap: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>
+* **Black n' Gold** basemap: Map tiles from <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.
+* **Aerial Imagery** basemap: USGS
 
-![Desktop](http://bmcbride.github.io/bootleaf/screenshots/bootleaf-desktop1.png)
+## Fish Fry data service
 
-![Desktop Search](http://bmcbride.github.io/bootleaf/screenshots/bootleaf-desktop2.png)
+Right now, regular snapshots of the data from [fishfrymap.codeforpgh.com/api/fishfrys](http://fishfrymap.codeforpgh.com/api/fishfrys) are being dumped into the `data` folder of this repo. Ideally, the map would reference the Fish Fry API directly (after all, that's why we built the API) - we're working on that.
 
-![Desktop Popup](http://bmcbride.github.io/bootleaf/screenshots/bootleaf-desktop3.png)
+## Development
 
-![Mobile](http://bmcbride.github.io/bootleaf/screenshots/bootleaf-mobile1.png)
+This is a static web site. We're serving it up with GitHub pages, but it can run on any web server, really.
 
-![Mobile Popup](http://bmcbride.github.io/bootleaf/screenshots/bootleaf-mobile2.png)
+If you're interested in taking it for a spin, clone the repo and use your preferred software to spin up a web server.
 
-![Mobile Search](http://bmcbride.github.io/bootleaf/screenshots/bootleaf-mobile3.png)
+Using Python:
 
-![Mobile Menu](http://bmcbride.github.io/bootleaf/screenshots/bootleaf-mobile4.png)
+1. `cd /path/to/fishfrymap/`
+2. `python -m SimpleHTTPServer`
+3. Open [http:\\localhost:8000](http:\\localhost:8000) in your browser.
+
+Most of the magic happens in `assets/js/app.js`. The rest happens in `index.html`. Note that there is some holdover code from the original Bootleaf project still cluttering things up a bit.
