@@ -13,7 +13,7 @@
 
 ## Fish Fry data service
 
-Right now, regular snapshots of the data from [fishfrymap.codeforpgh.com/api/fishfrys](http://fishfrymap.codeforpgh.com/api/fishfrys) are being dumped into the `data` folder of this repo. Ideally, the map would reference the Fish Fry API directly (after all, that's why we built the API) - we're working on that.
+Right now, regular snapshots of the data from [fishfry.codeforpgh.com/api/fishfrys](http://fishfry.codeforpgh.com/api/fishfrys) are being dumped into the `data` folder of this repo. Ideally, the map would reference the Fish Fry API directly (after all, that's why we built the API) - we're working on that.
 
 ## Development
 
