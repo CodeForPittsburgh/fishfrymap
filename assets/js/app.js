@@ -11,12 +11,19 @@ var iconLookup = {
   "" : iconPath + "Unsure_NA.png",
   "unpublished" : iconPath + "yellowpoint75.png"
 };
-var booleanLookup = {
-  'true': 'Yes',
-  'false': 'No',
-  'null': 'Unsure',
-  '': 'Unsure'
-};
+function booleanLookup(v){
+  var b;
+  if ((v === true) || ($.inArray( v, ['true','True',1,'Yes','yes'] ) > -1 )) {
+    b = 'Yes';
+  } else if ((v === false) || ($.inArray( v, ['false','False',0,'No','no'] ) > -1 )) {
+    b = 'No';
+  } else if ((v === null) || (v === "")) {
+    b = 'Unsure';
+  } else {
+    b = 'Unsure';
+  }
+  return b;
+}
 
 $(window).resize(function() {
   sizeLayerControl();
@@ -132,7 +139,7 @@ function syncSidebar() {
     }
   });
   var count = $('#feature-list tbody tr').length;
-  console.log(count);
+  //console.log(count);
   /* Update list.js featureList */
   featureList = new List("features", {
     valueNames: ["feature-name"],
@@ -289,7 +296,7 @@ var fishfrys = L.geoJson(null, {
         click: function (e) {
           //$("#feature-title").html(feature.properties.venue_name);
           //$("#feature-subtitle").html(feature.properties.venue_address);
-  
+          //console.log(feature.properties);
           // build Handlebars content object for the info-modal
           var infoContent = {
             // for strings, us attrClean to return empty string if value is null
@@ -302,17 +309,18 @@ var fishfrys = L.geoJson(null, {
             venue_notes: attrClean(feature.properties.venue_notes),
             venue_type: attrClean(feature.properties.venue_type),
             // for booleans, us booleanLookup to return human text
-            lunch: booleanLookup[feature.properties.lunch],        
-            homemade_pierogies: booleanLookup[feature.properties.lunch],
-            alcohol: booleanLookup[feature.properties.alcohol],
-            take_out: booleanLookup[feature.properties.take_out],
-            handicap: booleanLookup[feature.properties.handicap],
+            lunch: booleanLookup(feature.properties.lunch),        
+            homemade_pierogies: booleanLookup(feature.properties.homemade_pierogies),
+            alcohol: booleanLookup(feature.properties.alcohol),
+            take_out: booleanLookup(feature.properties.take_out),
+            handicap: booleanLookup(feature.properties.handicap),
             // events is a list that is parsed by function
             events: parseDateTimes(feature.properties.events)
           };
           if (!feature.properties.publish) {
             infoContent.notify = 'This Fish Fry has not yet been verified this year. If you have info about this location for 2017, please head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><u>Facebook page</u></a> and help us out. Thanks!';
           }
+          //console.log(infoContent);
           
           $("#feature-info").html(infoTemplateCompiled(infoContent));
           $("#featureModal").modal("show");
