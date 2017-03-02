@@ -131,9 +131,12 @@ function syncSidebar() {
       }
     }
   });
+  var count = $('#feature-list tbody tr').length;
+  console.log(count);
   /* Update list.js featureList */
   featureList = new List("features", {
-    valueNames: ["feature-name"]
+    valueNames: ["feature-name"],
+    page:1000
   });
   featureList.sort("feature-name", {
     order: "asc"
@@ -661,7 +664,7 @@ $("#featureModal").on("hidden.bs.modal", function (e) {
 $(document).one("ajaxStop", function () {
   $("#loading").hide();
   sizeLayerControl();
-  featureList = new List("features", {valueNames: ["feature-name"]});
+  featureList = new List("features", {valueNames: ["feature-name"], page:1000});
   featureList.sort("feature-name", {order:"asc"});
 
   var fishfrysBH = new Bloodhound({
