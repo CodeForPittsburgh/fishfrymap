@@ -335,9 +335,10 @@ var fishfrys = L.geoJson(null, {
 /**
  * Request the GeoJSON, add it to the layer and add the layer to the map
  */
-//$.getJSON("http://fishfry.codeforpgh.com/api/fishfrys/?publish=True", function (data) {
+//var geojsonSrc = "http://fishfry.codeforpgh.com/api/fishfrys/"
+var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap.geojson?" + now.unix();
+$.getJSON(geojsonSrc, function (data) {
   //console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
-$.getJSON("https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap.geojson", function (data) {
   console.log("Fish Frys successfully loaded");
   // once we get the data, we need to do a few things to each feature:
   $(data.features).each(function(i,e){
