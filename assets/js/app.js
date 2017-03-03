@@ -220,7 +220,7 @@ function parseDateTimes(fishfry_events){
     var begin = moment(v.dt_start);
     var end = moment(v.dt_end);
     // push those objects to a list that we'll work with, but only if they
-    // end after this week
+    // end after right now
     if (end.isAfter(now)) {
       sortList.push([begin, end]);
     }
@@ -234,19 +234,27 @@ function parseDateTimes(fishfry_events){
   });
   //console.log(sortList);
 
-  var eventList = [];
+  var eventList_Future = [];
+  var eventList_Today = [];
   var s;
   $.each(sortList, function(i,a){
     // compare them - if on same day, write to content a human-friendly string
     if (moment(a[0]).isSame(a[1], 'day')) {
-      s = a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
+      if (moment(a[0]).isSame(now, 'day')) {
+          //s = "Open Today, " + a[0]eventList_Future.format("h:mm a") + " to " + a[1].format("h:mm a");
+          eventList_Today.push(
+            a[0].format("h:mm a") + " to " + a[1].format("h:mm a")
+          );
+        } else {
+          s = a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
+        }
     } else {
       s = "Regular events from " + a[0].format("dddd, MMMM Do") + " to " + a[1].format("dddd, MMMM Do") + "; check with venue for days and times";
     }
-    eventList.push(s);
+    eventList_Future.push(s);
   });
   //console.log(eventList);
-  return eventList;
+  return {"today": eventList_Today, "future": eventList_Future};
 }
 
 
@@ -294,6 +302,10 @@ var fishfrys = L.geoJson(null, {
       var infoTemplateCompiled = Handlebars.compile(infoTemplate);
       layer.on({
         click: function (e) {
+          
+          //parse date times into object {"today": eventList_Today, "future": eventList_Future} 
+          events = parseDateTimes(feature.properties.events);
+          
           //$("#feature-title").html(feature.properties.venue_name);
           //$("#feature-subtitle").html(feature.properties.venue_address);
           //console.log(feature.properties);
@@ -308,14 +320,15 @@ var fishfrys = L.geoJson(null, {
             menu: attrClean(feature.properties.menu),
             venue_notes: attrClean(feature.properties.venue_notes),
             venue_type: attrClean(feature.properties.venue_type),
-            // for booleans, us booleanLookup to return human text
+            // for booleans, use booleanLookup to return human friendly text
             lunch: booleanLookup(feature.properties.lunch),        
             homemade_pierogies: booleanLookup(feature.properties.homemade_pierogies),
             alcohol: booleanLookup(feature.properties.alcohol),
             take_out: booleanLookup(feature.properties.take_out),
             handicap: booleanLookup(feature.properties.handicap),
-            // events is a list that is parsed by function
-            events: parseDateTimes(feature.properties.events)
+            // event lists parsed by function above
+            events_future: events.future,
+            events_today: events.today
           };
           if (!feature.properties.publish) {
             infoContent.notify = 'This Fish Fry has not yet been verified this year. If you have info about this location for 2017, please head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><u>Facebook page</u></a> and help us out. Thanks!';

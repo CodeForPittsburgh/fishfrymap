@@ -444,14 +444,23 @@
             {{/if}}
           </div>
           <div class="col-sm-6">
+            {{#if events_today}}
+            <h4>Open Today: 
+              {{#each events_today}}
+              <span>{{this}} </span>
+              {{/each}}
+            </h4>
+            <p>Upcoming Dates</p>
+            {{else}}
             <h4>Upcoming Dates</h4>
+            {{/if}}
             <ul class="list-unstyled">
-            {{#if events}}
-              {{#each events}}
-                <li><small>{{this}}</small></li>
+            {{#if events_future}}
+              {{#each events_future}}
+              <li><small>{{this}}</small></li>
               {{/each}}
             {{else}}
-                <p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. If it's not in the description above, check with the venue for dates/times.</p>
+              <p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. If it's not in the description above, check with the venue for dates/times.</p>
             {{/if}}
             </ul>
           </div>
