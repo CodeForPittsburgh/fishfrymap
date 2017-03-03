@@ -221,7 +221,7 @@ function parseDateTimes(fishfry_events){
     var end = moment(v.dt_end);
     // push those objects to a list that we'll work with, but only if they
     // end after this week
-    if (end.isAfter(now,'week')) {
+    if (end.isAfter(now)) {
       sortList.push([begin, end]);
     }
   });
