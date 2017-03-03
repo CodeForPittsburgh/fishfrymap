@@ -221,7 +221,7 @@ function parseDateTimes(fishfry_events){
     var end = moment(v.dt_end);
     // push those objects to a list that we'll work with, but only if they
     // end after this week
-    if (end.isAfter(now,'day')) {
+    if (end.isAfter(now,'week')) {
       sortList.push([begin, end]);
     }
   });
@@ -353,7 +353,6 @@ $.getJSON(geojsonSrc, function (data) {
   console.log("Fish Frys successfully loaded");
   // once we get the data, we need to do a few things to each feature:
   $(data.features).each(function(i,e){
-    
     // rewrite web urls to make sure they have http/s in front
     if (e.properties.website) {
       var str = e.properties.website;
@@ -361,7 +360,6 @@ $.getJSON(geojsonSrc, function (data) {
         e.properties.website = "http://" + str;
       }
     }
-    
     // add a new icon property to the geojson using iconLookup
     if (!e.properties.publish) {
       e.properties.icon = iconLookup.unpublished;
@@ -378,7 +376,6 @@ $.getJSON(geojsonSrc, function (data) {
       }
     }
   });
-  
   // proceed with adding it to the map
   fishfrys.addData(data);
   map.addLayer(fishFryLayer);
@@ -395,12 +392,6 @@ map = L.map("map", {
   zoomControl: false,
   attributionControl: false
 });
-
-/*
-var zoomControl = L.control.zoom({
-  position: "bottomright"
-}).addTo(map);
-*/
 
 /**
  * custom zoomhome-control
@@ -472,7 +463,7 @@ var locateControl = L.control.locate({
   drawCircle: true,
   follow: true,
   setView: true,
-  keepCurrentZoomLevel: true,
+  keepCurrentZoomLevel: false,
   markerStyle: {
     weight: 1,
     opacity: 0.8,
@@ -490,7 +481,7 @@ var locateControl = L.control.locate({
     outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
   },
   locateOptions: {
-    maxZoom: 18,
+    maxZoom: 17,
     watch: true,
     enableHighAccuracy: true,
     maximumAge: 10000,
@@ -553,9 +544,6 @@ $("input[class='filter']").click(function(c) {
   //console.log(c.target.id + ": " + c.target.checked);
   //setFilter applies the showFeature function to every feature in runLayer
   fishfrys.setFilter(filterFeatures);
-  //fishFryLayer.setFilter(filterFeatures);
-
-  //fishFryLayer.setFilter(filterFeatures);
   syncSidebar();
   markerClusters.refreshClusters();
   markerClusters.clearLayers(fishfrys);
