@@ -11,6 +11,11 @@
 * **Black n' Gold** basemap: Map tiles from <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.
 * **Aerial Imagery** basemap: © Mapbox © OpenStreetMap © DigitalGlobe
 
+### Icons
+
+* Church and Warehouse icons: © Mapbox 
+
+
 ## Fish Fry data service
 
 Right now, regular snapshots of the data from [fishfry.codeforpgh.com/api/fishfrys](http://fishfry.codeforpgh.com/api/fishfrys) are being dumped into the `data` folder of this repo. Ideally, the map would reference the Fish Fry API directly (after all, that's why we built the API) - we're working on that.
