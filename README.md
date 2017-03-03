@@ -9,7 +9,7 @@
 
 * **Street Map** basemap: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>
 * **Black n' Gold** basemap: Map tiles from <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.
-* **Aerial Imagery** basemap: USGS
+* **Aerial Imagery** basemap: © Mapbox © OpenStreetMap © DigitalGlobe
 
 ## Fish Fry data service
 
