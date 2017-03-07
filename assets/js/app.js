@@ -153,11 +153,16 @@ function syncSidebar() {
 /**
  * Basemap Layers
  */
+
+// http://mapstack.stamen.com/edit.html#terrain-background[mask=mapbox-water,bright=-30,sat=20,tint=$1b334b@100];watercolor[mask=!mapbox-water,invert=1,tint=3E3F3A@100];terrain-background[mask=!mapbox-water,bright=-40,tint=DFD7CA@100,comp=screen,alpha=60];streets-and-labels[tint=$fedd9a@100,alpha=50]/10/40.4088/-79.9963
+
 var mapStack =L.tileLayer(
 'http://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png', {
   attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
   maxZoom: 18,
 });
+
+
 var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
