@@ -48,27 +48,9 @@
             </div>
           </form>
           <ul class="nav navbar-nav navbar-right">
-            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-filter white"></i>&nbsp;&nbsp;Fish Fry Filter</a></li>
-            <!--li class="visible-xs-block"><a id="filterNav-btn" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" ><i class="fa fa-filter"></i>&nbsp;&nbsp;Filter Fish Frys</a></li-->
-            <!--li class="dropdown">
-              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a id="full-extent-btn" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" ><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
-                <li><a id="legend-btn" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" ><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
-                <li class="divider hidden-xs"></li>
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
-              </ul>
-            </li-->
+            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-filter white"></i>&nbsp;&nbsp;Filter</a></li>
             <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
-            <!--li class="dropdown">
-                <a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown"><i class="fa fa-cloud-download white"></i>&nbsp;&nbsp;Download <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="data/boroughs.geojson" download="boroughs.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Boroughs</a></li>
-                  <li><a href="data/subways.geojson" download="subways.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Subway Lines</a></li>
-                  <li><a href="data/DOITT_THEATER_01_13SEPT2010.geojson" download="theaters.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Theaters</a></li>
-                  <li><a href="data/DOITT_MUSEUM_01_13SEPT2010.geojson" download="museums.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Museums</a></li>
-                </ul>
-            </li-->
+            <li><a href="https://data.wprdc.org/dataset/pittsburgh-fish-fry-map" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in" id="data-btn"><i class="fa fa-database"></i>&nbsp;&nbsp;Data</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -134,8 +116,9 @@
           <div class="modal-body">
             <ul class="nav nav-tabs nav-justified" id="aboutTabs">
               <li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-question-circle"></i> About the project</a></li>
-              <li><a href="#contact" data-toggle="tab"><i class="fa fa-envelope"></i> Contact us</a></li>
+              <li><a href="#contact" data-toggle="tab"><i class="fa fa-envelope"></i> Contact Us</a></li>
               <li><a href="#disclaimer" data-toggle="tab"><i class="fa fa-exclamation-circle"></i> Disclaimer</a></li>
+              <li><a href="#build" data-toggle="tab"><i class="fa fa-code"></i> Build With Us</a></li>
             </ul>
             <div class="tab-content" id="aboutTabsContent">
               <div class="tab-pane  active in" id="about">
@@ -144,9 +127,9 @@
                 <h4>Code for Pittsburgh</h4>
                 <p>Code for Pittsburgh, the Pittsburgh region’s <a href="https://www.codeforamerica.org/">Code for America Brigade</a>, makes the Pittsburgh region a better place through the use of information and technology. Despite the name, we’re not only focused on computer programming! We are a grass-roots organization that works as a civic relationship-builder and is inclusive of different interests, skill-sets, and communities. For more information, head over to <a href="http://www.codeforpgh.com">www.codeforpgh.com</a>.</p>
                 <h4>Built with Open Source Software</h4>
-                <p>The Fish Fry Map is built on <a href='https://github.com/bmcbride'>Bootleaf</a>, an amazing, simple, responsive template for building web mapping applications with <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Open source, MIT licensed, and available on <a href="https://github.com/bmcbride/bootleaf" target="_blank">GitHub</a>. Bootleaft was created by <a href="https://github.com/bmcbride">Bryan McBride.</a> We've adapted it for this project.</p>
+                <p>The Fish Fry Map is built on <a href='https://github.com/bmcbride'>Bootleaf</a>, an amazing, simple, responsive template for building web mapping applications with <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Open source, MIT licensed, and available on <a href="https://github.com/bmcbride/bootleaf" target="_blank">GitHub</a>. Bootleaf was created by <a href="https://github.com/bmcbride">Bryan McBride.</a> We've adapted it for this project.</p>
               </div>
-              <div id="disclaimer" class="tab-pane ">
+              <div id="disclaimer" class="tab-pane">
                 <p>This map and the data and software behind it is maintained entirely by volunteers.</p>
                 <p>While we try our best to verify all details about Fish Frys, some details may be incomplete. Please check with the Fish Fry venue ahead of time to verify any details that are crucial to you having an enjoyable, fulfilling Fish Fry experience.</p>
               </div>
@@ -155,54 +138,22 @@
                     <div class="row">
                       <div class="col-md-12">
                         <p>Head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/">Facebook page</a> to suggest a Fish Fry, share Fish Fry photos and news, and discuss all things Fish Fry!</p>
-                        <p>If you're interested in helping curate Fish Fry data or build the software behind the map, head over to the project page on <a href="https://github.com/CodeForPittsburgh/fishfryform">GitHub</a>, and dig in.</p>
                       </div>
                     </div>
                   </div>
-                <!--form id="contact-form">
-                  <div class="well well-sm">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label for="first-name">First Name:</label>
-                          <input type="text" class="form-control" id="first-name">
-                        </div>
-                        <div class="form-group">
-                          <label for="last-name">Last Name:</label>
-                          <input type="text" class="form-control" id="last-email">
-                        </div>
-                        <div class="form-group">
-                          <label for="email">Email:</label>
-                          <input type="text" class="form-control" id="email">
-                        </div>
-                      </div>
-                      <div class="col-md-8">
-                        <label for="message">Message:</label>
-                        <textarea class="form-control" rows="8" id="message"></textarea>
-                      </div>
-                      <div class="col-md-12">
-                        <p>
-                          <button type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Submit</button>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </form-->
               </div>
-              <!--
-              <div class="tab-pane " id="boroughs-tab">
-                <p>Borough data courtesy of <a href="http://www.nyc.gov/html/dcp/pdf/bytes/nybbwi_metadata.pdf" target="_blank">New York City Department of City Planning</a></p>
-              </div>
-              <div class="tab-pane " id="subway-lines-tab">
-                <p><a href="http://spatialityblog.com/2010/07/08/mta-gis-data-update/#datalinks" target="_blank">MTA Subway data</a> courtesy of the <a href="http://www.urbanresearch.org/about/cur-components/cuny-mapping-service" target="_blank">CUNY Mapping Service at the Center for Urban Research</a></p>
-              </div>
-              <div class="tab-pane " id="theaters-tab">
-                <p>Theater data courtesy of <a href="https://data.cityofnewyork.us/Recreation/Theaters/kdu2-865w" target="_blank">NYC Department of Information & Telecommunications (DoITT)</a></p>
-              </div>
-              <div class="tab-pane " id="museums-tab">
-                <p>Museum data courtesy of <a href="https://data.cityofnewyork.us/Recreation/Museums-and-Galleries/sat5-adpb" target="_blank">NYC Department of Information & Telecommunications (DoITT)</a></p>
-              </div>
-              -->
+              <div id="build" class="tab-pane">
+                <p>If you're interested in helping build the software behind the map, head over to the project repositories and dig in:</p>
+                 <ul>
+                   <li>Fish Fry Form: Fish Fry Curation Tool: <a href="https://github.com/CodeForPittsburgh/fishfryform">Repository</a> | <a href="http://fishfry.codeforpgh.org">Site</a></li>
+                   <li>Fish Fry Map (this site): <a href="https://github.com/CodeForPittsburgh/fishfrymap"> Repository</a></li>
+                 </ul>
+                 <p>If you want to get the data used on this map and use it in your own projects, you have a couple of options:</p>
+                 <ul>
+                   <li>Download the data from <a href="https://data.wprdc.org/dataset/pittsburgh-fish-fry-map">WPRDC</a>. This is periodically synced with our database.</li>
+                   <li>Get the data as GeoJSON directly from the <a href="https://data.wprdc.org/dataset/pittsburgh-fish-fry-map">Fish Fry API</a>. Please let us know if you plan on using the data on a high-traffic site, as we have limited hosting resources. :)</li>
+                 </ul>
+              </div>              
             </div>
           </div>
           <div class="modal-footer">
