@@ -9,17 +9,31 @@ body {
 input[type="radio"], input[type="checkbox"] {
   margin: 0;
 }
+
 #sidebar {
   display: block;
-  width: 250px;
+  width: 75%;
   height: 100%;
   max-width: 100%;
   float: left;
 }
+
+@media (min-width:768px) and (max-width:991px) {
+  #sidebar {
+    width: 40%;
+  }
+}
+
+@media (min-width:992px) {
+  #sidebar {
+    width: 20%;
+  }
+}
+
 #map {
   width: auto;
   height: 100%;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
 }
 #loading {
   position: absolute;
@@ -49,12 +63,14 @@ input[type="radio"], input[type="checkbox"] {
 .white {
   color: #FFFFFF;
 }
+/*
 .panel-heading{
    width: 250px;
 }
 .panel-body{
   width: 250px;
 }
+*/
 .feature-row {
   cursor: pointer;
   width: 250px;
