@@ -284,7 +284,7 @@ function parseDateTimes(fishfry_events) {
         eventList_Future.push(s);
     }
     //console.log(eventList);
-    return {"today": eventList_Today, "future": eventList_Future};
+    return {"today": eventList_Today, "future": eventList_Future, "GoodFriday": OpenGoodFriday};
 }
 
 
@@ -356,10 +356,14 @@ var fishfrys = L.geoJson(null, {
                         alcohol: booleanLookup(feature.properties.alcohol),
                         take_out: booleanLookup(feature.properties.take_out),
                         handicap: booleanLookup(feature.properties.handicap),
+                        GoodFriday: booleanLookup(events.GoodFriday),
                         // event lists parsed by function above
                         events_future: events.future,
                         events_today: events.today
                     };
+
+
+
                     if (!feature.properties.publish) {
                         infoContent.notify = 'This Fish Fry has not yet been verified this year. If you have info about this location for 2017, please head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><u>Facebook page</u></a> and help us out. Thanks!';
                     }
@@ -389,8 +393,8 @@ var fishfrys = L.geoJson(null, {
 /**
  * Request the GeoJSON, add it to the layer and add the layer to the map
  */
-//var geojsonSrc = "http://fishfry.codeforpgh.com/api/fishfrys/"
-var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap.geojson?" + now.unix();
+var geojsonSrc = "http://fishfry.codeforpgh.com/api/fishfrys/"
+//var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap.geojson?" + now.unix();
 $.getJSON(geojsonSrc, function (data) {
     //console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
     console.log("Fish Frys successfully loaded");
@@ -604,6 +608,7 @@ $("input[class='filter']").click(function (c) {
 
 });
 
+
 function filterFeatures(f) {
     /**
      * This function is applied to every feature by the setFilter function.
@@ -622,9 +627,10 @@ function filterFeatures(f) {
      * If no checkboxes are checked (all checkboxes return false), then all
      * features are shown - this function will just return true.
      */
-
+    
     var show = true;
     var checkboxed = [];
+    //var OpenGoodFriday = false;
     // reset noFilters applied - we'll make that determination again here
     noFiltersApplied = true;
 
@@ -639,12 +645,42 @@ function filterFeatures(f) {
         // get the property value of the feature from the id of the checkbox
         // hint: the checkbox id = the feature property name, so we can use the
         // checkbox id to retreive the value of the feature property
+        var prop_boolean = false;
+        var test = false;
         var prop_id = $(e).prop("id");
-        var prop_boolean = f.properties[prop_id];
-        var test = (filtered === prop_boolean);
-        if (filtered) {
-            checkboxed.push(test);
+        
+        // var begin;
+        //console.log(">>> " + prop_id + ": ");
+        if (prop_id === "GoodFriday")
+        {
+            //console.log(">>> " + prop_id + ": ");
+            var fishfry_events = f.properties.events;
+            //var sortList = [];
+            $.each(fishfry_events, function (k, v) {
+                // read each dateimte/pair into moment js objects "begin" and "end"
+
+                if (moment(v.dt_start).isSame('2017-04-14', 'day'))
+                {
+                    //console.log("Found Good Friday");
+                    prop_boolean = true;
+
+                    //console.log(">>> ", prop_id, test);
+                    //counter++;
+                }
+
+            });
+        } else
+        {
+            prop_boolean = f.properties[prop_id];
         }
+        
+            test = (filtered === prop_boolean);
+            if (filtered) {
+                checkboxed.push(test);
+                //console.log("Other");
+            }
+        
+
         //console.log(">>> " + prop_id + ": " + test);
     });
 
