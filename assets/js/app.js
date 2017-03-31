@@ -393,7 +393,7 @@ var fishfrys = L.geoJson(null, {
 /**
  * Request the GeoJSON, add it to the layer and add the layer to the map
  */
-var geojsonSrc = "http://fishfry.codeforpgh.com/api/fishfrys/"
+var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfrys/"
 //var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap.geojson?" + now.unix();
 $.getJSON(geojsonSrc, function (data) {
     //console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
