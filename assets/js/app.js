@@ -251,6 +251,11 @@ function parseDateTimes(fishfry_events) {
     var datecounter = 0;
     $.each(sortList, function (i, a) {
         // compare them - if on same day, write to content a human-friendly string
+        if (moment(a[0]).isSame('2017-04-14', 'day'))
+        {
+            OpenGoodFriday = true;
+            // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
+        }
         if (moment(a[0]).isSame(a[1], 'day')) {
             if (moment(a[0]).isSame(now, 'day')) {
                 //s = "Open Today, " + a[0]eventList_Future.format("h:mm a") + " to " + a[1].format("h:mm a");
@@ -258,13 +263,14 @@ function parseDateTimes(fishfry_events) {
                         a[0].format("h:mm a") + " to " + a[1].format("h:mm a")
                         );
                 datecounter++;
-            } else {
-                if (moment(a[0]).isSame('2017-04-14', 'day'))
-                {
-                    OpenGoodFriday = true;
-                    // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
-                }
-            }
+            } 
+//            else {
+//                if (moment(a[0]).isSame('2017-04-14', 'day'))
+//                {
+//                    OpenGoodFriday = true;
+//                    // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
+//                }
+//            }
         }
         if (OpenGoodFriday)
         {
@@ -279,6 +285,7 @@ function parseDateTimes(fishfry_events) {
     }
     );
     if (!OpenGoodFriday && datecounter > 0)
+
     {
         s = "Closed on Good Friday";
         eventList_Future.push(s);
@@ -627,7 +634,7 @@ function filterFeatures(f) {
      * If no checkboxes are checked (all checkboxes return false), then all
      * features are shown - this function will just return true.
      */
-    
+
     var show = true;
     var checkboxed = [];
     //var OpenGoodFriday = false;
@@ -648,7 +655,7 @@ function filterFeatures(f) {
         var prop_boolean = false;
         var test = false;
         var prop_id = $(e).prop("id");
-        
+
         // var begin;
         //console.log(">>> " + prop_id + ": ");
         if (prop_id === "GoodFriday")
@@ -673,13 +680,13 @@ function filterFeatures(f) {
         {
             prop_boolean = f.properties[prop_id];
         }
-        
-            test = (filtered === prop_boolean);
-            if (filtered) {
-                checkboxed.push(test);
-                //console.log("Other");
-            }
-        
+
+        test = (filtered === prop_boolean);
+        if (filtered) {
+            checkboxed.push(test);
+            //console.log("Other");
+        }
+
 
         //console.log(">>> " + prop_id + ": " + test);
     });
