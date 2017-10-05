@@ -30,6 +30,6 @@ Using Python:
 
 1. `cd /path/to/fishfrymap/`
 2. `python -m SimpleHTTPServer`
-3. Open [http:\\localhost:8000](http:\\localhost:8000) in your browser.
+3. Open [http://localhost:8000](http://localhost:8000) in your browser.
 
 Most of the magic happens in `assets/js/app.js`. The rest happens in `index.html`. Note that there is some holdover code from the original Bootleaf project still cluttering things up a bit.
