@@ -759,26 +759,25 @@ $(document).one("ajaxStop", function() {
     });
 
     var geonamesBH = new Bloodhound({
-        name: "GeoNames",
+        name: "Places",
         datumTokenizer: function(d) {
             return Bloodhound.tokenizers.whitespace(d.name);
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-            url: "http://api.geonames.org/searchJSON?username=bootleaf&featureClass=P&maxRows=5&countryCode=US&name_startsWith=%QUERY",
+            url: "https://api.mapbox.com/geocoding/v5/mapbox.places/%QUERY.json?&access_token=pk.eyJ1IjoiY2l2aWNtYXBwZXIiLCJhIjoiY2pkZGR2YnRkMDBiYTMzbmFqemRhemYzdSJ9.Cny85WNd4zd6C3WhC6v9Rw&country=us&proximity=-79.9976593%2C40.4396267&autocomplete=true&limit=5",
             filter: function(data) {
                 return $.map(data.geonames, function(result) {
                     return {
-                        name: result.name + ", " + result.adminCode1,
-                        lat: result.lat,
-                        lng: result.lng,
-                        source: "GeoNames"
+                        name: feature.place_name,
+                        lat: feature.geometry.coordinates[1],
+                        lng: feature.geometry.coordinates[0],
+                        source: "Mapbox"
                     };
                 });
             },
             ajax: {
                 beforeSend: function(jqXhr, settings) {
-                    settings.url += "&east=" + map.getBounds().getEast() + "&west=" + map.getBounds().getWest() + "&north=" + map.getBounds().getNorth() + "&south=" + map.getBounds().getSouth();
                     $("#searchicon").removeClass("fa-search").addClass("fa-refresh fa-spin");
                 },
                 complete: function(jqXHR, status) {
@@ -805,11 +804,11 @@ $(document).one("ajaxStop", function() {
             suggestion: Handlebars.compile(["{{name}}<br>&nbsp;<small>{{address}}</small>"].join(""))
         }
     }, {
-        name: "GeoNames",
+        name: "Places",
         displayKey: "name",
         source: geonamesBH.ttAdapter(),
         templates: {
-            header: "<h4 class='typeahead-header'><img src='assets/img/globe.png' width='25' height='25'>&nbsp;GeoNames</h4>"
+            header: "<h4 class='typeahead-header'>Places</h4>"
         }
     }).on("typeahead:selected", function(obj, datum) {
         if (datum.source === "FishFrys") {
@@ -821,8 +820,8 @@ $(document).one("ajaxStop", function() {
                 map._layers[datum.id].fire("click");
             }
         }
-        if (datum.source === "GeoNames") {
-            map.setView([datum.lat, datum.lng], 14);
+        if (datum.source === "Places") {
+            map.setView([datum.lat, datum.lng], 17);
         }
         if ($(".navbar-collapse").height() > 50) {
             $(".navbar-collapse").collapse("hide");
