@@ -564,12 +564,6 @@ var groupedOverlays = {
     "Fish Frys": {
         "&nbsp;On/Off": fishFryLayer
     }
-    /*
-     "Reference": {
-     "Boroughs": boroughs,
-     "Subway Lines": subwayLines
-     }
-     */
 };
 
 var layerControl = L.control.groupedLayers(baseLayers, groupedOverlays, {
@@ -759,7 +753,7 @@ $(document).one("ajaxStop", function() {
     });
 
     var geonamesBH = new Bloodhound({
-        name: "Places",
+        name: "Mapbox",
         datumTokenizer: function(d) {
             return Bloodhound.tokenizers.whitespace(d.name);
         },
@@ -767,7 +761,7 @@ $(document).one("ajaxStop", function() {
         remote: {
             url: "https://api.mapbox.com/geocoding/v5/mapbox.places/%QUERY.json?&access_token=pk.eyJ1IjoiY2l2aWNtYXBwZXIiLCJhIjoiY2pkZGR2YnRkMDBiYTMzbmFqemRhemYzdSJ9.Cny85WNd4zd6C3WhC6v9Rw&country=us&proximity=-79.9976593%2C40.4396267&autocomplete=true&limit=5",
             filter: function(data) {
-                return $.map(data.geonames, function(result) {
+                return $.map(data.features, function(feature) {
                     return {
                         name: feature.place_name,
                         lat: feature.geometry.coordinates[1],
@@ -800,11 +794,11 @@ $(document).one("ajaxStop", function() {
         displayKey: "name",
         source: fishfrysBH.ttAdapter(),
         templates: {
-            header: "<h4 class='typeahead-header'><img src='assets/img/favicon-76.png' width='24' height='28'>&nbsp;Fish Frys</h4>",
+            header: "<h4 class='typeahead-header'>Fish Frys</h4>",
             suggestion: Handlebars.compile(["{{name}}<br>&nbsp;<small>{{address}}</small>"].join(""))
         }
     }, {
-        name: "Places",
+        name: "Mapbox",
         displayKey: "name",
         source: geonamesBH.ttAdapter(),
         templates: {
@@ -820,7 +814,7 @@ $(document).one("ajaxStop", function() {
                 map._layers[datum.id].fire("click");
             }
         }
-        if (datum.source === "Places") {
+        if (datum.source === "Mapbox") {
             map.setView([datum.lat, datum.lng], 17);
         }
         if ($(".navbar-collapse").height() > 50) {
