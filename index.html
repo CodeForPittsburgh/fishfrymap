@@ -9,7 +9,7 @@
         <meta name="theme-color" content="#000000">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>2017 Pittsburgh Lenten Fish Fry Map</title>
+        <title>2018 Pittsburgh Lenten Fish Fry Map</title>
 
         <link rel="stylesheet" href="assets/css/sandstone-bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -21,7 +21,7 @@
         <link rel="stylesheet" href="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css">
         <link rel="stylesheet" href="assets/leaflet-zoomhome/leaflet.zoomhome.css">
         <link rel="stylesheet" href="assets/css/app.css">
-        
+
 
         <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">
         <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">
@@ -38,8 +38,8 @@
                         <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
                         <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-filter fa-lg white"></i></a>
                     </div>
-                    <a class="navbar-brand hidden-xs hidden-sm" href="#">2017 Pittsburgh Lenten Fish Fry Map</a>
-                    <a class="navbar-brand hidden-md hidden-lg small" href="#">2017 Fish Fry Map</a>
+                    <a class="navbar-brand hidden-xs hidden-sm" href="#">2018 Pittsburgh Lenten Fish Fry Map</a>
+                    <a class="navbar-brand hidden-md hidden-lg small" href="#">2018 Fish Fry Map</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <form class="navbar-form navbar-right" role="search">
@@ -291,7 +291,7 @@
                             <div class="col-sm-8 col-sm-offset-2 bg-info">
                                 <div class="checkbox">
                                     <label>
-                                        <input class="filter" id='publish' type="checkbox">Show only those verified for 2017.
+                                        <input class="filter" id='publish' type="checkbox">Show only those verified for 2018.
                                     </label>
                                 </div>
                             </div>
@@ -413,9 +413,14 @@
             </div>
             <div class="row">
             <div class="col-sm-6">
-            <h4>Menu</h4>
-            {{#if menu}}<p>{{menu}}</p>
+            <h2>Menu Information</h2>
+            <h4>Menu </h4>
+            {{#if menu_text}}<p>{{menu_text}}</p>
             {{else}}<p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. Check with the venue for their menu.</p>
+            {{/if}}
+             <h4>Menu URL</h4>
+            {{#if menu_url}}<p><a class='url-break' href='{{menu_url}}' target='_blank'>{{menu_url}}</a></p>
+             {{else}}<p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. Check with the venue for their menu URL.</p>
             {{/if}}
             </div>
             <div class="col-sm-6">

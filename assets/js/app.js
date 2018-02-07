@@ -251,7 +251,7 @@ function parseDateTimes(fishfry_events) {
     var datecounter = 0;
     $.each(sortList, function (i, a) {
         // compare them - if on same day, write to content a human-friendly string
-        if (moment(a[0]).isSame('2017-04-14', 'day'))
+        if (moment(a[0]).isSame('2018-03-30', 'day'))
         {
             OpenGoodFriday = true;
             // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
@@ -265,7 +265,7 @@ function parseDateTimes(fishfry_events) {
                 datecounter++;
             } 
 //            else {
-//                if (moment(a[0]).isSame('2017-04-14', 'day'))
+//                if (moment(a[0]).isSame('2018-03-30', 'day'))
 //                {
 //                    OpenGoodFriday = true;
 //                    // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
@@ -332,6 +332,7 @@ var fishfrys = L.geoJson(null, {
     },
     onEachFeature: function (feature, layer) {
         // create feature pop-up modal content
+        var nl = 'URL:';
         if (feature.properties) {
             //var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Name</th><td>" + feature.properties.venue_name + "</td></tr>" + "<tr><th>Phone</th><td>" + feature.properties.phone + "</td></tr>" + "<tr><th>Address</th><td>" + feature.properties.venue_address + "</td></tr>" + "<tr><th>Website</th><td><a class='url-break' href='" + feature.properties.website + "' target='_blank'>" + feature.properties.website + "</a></td></tr>" + "<table>";
             // assemble the info-modal content using Handlebars
@@ -354,7 +355,9 @@ var fishfrys = L.geoJson(null, {
                         phone: attrClean(feature.properties.phone),
                         website: attrClean(feature.properties.website),
                         etc: attrClean(feature.properties.etc),
-                        menu: attrClean(feature.properties.menu),
+                        menu_text: attrClean(feature.properties.menu.text),
+                        menu_url: attrClean(feature.properties.menu.url),
+                        //menu: attrClean(feature.properties.menu),
                         venue_notes: attrClean(feature.properties.venue_notes),
                         venue_type: attrClean(feature.properties.venue_type),
                         // for booleans, use booleanLookup to return human friendly text
@@ -372,7 +375,7 @@ var fishfrys = L.geoJson(null, {
 
 
                     if (!feature.properties.publish) {
-                        infoContent.notify = 'This Fish Fry has not yet been verified this year. If you have info about this location for 2017, please head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><u>Facebook page</u></a> and help us out. Thanks!';
+                        infoContent.notify = 'This Fish Fry has not yet been verified this year. If you have info about this location for 2018, please head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><u>Facebook page</u></a> and help us out. Thanks!';
                     }
                     //console.log(infoContent);
 
@@ -401,7 +404,7 @@ var fishfrys = L.geoJson(null, {
  * Request the GeoJSON, add it to the layer and add the layer to the map
  */
 //var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfrys/"
-var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap.geojson"; //?" + now.unix();
+var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap2018.geojson"; //?" + now.unix();
 $.getJSON(geojsonSrc, function (data) {
     //console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
     console.log("Fish Frys successfully loaded");
@@ -666,7 +669,7 @@ function filterFeatures(f) {
             $.each(fishfry_events, function (k, v) {
                 // read each dateimte/pair into moment js objects "begin" and "end"
 
-                if (moment(v.dt_start).isSame('2017-04-14', 'day'))
+                if (moment(v.dt_start).isSame('2018-03-30', 'day'))
                 {
                     //console.log("Found Good Friday");
                     prop_boolean = true;
