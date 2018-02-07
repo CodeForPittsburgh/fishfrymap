@@ -481,8 +481,10 @@
                             <td>{{phone}}</td>
                         </tr>
                         <tr>
-                            <th>Website</th>
-                            <td><a class='url-break' href='{{website}}' target='_blank'>{{website}}</a></td>
+                            <th>Venue Website</th>
+                            <td>
+                                {{#if website}}<a class='url-break' href='{{website}}' target='_blank'>Venue Website</a> {{/if}}
+                            </td>
                         </tr>
                         <tr>
                             <th>Email</th>
