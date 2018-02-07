@@ -11,6 +11,7 @@ var iconLookup = {
     "": iconPath + "Unsure_NA.png",
     "unpublished": iconPath + "yellowpoint75.png"
 };
+
 function booleanLookup(v) {
     var b;
     if ((v === true) || ($.inArray(v, ['true', 'True', 1, 'Yes', 'yes']) > -1)) {
@@ -25,54 +26,54 @@ function booleanLookup(v) {
     return b;
 }
 
-$(window).resize(function () {
+$(window).resize(function() {
     sizeLayerControl();
 });
 
-$(document).on("click", ".feature-row", function (e) {
+$(document).on("click", ".feature-row", function(e) {
     $(document).off("mouseout", ".feature-row", clearHighlight);
     sidebarClick(parseInt($(this).attr("id"), 10));
 });
 
 if (!("ontouchstart" in window)) {
-    $(document).on("mouseover", ".feature-row", function (e) {
+    $(document).on("mouseover", ".feature-row", function(e) {
         highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
     });
 }
 
 $(document).on("mouseout", ".feature-row", clearHighlight);
 
-$("#about-btn").click(function () {
+$("#about-btn").click(function() {
     $("#aboutModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#login-btn").click(function () {
+$("#login-btn").click(function() {
     $("#loginModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#full-extent-btn").click(function () {
+$("#full-extent-btn").click(function() {
     map.fitBounds(fishfrys.getBounds());
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#legend-btn").click(function () {
+$("#legend-btn").click(function() {
     $("#legendModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#filterNav-btn").click(function () {
+$("#filterNav-btn").click(function() {
     $("#filterModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#filterSidebar-btn").click(function () {
+$("#filterSidebar-btn").click(function() {
     $("#filterModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
@@ -80,22 +81,22 @@ $("#filterSidebar-btn").click(function () {
 
 
 
-$("#list-btn").click(function () {
+$("#list-btn").click(function() {
     animateSidebar();
     return false;
 });
 
-$("#nav-btn").click(function () {
+$("#nav-btn").click(function() {
     $(".navbar-collapse").collapse("toggle");
     return false;
 });
 
-$("#sidebar-toggle-btn").click(function () {
+$("#sidebar-toggle-btn").click(function() {
     animateSidebar();
     return false;
 });
 
-$("#sidebar-hide-btn").click(function () {
+$("#sidebar-hide-btn").click(function() {
     animateSidebar();
     return false;
 });
@@ -103,7 +104,7 @@ $("#sidebar-hide-btn").click(function () {
 function animateSidebar() {
     $("#sidebar").animate({
         width: "toggle"
-    }, 350, function () {
+    }, 350, function() {
         map.invalidateSize();
     });
 }
@@ -131,7 +132,7 @@ function syncSidebar() {
     /* Empty sidebar features */
     $("#feature-list tbody").empty();
     /* Loop through fishfrys layer and add only features which are in the map bounds */
-    fishfrys.eachLayer(function (layer) {
+    fishfrys.eachLayer(function(layer) {
         if (map.hasLayer(fishFryLayer)) {
             if (map.getBounds().contains(layer.getLatLng())) {
                 $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="20" src=' + layer.feature.properties.icon + '></td><td class="feature-name">' + layer.feature.properties.venue_name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
@@ -160,10 +161,10 @@ var cartoDark = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/
 });
 // http://mapstack.stamen.com/edit.html#terrain-background[mask=mapbox-water,bright=-30,sat=20,tint=$1b334b@100];watercolor[mask=!mapbox-water,invert=1,tint=3E3F3A@100];terrain-background[mask=!mapbox-water,bright=-40,tint=DFD7CA@100,comp=screen,alpha=60];streets-and-labels[tint=$fedd9a@100,alpha=50]/10/40.4088/-79.9963
 var mapStack = L.tileLayer(
-        'http://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png', {
-            attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
-            maxZoom: 18
-        });
+    'http://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png', {
+        attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
+        maxZoom: 18
+    });
 var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
@@ -219,9 +220,10 @@ function attrClean(attr) {
  * This could be moved to server-side and returned natively by the API.
  */
 var now = moment();
+
 function parseDateTimes(fishfry_events) {
     var sortList = [];
-    $.each(fishfry_events, function (k, v) {
+    $.each(fishfry_events, function(k, v) {
         // read each dateimte/pair into moment js objects "begin" and "end"
         var begin = moment(v.dt_start);
         var end = moment(v.dt_end);
@@ -233,7 +235,7 @@ function parseDateTimes(fishfry_events) {
     });
     //console.log(sortList);
     // sort the array based on the first element in each element
-    sortList.sort(function (a, b) {
+    sortList.sort(function(a, b) {
         if (a[0].isBefore(b[0])) {
             return -1;
         }
@@ -249,10 +251,9 @@ function parseDateTimes(fishfry_events) {
     var s;
     var OpenGoodFriday = false;
     var datecounter = 0;
-    $.each(sortList, function (i, a) {
+    $.each(sortList, function(i, a) {
         // compare them - if on same day, write to content a human-friendly string
-        if (moment(a[0]).isSame('2018-03-30', 'day'))
-        {
+        if (moment(a[0]).isSame('2018-03-30', 'day')) {
             OpenGoodFriday = true;
             // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
         }
@@ -260,30 +261,27 @@ function parseDateTimes(fishfry_events) {
             if (moment(a[0]).isSame(now, 'day')) {
                 //s = "Open Today, " + a[0]eventList_Future.format("h:mm a") + " to " + a[1].format("h:mm a");
                 eventList_Today.push(
-                        a[0].format("h:mm a") + " to " + a[1].format("h:mm a")
-                        );
+                    a[0].format("h:mm a") + " to " + a[1].format("h:mm a")
+                );
                 datecounter++;
-            } 
-//            else {
-//                if (moment(a[0]).isSame('2018-03-30', 'day'))
-//                {
-//                    OpenGoodFriday = true;
-//                    // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
-//                }
-//            }
+            }
+            //            else {
+            //                if (moment(a[0]).isSame('2018-03-30', 'day'))
+            //                {
+            //                    OpenGoodFriday = true;
+            //                    // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
+            //                }
+            //            }
         }
-        if (OpenGoodFriday)
-        {
+        if (OpenGoodFriday) {
             s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
-        } else
-        {
+        } else {
             s = a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
         }
         datecounter++;
         eventList_Future.push(s);
 
-    }
-    );
+    });
     if (!OpenGoodFriday && datecounter > 0)
 
     {
@@ -291,7 +289,7 @@ function parseDateTimes(fishfry_events) {
         eventList_Future.push(s);
     }
     //console.log(eventList);
-    return {"today": eventList_Today, "future": eventList_Future, "GoodFriday": OpenGoodFriday};
+    return { "today": eventList_Today, "future": eventList_Future, "GoodFriday": OpenGoodFriday };
 }
 
 
@@ -306,7 +304,7 @@ var fishfrys = L.geoJson(null, {
      return feature.properties.publish;
      },
      */
-    pointToLayer: function (feature, latlng) {
+    pointToLayer: function(feature, latlng) {
         if (feature.properties.publish) {
             return L.marker(latlng, {
                 icon: L.icon({
@@ -330,7 +328,7 @@ var fishfrys = L.geoJson(null, {
             });
         }
     },
-    onEachFeature: function (feature, layer) {
+    onEachFeature: function(feature, layer) {
         // create feature pop-up modal content
         var nl = 'URL:';
         if (feature.properties) {
@@ -339,7 +337,7 @@ var fishfrys = L.geoJson(null, {
             var infoTemplate = $("#info-template").html();
             var infoTemplateCompiled = Handlebars.compile(infoTemplate);
             layer.on({
-                click: function (e) {
+                click: function(e) {
 
                     //parse date times into object {"today": eventList_Today, "future": eventList_Future} 
                     events = parseDateTimes(feature.properties.events);
@@ -403,13 +401,13 @@ var fishfrys = L.geoJson(null, {
 /**
  * Request the GeoJSON, add it to the layer and add the layer to the map
  */
-//var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfrys/"
-var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap2018.geojson"; //?" + now.unix();
-$.getJSON(geojsonSrc, function (data) {
+var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfries/"
+    // var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap2018.geojson"; //?" + now.unix();
+$.getJSON(geojsonSrc, function(data) {
     //console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
     console.log("Fish Frys successfully loaded");
     // once we get the data, we need to do a few things to each feature:
-    $(data.features).each(function (i, e) {
+    $(data.features).each(function(i, e) {
         // rewrite web urls to make sure they have http/s in front
         if (e.properties.website) {
             var str = e.properties.website;
@@ -461,14 +459,14 @@ zoomHome.addTo(map);
 /*
  * Layer control listeners that allow for a single markerClusters layer
  */
-map.on("overlayadd", function (e) {
+map.on("overlayadd", function(e) {
     if (e.layer === fishFryLayer) {
         markerClusters.addLayer(fishfrys);
         syncSidebar();
     }
 });
 
-map.on("overlayremove", function (e) {
+map.on("overlayremove", function(e) {
     if (e.layer === fishFryLayer) {
         markerClusters.removeLayer(fishfrys);
         syncSidebar();
@@ -478,14 +476,14 @@ map.on("overlayremove", function (e) {
 /**
  * Filter sidebar feature list to only show features in current map bounds
  */
-map.on("moveend", function (e) {
+map.on("moveend", function(e) {
     syncSidebar();
 });
 
 /**
  * Clear feature highlight when map is clicked
  */
-map.on("click", function (e) {
+map.on("click", function(e) {
     highlight.clearLayers();
 });
 
@@ -493,7 +491,7 @@ map.on("click", function (e) {
  * Attribution control
  */
 function updateAttribution() {
-    $.each(map._layers, function (index, layer) {
+    $.each(map._layers, function(index, layer) {
         if (layer.getAttribution) {
             $("#attribution").html((layer.getAttribution()));
         }
@@ -505,7 +503,7 @@ map.on("layerremove", updateAttribution);
 var attributionControl = L.control({
     position: "bottomright"
 });
-attributionControl.onAdd = function (map) {
+attributionControl.onAdd = function(map) {
     var div = L.DomUtil.create("div", "leaflet-control-attribution");
     div.innerHTML = "<span class='hidden-xs'><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a> | <a href='https://github.com/bmcbride'>Bootleaf</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Basemap Attribution</a>";
     return div;
@@ -586,7 +584,7 @@ var layerControl = L.control.groupedLayers(baseLayers, groupedOverlays, {
 /**
  * uncheck all filter checkboxes all by default
  */
-$(".filter").each(function (i, e) {
+$(".filter").each(function(i, e) {
     e.checked = false;
 });
 
@@ -598,7 +596,7 @@ var noFiltersApplied = true;
 /**
  * click event for checkboxes, applies a filter function to every feature
  */
-$("input[class='filter']").click(function (c) {
+$("input[class='filter']").click(function(c) {
     //console.log(c.target.id + ": " + c.target.checked);
     //setFilter applies the showFeature function to every feature in runLayer
     fishfrys.setFilter(filterFeatures);
@@ -645,7 +643,7 @@ function filterFeatures(f) {
     noFiltersApplied = true;
 
     // check all the checkboxes to get the combination of filters applied.
-    $("input[class='filter']").each(function (i, e) {
+    $("input[class='filter']").each(function(i, e) {
         // get the checkbox value
         var filtered = $(e).prop("checked");
         // the presence of any checked checkbox will set noFiltersApplied to false
@@ -661,16 +659,14 @@ function filterFeatures(f) {
 
         // var begin;
         //console.log(">>> " + prop_id + ": ");
-        if (prop_id === "GoodFriday")
-        {
+        if (prop_id === "GoodFriday") {
             //console.log(">>> " + prop_id + ": ");
             var fishfry_events = f.properties.events;
             //var sortList = [];
-            $.each(fishfry_events, function (k, v) {
+            $.each(fishfry_events, function(k, v) {
                 // read each dateimte/pair into moment js objects "begin" and "end"
 
-                if (moment(v.dt_start).isSame('2018-03-30', 'day'))
-                {
+                if (moment(v.dt_start).isSame('2018-03-30', 'day')) {
                     //console.log("Found Good Friday");
                     prop_boolean = true;
 
@@ -679,8 +675,7 @@ function filterFeatures(f) {
                 }
 
             });
-        } else
-        {
+        } else {
             prop_boolean = f.properties[prop_id];
         }
 
@@ -729,33 +724,33 @@ function filterFeatures(f) {
 
 
 /* Highlight search box text on click */
-$("#searchbox").click(function () {
+$("#searchbox").click(function() {
     $(this).select();
 });
 
 /* Prevent hitting enter from refreshing the page */
-$("#searchbox").keypress(function (e) {
+$("#searchbox").keypress(function(e) {
     if (e.which == 13) {
         e.preventDefault();
     }
 });
 
-$("#featureModal").on("hidden.bs.modal", function (e) {
+$("#featureModal").on("hidden.bs.modal", function(e) {
     $(document).on("mouseout", ".feature-row", clearHighlight);
 });
 
 /**
  * Typeahead search functionality
  */
-$(document).one("ajaxStop", function () {
+$(document).one("ajaxStop", function() {
     $("#loading").hide();
     sizeLayerControl();
-    featureList = new List("features", {valueNames: ["feature-name"], page: 1000});
-    featureList.sort("feature-name", {order: "asc"});
+    featureList = new List("features", { valueNames: ["feature-name"], page: 1000 });
+    featureList.sort("feature-name", { order: "asc" });
 
     var fishfrysBH = new Bloodhound({
         name: "FishFrys",
-        datumTokenizer: function (d) {
+        datumTokenizer: function(d) {
             return Bloodhound.tokenizers.whitespace(d.name);
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -765,14 +760,14 @@ $(document).one("ajaxStop", function () {
 
     var geonamesBH = new Bloodhound({
         name: "GeoNames",
-        datumTokenizer: function (d) {
+        datumTokenizer: function(d) {
             return Bloodhound.tokenizers.whitespace(d.name);
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
             url: "http://api.geonames.org/searchJSON?username=bootleaf&featureClass=P&maxRows=5&countryCode=US&name_startsWith=%QUERY",
-            filter: function (data) {
-                return $.map(data.geonames, function (result) {
+            filter: function(data) {
+                return $.map(data.geonames, function(result) {
                     return {
                         name: result.name + ", " + result.adminCode1,
                         lat: result.lat,
@@ -782,11 +777,11 @@ $(document).one("ajaxStop", function () {
                 });
             },
             ajax: {
-                beforeSend: function (jqXhr, settings) {
+                beforeSend: function(jqXhr, settings) {
                     settings.url += "&east=" + map.getBounds().getEast() + "&west=" + map.getBounds().getWest() + "&north=" + map.getBounds().getNorth() + "&south=" + map.getBounds().getSouth();
                     $("#searchicon").removeClass("fa-search").addClass("fa-refresh fa-spin");
                 },
-                complete: function (jqXHR, status) {
+                complete: function(jqXHR, status) {
                     $('#searchicon').removeClass("fa-refresh fa-spin").addClass("fa-search");
                 }
             }
@@ -816,7 +811,7 @@ $(document).one("ajaxStop", function () {
         templates: {
             header: "<h4 class='typeahead-header'><img src='assets/img/globe.png' width='25' height='25'>&nbsp;GeoNames</h4>"
         }
-    }).on("typeahead:selected", function (obj, datum) {
+    }).on("typeahead:selected", function(obj, datum) {
         if (datum.source === "FishFrys") {
             if (!map.hasLayer(fishFryLayer)) {
                 map.addLayer(fishFryLayer);
@@ -832,10 +827,10 @@ $(document).one("ajaxStop", function () {
         if ($(".navbar-collapse").height() > 50) {
             $(".navbar-collapse").collapse("hide");
         }
-    }).on("typeahead:opened", function () {
+    }).on("typeahead:opened", function() {
         $(".navbar-collapse.in").css("max-height", $(document).height() - $(".navbar-header").height());
         $(".navbar-collapse.in").css("height", $(document).height() - $(".navbar-header").height());
-    }).on("typeahead:closed", function () {
+    }).on("typeahead:closed", function() {
         $(".navbar-collapse.in").css("max-height", "");
         $(".navbar-collapse.in").css("height", "");
     });
@@ -847,8 +842,8 @@ $(document).one("ajaxStop", function () {
 var container = $(".leaflet-control-layers")[0];
 if (!L.Browser.touch) {
     L.DomEvent
-            .disableClickPropagation(container)
-            .disableScrollPropagation(container);
+        .disableClickPropagation(container)
+        .disableScrollPropagation(container);
 } else {
     L.DomEvent.disableClickPropagation(container);
 }
