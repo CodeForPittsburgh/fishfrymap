@@ -45,7 +45,7 @@
             <div class="navbar-collapse collapse">
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group has-feedback">
-                        <input id="searchbox" type="text" placeholder="Search All Fish Frys" class="form-control">
+                        <input id="searchbox" type="text" placeholder="Search All Fish Fries" class="form-control">
                         <span id="searchicon" class="fa fa-search form-control-feedback"></span>
                     </div>
                 </form>
@@ -127,7 +127,7 @@
                         <div class="tab-pane  active in" id="about">
                             <h3>Fish Fry Map</h3>
                             <h3 class="small">
-                                <em>See the <a href="https://twitter.com/hollenbarmer/status/845241410450329603" target="_blank">Fish Fry Map How-To</a> for a short video set to polka music that demonstrates how to filter the Fish Frys.</em>
+                                <em>See the <a href="https://twitter.com/hollenbarmer/status/845241410450329603" target="_blank">Fish Fry Map How-To</a> for a short video set to polka music that demonstrates how to filter the Fish Fries.</em>
                             </h3>
                             <p>The Pittsburgh Lenten Fish Fry Map is the brainchild of <a href="https://twitter.com/hollenbarmer">Hollen Barmer</a>, who has tirelessly dedicated time the past few years to inventorying the rich array of Lenten Fish Fry events
                                 that occur every spring in Western Pennsylvania. This year, Code for Pittsburgh is helping.</p>
@@ -142,8 +142,8 @@
                         </div>
                         <div id="disclaimer" class="tab-pane">
                             <p>This map and the data and software behind it is maintained entirely by volunteers.</p>
-                            <p>While we try our best to verify all details about Fish Frys, some details may be incomplete. Please check with the Fish Fry venue ahead of time to verify any details that are crucial to you having an enjoyable, fulfilling Fish
-                                Fry experience.</p>
+                            <p>While we try our best to verify all details about Fish Fries, some details may be incomplete. Please check with the Fish Fry venue ahead of time to verify any details that are crucial to you having an enjoyable, fulfilling
+                                Fish Fry experience.</p>
                         </div>
                         <div class="tab-pane " id="contact">
                             <div class="well well-sm">
@@ -337,12 +337,12 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2">
-                            <h4><small>Note that while we try our best to verify all details about Fish Frys, some details may be incomplete. Please  check with the Fish Fry venue ahead of time and rely on the above filters at your own discretion. </small></h4>
+                            <h4><small>Note that while we try our best to verify all details about Fish Fries, some details may be incomplete. Please  check with the Fish Fry venue ahead of time and rely on the above filters at your own discretion. </small></h4>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Find those fish frys!</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Find those Fish Fries!</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -369,28 +369,25 @@
         <div class="modal-header">
             <div id="feature-info-header">
                 <div class="row">
-                    <div class="col-xs-11">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <h3 class="modal-title"><span id="feature-title">{{venue_name}}</span></h3>
-                            </div>
-                            <div class="col-md-5">
-                                <h3 class="modal-title text-right"><small>{{venue_type}}</small></h3>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-7">
-                                <h4 class="modal-title"><span id="feature-subtitle">{{venue_address}}</span>&nbsp;</h4>
-                            </div>
-                            <div class="col-md-5">
-                                <h4 class="modal-title text-right"><small><a href="https://www.google.com/maps/dir//{{venue_address}}" target="_blank">Get directions &rarr;</a></small></h4>
-                            </div>
-                        </div>
+                    <div class="col-xs-offset-11 col-xs-1">
+                        <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
-                    <div class="col-xs-1">
-                        <div class="col-xs-1">
-                            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <h3 class="modal-title"><span id="feature-title">{{venue_name}}</span></h3>
+                    </div>
+                    <div class="col-md-5">
+                        <h3 class="modal-title text-right hidden-sm hidden-xs"><small>{{venue_type}}</small></h3>
+                        <h3 class="modal-title hidden-md hidden-lg"><small>{{venue_type}}</small></h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <h4 class="modal-title"><span id="feature-subtitle">{{venue_address}}</span>&nbsp;</h4>
+                    </div>
+                    <div class="col-md-5">
+                        <h4 class="modal-title text-right"><small><a href="https://www.google.com/maps/dir//{{venue_address}}" target="_blank">Get directions &rarr;</a></small></h4>
                     </div>
                 </div>
             </div>
