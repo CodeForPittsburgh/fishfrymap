@@ -196,7 +196,7 @@ var mapStack = L.tileLayer(
 var cartoLight = L.tileLayer(
     "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
         maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>'
     }
 );
 var mapboxImagery = L.tileLayer(
@@ -515,7 +515,7 @@ map = L.map("map", {
     layers: [cartoLight, markerClusters, highlight],
     // these are added later:
     zoomControl: false,
-    attributionControl: false
+    // attributionControl: true
 });
 
 /**
@@ -576,7 +576,7 @@ var attributionControl = L.control({
 attributionControl.onAdd = function(map) {
     var div = L.DomUtil.create("div", "leaflet-control-attribution");
     div.innerHTML =
-        "<span class='hidden-xs'><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a> | <a href='https://github.com/bmcbride'>Bootleaf</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Basemap Attribution</a>";
+        "<span class='hidden-xs'><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Basemaps</a>";
     return div;
 };
 map.addControl(attributionControl);
