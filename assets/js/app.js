@@ -347,12 +347,12 @@ var fishFryLayer = L.geoJson(null);
 var fishfrys = L.geoJson(null, {
     // filter function: show only features where publish==true
     /*
-       filter: function(feature, layer) {
-       // filter by publish here
-       // to add: include only those occurring in future
-       return feature.properties.publish;
-       },
-       */
+                           filter: function(feature, layer) {
+                           // filter by publish here
+                           // to add: include only those occurring in future
+                           return feature.properties.publish;
+                           },
+                           */
     pointToLayer: function(feature, latlng) {
         if (feature.properties.publish) {
             return L.marker(latlng, {
@@ -367,21 +367,28 @@ var fishfrys = L.geoJson(null, {
                 riseOnHover: true
             });
         } else {
-            return L.marker(latlng, {
-                icon: L.icon({
-                    iconUrl: feature.properties.icon,
-                    iconSize: [10, 10]
-                }),
-                title: feature.properties.venue_name,
-                riseOnHover: true
+            return L.circleMarker(latlng, {
+                radius: 3,
+                color: "#fedb96",
+                fillColor: "#fff",
+                fillOpacity: 1,
+                weight: 5,
+                opacity: 0.5
             });
+            // return L.marker(latlng, {
+            //     icon: L.icon({
+            //         iconUrl: feature.properties.icon,
+            //         iconSize: [10, 10]
+            //     }),
+            //     title: feature.properties.venue_name,
+            //     riseOnHover: true
+            // });
         }
     },
     onEachFeature: function(feature, layer) {
         // create feature pop-up modal content
         var nl = "URL:";
         if (feature.properties) {
-            //var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Name</th><td>" + feature.properties.venue_name + "</td></tr>" + "<tr><th>Phone</th><td>" + feature.properties.phone + "</td></tr>" + "<tr><th>Address</th><td>" + feature.properties.venue_address + "</td></tr>" + "<tr><th>Website</th><td><a class='url-break' href='" + feature.properties.website + "' target='_blank'>" + feature.properties.website + "</a></td></tr>" + "<table>";
             // assemble the info-modal content using Handlebars
             var infoTemplate = $("#info-template").html();
             var infoTemplateCompiled = Handlebars.compile(infoTemplate);
@@ -389,10 +396,6 @@ var fishfrys = L.geoJson(null, {
                 click: function(e) {
                     //parse date times into object {"today": eventList_Today, "future": eventList_Future}
                     events = parseDateTimes(feature.properties.events);
-
-                    //$("#feature-title").html(feature.properties.venue_name);
-                    //$("#feature-subtitle").html(feature.properties.venue_address);
-                    //console.log(feature.properties);
                     // build Handlebars content object for the info-modal
                     var infoContent = {
                         // for strings, us attrClean to return empty string if value is null
@@ -514,8 +517,8 @@ map = L.map("map", {
     center: [40.4452, -79.9866],
     layers: [cartoLight, markerClusters, highlight],
     // these are added later:
-    zoomControl: false,
-    // attributionControl: true
+    zoomControl: false
+        // attributionControl: true
 });
 
 /**
@@ -756,13 +759,13 @@ function filterFeatures(f) {
     });
 
     /*
-       // 2016 map filter example:
-       var lunch_box = $("#lunch").prop("checked");
-       var lunch_prop = feature.properties.lunch === true;
-       var lunch = (lunch_box === lunch_prop);
-       if (lunch_box) checkboxed.push(lunch);
-       //console.log("lunch ", lunch)
-       */
+                           // 2016 map filter example:
+                           var lunch_box = $("#lunch").prop("checked");
+                           var lunch_prop = feature.properties.lunch === true;
+                           var lunch = (lunch_box === lunch_prop);
+                           if (lunch_box) checkboxed.push(lunch);
+                           //console.log("lunch ", lunch)
+                           */
 
     // the business of filtering:
 
