@@ -1,3 +1,32 @@
+/************************************************
+ * dependencies
+ */
+
+// jQuery + Bootstrap
+var $ = (jQuery = require("jquery"));
+require("bootstrap");
+
+// Leaflet + plugins
+var L = require("leaflet");
+require("leaflet.markercluster");
+require("leaflet-basemaps");
+require("leaflet.locatecontrol");
+require("leaflet-groupedlayercontrol");
+require("leafletgeojsonfilter");
+require("../../node_modules/@unchartedsoftware/leaflet.zoomhome/dist/leaflet.zoomhome");
+
+// other things
+// Misc
+var Handlebars = require("handlebars");
+require("typeahead.js/dist/typeahead.bundle.js");
+// require("list.js"); doesnt work with browserify, loaded via script tag instead.
+var moment = require("moment");
+
+/************************************************
+ * Application Code
+ * TODO: break this up!
+ */
+
 var map,
     featureList,
     fishFrySearch = [];
@@ -212,19 +241,6 @@ var vintage = L.tileLayer(
     }
 );
 
-/*
- var usgsImagery = L.layerGroup([L.tileLayer("http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}", {
- maxZoom: 15,
- }), L.tileLayer.wms("http://raster.nationalmap.gov/arcgis/services/Orthoimagery/USGS_EROS_Ortho_SCALE/ImageServer/WMSServer?", {
- minZoom: 16,
- maxZoom: 19,
- layers: "0",
- format: 'image/jpeg',
- transparent: true,
- attribution: "Aerial Imagery courtesy USGS"
- })]);
- */
-
 /**
  * Overlay Layers
  */
@@ -345,14 +361,6 @@ function parseDateTimes(fishfry_events) {
 /* Empty layer placeholder to add to layer control for listening when to add/remove fishfrys to markerClusters layer */
 var fishFryLayer = L.geoJson(null);
 var fishfrys = L.geoJson(null, {
-    // filter function: show only features where publish==true
-    /*
-                           filter: function(feature, layer) {
-                           // filter by publish here
-                           // to add: include only those occurring in future
-                           return feature.properties.publish;
-                           },
-                           */
     pointToLayer: function(feature, latlng) {
         if (feature.properties.publish) {
             return L.marker(latlng, {
@@ -375,14 +383,6 @@ var fishfrys = L.geoJson(null, {
                 weight: 5,
                 opacity: 0.5
             });
-            // return L.marker(latlng, {
-            //     icon: L.icon({
-            //         iconUrl: feature.properties.icon,
-            //         iconSize: [10, 10]
-            //     }),
-            //     title: feature.properties.venue_name,
-            //     riseOnHover: true
-            // });
         }
     },
     onEachFeature: function(feature, layer) {
@@ -477,7 +477,6 @@ var fishfrys = L.geoJson(null, {
 var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfries/";
 // var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap2018.geojson"; //?" + now.unix();
 $.getJSON(geojsonSrc, function(data) {
-    //console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
     console.log("Fish Frys successfully loaded");
     // once we get the data, we need to do a few things to each feature:
     $(data.features).each(function(i, e) {
@@ -757,15 +756,6 @@ function filterFeatures(f) {
 
         //console.log(">>> " + prop_id + ": " + test);
     });
-
-    /*
-                           // 2016 map filter example:
-                           var lunch_box = $("#lunch").prop("checked");
-                           var lunch_prop = feature.properties.lunch === true;
-                           var lunch = (lunch_box === lunch_prop);
-                           if (lunch_box) checkboxed.push(lunch);
-                           //console.log("lunch ", lunch)
-                           */
 
     // the business of filtering:
 

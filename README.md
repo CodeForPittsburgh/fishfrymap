@@ -4,9 +4,9 @@
 
 # Credits
 
-The Fish Fry Map is built and maintained by members of Code for Pittsburgh. 
+The Fish Fry Map is built and maintained by members of Code for Pittsburgh.
 
-It uses <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a>, <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Bootleaf was created by <a href="https://github.com/bmcbride">Bryan McBride</a>. We've adapted it for this project.
+It uses <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a>, <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>. Bootleaf was created by <a href="https://github.com/bmcbride">Bryan McBride</a>. We've adapted it and modified it (quite heavily) for this project.
 
 ## Basemaps:
 
@@ -16,8 +16,7 @@ It uses <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a>, <a href="ht
 
 ## Icons
 
-* Church and Warehouse icons: © Mapbox 
-
+* Church and Warehouse icons: © Mapbox
 
 # Fish Fry data service
 
@@ -33,20 +32,28 @@ Clone the repo and use your preferred software to spin up a web server.
 
 Using Ruby/Jekyll:
 
-1. `cd /path/to/fishfrymap/`
-2. `jekyll serve`
-3. Open [http://localhost:4000](http://localhost:4000) in your browser.
+1.  `cd /path/to/fishfrymap/`
+2.  `jekyll serve`
+3.  Open [http://localhost:4000](http://localhost:4000) in your browser.
 
 Using Python 3:
 
-1. `cd /path/to/fishfrymap/`
-2. `python -m http.server`
-3. Open [http://localhost:8000](http://localhost:8000) in your browser.
+1.  `cd /path/to/fishfrymap/`
+2.  `python -m http.server`
+3.  Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+## Building and Watching
+
+We use GulpJS for compiling and bundling source code from `src` folder into the `assets` folder. Since the deployment path for this is GitHub pages, we put things in places that Jekyll expects them to be.
+
+Running `gulp build` will compile and bundle the source code.
+
+Running `gulp watch` will do that, plus run `jekyll serve`, opens a browser, and re-run the compiling/bundling tasks on file changes.
 
 ## Code
 
-Most of the work is happening in `assets/js/app.js`. The rest happens in `index.html`. Be warned: it's a bit of a mess...the result of  quick prototyping. 
+Most of the work is happening in `src/js/app.js`. The rest happens in `index.html`. Be warned: it's a bit of a mess...the result of quick prototyping.
 
-## Build and Deployment
+## Deploying
 
-(coming soon)
+Run `gulp build`, commit changes, and push to GitHub to deploy.

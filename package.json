@@ -1,0 +1,56 @@
+{
+    "name": "fishfrymap",
+    "version": "2.0.0",
+    "description": "Pittsburgh Lenten Fish Fry Map",
+    "main": "gulpfile.js",
+    "dependencies": {
+        "@unchartedsoftware/leaflet.zoomhome": "git+https://github.com/gassc/leaflet.zoomhome.git#dc2618f7dcac00f60cb664802ed3e02dcbc62d26",
+        "bootstrap": "^3.3.7",
+        "font-awesome": "^4.7.0",
+        "gulp": "^4.0.0-alpha.3",
+        "handlebars": "^3.0.3",
+        "jquery": "^3.3.1",
+        "leaflet": "^1.3.1",
+        "leaflet-basemaps": "^0.2.3",
+        "leaflet-groupedlayercontrol": "^0.6.0",
+        "leaflet.locatecontrol": "^0.62.0",
+        "leaflet.markercluster": "^1.3.0",
+        "leafletgeojsonfilter": "^0.1.1",
+        "list.js": "^1.2.0",
+        "moment": "^2.21.0",
+        "npm": "^5.7.1",
+        "typeahead.js": "^0.10.5"
+    },
+    "devDependencies": {
+        "browser-sync": "^2.23.6",
+        "browserify": "^16.1.1",
+        "child_process": "^1.0.2",
+        "gulp-clean-css": "^3.9.3",
+        "gulp-concat": "^2.6.1",
+        "gulp-sourcemaps": "^2.6.4",
+        "gulp-uglify": "^3.0.0",
+        "http-server": "^0.11.1",
+        "vinyl-buffer": "^1.0.1",
+        "vinyl-source-stream": "^2.0.0",
+        "watchify": "^3.11.0"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CodeForPittsburgh/fishfrymap.git"
+    },
+    "keywords": [
+        "leaflet",
+        "map",
+        "fishfry",
+        "pittsburgh"
+    ],
+    "author": "Christian Gass",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/CodeForPittsburgh/fishfrymap/issues"
+    },
+    "homepage": "https://github.com/CodeForPittsburgh/fishfrymap#readme"
+}
