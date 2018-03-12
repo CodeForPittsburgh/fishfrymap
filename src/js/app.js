@@ -84,6 +84,15 @@ if (!("ontouchstart" in window)) {
 
 $(document).on("mouseout", ".feature-row", clearHighlight);
 
+/**
+ * screen detection (larger screens get expanded layer control and visible sidebar)
+ */
+if (document.body.clientWidth <= 767) {
+    var isCollapsed = true;
+} else {
+    var isCollapsed = false;
+}
+
 $("#about-btn").click(function() {
     $("#aboutModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
@@ -240,6 +249,8 @@ var vintage = L.tileLayer(
         attribution: "&copy; Mapbox &copy; OpenStreetMap &copy; DigitalGlobe"
     }
 );
+
+var basemaps = [cartoLight, cartoDark, mapStack, mapboxImagery];
 
 /**
  * Overlay Layers
@@ -505,7 +516,6 @@ $.getJSON(geojsonSrc, function(data) {
     });
     // proceed with adding it to the map
     fishfrys.addData(data);
-    map.addLayer(fishFryLayer);
 });
 
 /**
@@ -517,16 +527,119 @@ map = L.map("map", {
     layers: [cartoLight, markerClusters, highlight],
     // these are added later:
     zoomControl: false
-        // attributionControl: true
 });
 
 /**
  * custom zoomhome-control
  */
-var zoomHome = L.Control.zoomHome({
-    position: "topleft"
+map.addControl(
+    L.Control.zoomHome({
+        position: "topleft"
+    })
+);
+
+// var baseLayers = {
+//     "Street Map": cartoLight,
+//     "Night Map": cartoDark,
+//     "Black n' Gold": mapStack,
+//     "Aerial Imagery": mapboxImagery,
+//     Vintage: vintage
+// };
+
+// var groupedOverlays = {
+//     "Fish Frys": {
+//         "&nbsp;On/Off": fishFryLayer
+//     }
+// };
+
+// var layerControl = L.control
+//     .groupedLayers(baseLayers, groupedOverlays, {
+//         collapsed: isCollapsed,
+//         position: "topright"
+//     })
+//     .addTo(map);
+
+// var layerControl = L.control
+//     .layers({}, {
+//         "Fish Fries": fishFryLayer
+//     }, {
+//         collapsed: true
+//     })
+//     .addTo(map);
+
+map.addLayer(fishfrys);
+map.addLayer(fishFryLayer);
+
+map.addControl(
+    // custom basemap control
+    L.control.basemaps({
+        position: "topright",
+        basemaps: basemaps,
+        tileX: 4550, // tile X coordinate
+        tileY: 6176, // tile Y coordinate
+        tileZ: 14 // tile zoom level
+    })
+);
+
+/**
+ * GPS enabled geolocation control set to follow the user's location
+ */
+map.addControl(
+    L.control.locate({
+        position: "topleft",
+        drawCircle: true,
+        follow: true,
+        setView: true,
+        keepCurrentZoomLevel: false,
+        markerStyle: {
+            weight: 1,
+            opacity: 0.8,
+            fillOpacity: 0.8
+        },
+        circleStyle: {
+            weight: 1,
+            clickable: false
+        },
+        icon: "fa fa-location-arrow",
+        metric: false,
+        strings: {
+            title: "My location",
+            popup: "You are within {distance} {unit} from this point",
+            outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
+        },
+        locateOptions: {
+            maxZoom: 17,
+            watch: true,
+            enableHighAccuracy: true,
+            maximumAge: 10000,
+            timeout: 10000
+        }
+    })
+);
+
+/**
+ * Attribution control
+ */
+function updateAttribution() {
+    $.each(map._layers, function(index, layer) {
+        if (layer.getAttribution) {
+            $("#attribution").html(layer.getAttribution());
+        }
+    });
+}
+map.on("layeradd", updateAttribution);
+map.on("layerremove", updateAttribution);
+
+var attributionControl = L.control({
+    position: "bottomright"
 });
-zoomHome.addTo(map);
+attributionControl.onAdd = function(map) {
+    var div = L.DomUtil.create("div", "leaflet-control-attribution");
+    div.innerHTML =
+        "<span><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a></span>";
+    return div;
+};
+map.addControl(attributionControl);
 
 /*
  * Layer control listeners that allow for a single markerClusters layer
@@ -558,96 +671,6 @@ map.on("moveend", function(e) {
 map.on("click", function(e) {
     highlight.clearLayers();
 });
-
-/**
- * Attribution control
- */
-function updateAttribution() {
-    $.each(map._layers, function(index, layer) {
-        if (layer.getAttribution) {
-            $("#attribution").html(layer.getAttribution());
-        }
-    });
-}
-map.on("layeradd", updateAttribution);
-map.on("layerremove", updateAttribution);
-
-var attributionControl = L.control({
-    position: "bottomright"
-});
-attributionControl.onAdd = function(map) {
-    var div = L.DomUtil.create("div", "leaflet-control-attribution");
-    div.innerHTML =
-        "<span class='hidden-xs'><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Basemaps</a>";
-    return div;
-};
-map.addControl(attributionControl);
-
-/**
- * GPS enabled geolocation control set to follow the user's location
- */
-var locateControl = L.control
-    .locate({
-        position: "topleft",
-        drawCircle: true,
-        follow: true,
-        setView: true,
-        keepCurrentZoomLevel: false,
-        markerStyle: {
-            weight: 1,
-            opacity: 0.8,
-            fillOpacity: 0.8
-        },
-        circleStyle: {
-            weight: 1,
-            clickable: false
-        },
-        icon: "fa fa-location-arrow",
-        metric: false,
-        strings: {
-            title: "My location",
-            popup: "You are within {distance} {unit} from this point",
-            outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
-        },
-        locateOptions: {
-            maxZoom: 17,
-            watch: true,
-            enableHighAccuracy: true,
-            maximumAge: 10000,
-            timeout: 10000
-        }
-    })
-    .addTo(map);
-
-/**
- * Larger screens get expanded layer control and visible sidebar
- */
-if (document.body.clientWidth <= 767) {
-    var isCollapsed = true;
-} else {
-    var isCollapsed = false;
-}
-
-var baseLayers = {
-    "Street Map": cartoLight,
-    "Night Map": cartoDark,
-    "Black n' Gold": mapStack,
-    "Aerial Imagery": mapboxImagery,
-    Vintage: vintage
-};
-
-var groupedOverlays = {
-    "Fish Frys": {
-        "&nbsp;On/Off": fishFryLayer
-    }
-};
-
-var layerControl = L.control
-    .groupedLayers(baseLayers, groupedOverlays, {
-        collapsed: isCollapsed,
-        position: "topright"
-    })
-    .addTo(map);
 
 /**
  * FILTERING
@@ -915,11 +938,11 @@ $(document).one("ajaxStop", function() {
 });
 
 // Leaflet patch to make layer control scrollable on touch browsers
-var container = $(".leaflet-control-layers")[0];
-if (!L.Browser.touch) {
-    L.DomEvent.disableClickPropagation(container).disableScrollPropagation(
-        container
-    );
-} else {
-    L.DomEvent.disableClickPropagation(container);
-}
+// var container = $(".leaflet-control-layers")[0];
+// if (!L.Browser.touch) {
+//     L.DomEvent.disableClickPropagation(container).disableScrollPropagation(
+//         container
+//     );
+// } else {
+//     L.DomEvent.disableClickPropagation(container);
+// }
