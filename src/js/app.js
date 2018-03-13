@@ -250,7 +250,7 @@ var vintage = L.tileLayer(
     }
 );
 
-var basemaps = [cartoLight, cartoDark, mapStack, mapboxImagery];
+var basemaps = [cartoLight, cartoDark, mapStack, mapboxImagery, vintage];
 
 /**
  * Overlay Layers
@@ -516,6 +516,7 @@ $.getJSON(geojsonSrc, function(data) {
     });
     // proceed with adding it to the map
     fishfrys.addData(data);
+    map.addLayer(fishFryLayer);
 });
 
 /**
@@ -529,6 +530,8 @@ map = L.map("map", {
     zoomControl: false
 });
 
+// map.addLayer(fishfrys);
+
 /**
  * custom zoomhome-control
  */
@@ -537,6 +540,9 @@ map.addControl(
         position: "topleft"
     })
 );
+$(".leaflet-control-zoomhome-out").html('<i class="fa fa-minus"></i>');
+$(".leaflet-control-zoomhome-in").html('<i class="fa fa-plus"></i>');
+$(".leaflet-control-zoomhome-home").html('<i class="fa fa-arrows-alt"></i>');
 
 // var baseLayers = {
 //     "Street Map": cartoLight,
@@ -559,17 +565,6 @@ map.addControl(
 //     })
 //     .addTo(map);
 
-// var layerControl = L.control
-//     .layers({}, {
-//         "Fish Fries": fishFryLayer
-//     }, {
-//         collapsed: true
-//     })
-//     .addTo(map);
-
-map.addLayer(fishfrys);
-map.addLayer(fishFryLayer);
-
 map.addControl(
     // custom basemap control
     L.control.basemaps({
@@ -578,6 +573,14 @@ map.addControl(
         tileX: 4550, // tile X coordinate
         tileY: 6176, // tile Y coordinate
         tileZ: 14 // tile zoom level
+    })
+);
+
+map.addControl(
+    L.control.layers({}, {
+        "Fish Fries": fishFryLayer
+    }, {
+        collapsed: true
     })
 );
 
@@ -938,11 +941,11 @@ $(document).one("ajaxStop", function() {
 });
 
 // Leaflet patch to make layer control scrollable on touch browsers
-// var container = $(".leaflet-control-layers")[0];
-// if (!L.Browser.touch) {
-//     L.DomEvent.disableClickPropagation(container).disableScrollPropagation(
-//         container
-//     );
-// } else {
-//     L.DomEvent.disableClickPropagation(container);
-// }
+var container = $(".leaflet-control-layers")[0];
+if (!L.Browser.touch) {
+    L.DomEvent.disableClickPropagation(container).disableScrollPropagation(
+        container
+    );
+} else {
+    L.DomEvent.disableClickPropagation(container);
+}
