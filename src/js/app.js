@@ -1,3 +1,32 @@
+/************************************************
+ * dependencies
+ */
+
+// jQuery + Bootstrap
+var $ = (jQuery = require("jquery"));
+require("bootstrap");
+
+// Leaflet + plugins
+var L = require("leaflet");
+require("leaflet.markercluster");
+require("leaflet-basemaps");
+require("leaflet.locatecontrol");
+require("leaflet-groupedlayercontrol");
+require("leafletgeojsonfilter");
+require("../../node_modules/@unchartedsoftware/leaflet.zoomhome/dist/leaflet.zoomhome");
+
+// other things
+// Misc
+var Handlebars = require("handlebars");
+require("typeahead.js/dist/typeahead.bundle.js");
+// require("list.js"); doesnt work with browserify, loaded via script tag instead.
+var moment = require("moment");
+
+/************************************************
+ * Application Code
+ * TODO: break this up!
+ */
+
 var map,
     featureList,
     fishFrySearch = [];
@@ -54,6 +83,15 @@ if (!("ontouchstart" in window)) {
 }
 
 $(document).on("mouseout", ".feature-row", clearHighlight);
+
+/**
+ * screen detection (larger screens get expanded layer control and visible sidebar)
+ */
+if (document.body.clientWidth <= 767) {
+    var isCollapsed = true;
+} else {
+    var isCollapsed = false;
+}
 
 $("#about-btn").click(function() {
     $("#aboutModal").modal("show");
@@ -212,18 +250,7 @@ var vintage = L.tileLayer(
     }
 );
 
-/*
- var usgsImagery = L.layerGroup([L.tileLayer("http://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}", {
- maxZoom: 15,
- }), L.tileLayer.wms("http://raster.nationalmap.gov/arcgis/services/Orthoimagery/USGS_EROS_Ortho_SCALE/ImageServer/WMSServer?", {
- minZoom: 16,
- maxZoom: 19,
- layers: "0",
- format: 'image/jpeg',
- transparent: true,
- attribution: "Aerial Imagery courtesy USGS"
- })]);
- */
+var basemaps = [cartoLight, cartoDark, mapStack, mapboxImagery, vintage];
 
 /**
  * Overlay Layers
@@ -345,14 +372,6 @@ function parseDateTimes(fishfry_events) {
 /* Empty layer placeholder to add to layer control for listening when to add/remove fishfrys to markerClusters layer */
 var fishFryLayer = L.geoJson(null);
 var fishfrys = L.geoJson(null, {
-    // filter function: show only features where publish==true
-    /*
-                           filter: function(feature, layer) {
-                           // filter by publish here
-                           // to add: include only those occurring in future
-                           return feature.properties.publish;
-                           },
-                           */
     pointToLayer: function(feature, latlng) {
         if (feature.properties.publish) {
             return L.marker(latlng, {
@@ -375,14 +394,6 @@ var fishfrys = L.geoJson(null, {
                 weight: 5,
                 opacity: 0.5
             });
-            // return L.marker(latlng, {
-            //     icon: L.icon({
-            //         iconUrl: feature.properties.icon,
-            //         iconSize: [10, 10]
-            //     }),
-            //     title: feature.properties.venue_name,
-            //     riseOnHover: true
-            // });
         }
     },
     onEachFeature: function(feature, layer) {
@@ -477,7 +488,6 @@ var fishfrys = L.geoJson(null, {
 var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfries/";
 // var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap2018.geojson"; //?" + now.unix();
 $.getJSON(geojsonSrc, function(data) {
-    //console.log("Fish Frys successfully loaded from http://fishfry.codeforpgh.com/api/fishfrys");
     console.log("Fish Frys successfully loaded");
     // once we get the data, we need to do a few things to each feature:
     $(data.features).each(function(i, e) {
@@ -518,16 +528,121 @@ map = L.map("map", {
     layers: [cartoLight, markerClusters, highlight],
     // these are added later:
     zoomControl: false
-        // attributionControl: true
 });
+
+// map.addLayer(fishfrys);
 
 /**
  * custom zoomhome-control
  */
-var zoomHome = L.Control.zoomHome({
-    position: "topleft"
+map.addControl(
+    L.Control.zoomHome({
+        position: "topleft"
+    })
+);
+$(".leaflet-control-zoomhome-out").html('<i class="fa fa-minus"></i>');
+$(".leaflet-control-zoomhome-in").html('<i class="fa fa-plus"></i>');
+$(".leaflet-control-zoomhome-home").html('<i class="fa fa-arrows-alt"></i>');
+
+// var baseLayers = {
+//     "Street Map": cartoLight,
+//     "Night Map": cartoDark,
+//     "Black n' Gold": mapStack,
+//     "Aerial Imagery": mapboxImagery,
+//     Vintage: vintage
+// };
+
+// var groupedOverlays = {
+//     "Fish Frys": {
+//         "&nbsp;On/Off": fishFryLayer
+//     }
+// };
+
+// var layerControl = L.control
+//     .groupedLayers(baseLayers, groupedOverlays, {
+//         collapsed: isCollapsed,
+//         position: "topright"
+//     })
+//     .addTo(map);
+
+map.addControl(
+    // custom basemap control
+    L.control.basemaps({
+        position: "topright",
+        basemaps: basemaps,
+        tileX: 4550, // tile X coordinate
+        tileY: 6176, // tile Y coordinate
+        tileZ: 14 // tile zoom level
+    })
+);
+
+map.addControl(
+    L.control.layers({}, {
+        "Fish Fries": fishFryLayer
+    }, {
+        collapsed: true
+    })
+);
+
+/**
+ * GPS enabled geolocation control set to follow the user's location
+ */
+map.addControl(
+    L.control.locate({
+        position: "topleft",
+        drawCircle: true,
+        follow: true,
+        setView: true,
+        keepCurrentZoomLevel: false,
+        markerStyle: {
+            weight: 1,
+            opacity: 0.8,
+            fillOpacity: 0.8
+        },
+        circleStyle: {
+            weight: 1,
+            clickable: false
+        },
+        icon: "fa fa-location-arrow",
+        metric: false,
+        strings: {
+            title: "My location",
+            popup: "You are within {distance} {unit} from this point",
+            outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
+        },
+        locateOptions: {
+            maxZoom: 17,
+            watch: true,
+            enableHighAccuracy: true,
+            maximumAge: 10000,
+            timeout: 10000
+        }
+    })
+);
+
+/**
+ * Attribution control
+ */
+function updateAttribution() {
+    $.each(map._layers, function(index, layer) {
+        if (layer.getAttribution) {
+            $("#attribution").html(layer.getAttribution());
+        }
+    });
+}
+map.on("layeradd", updateAttribution);
+map.on("layerremove", updateAttribution);
+
+var attributionControl = L.control({
+    position: "bottomright"
 });
-zoomHome.addTo(map);
+attributionControl.onAdd = function(map) {
+    var div = L.DomUtil.create("div", "leaflet-control-attribution");
+    div.innerHTML =
+        "<span><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a></span>";
+    return div;
+};
+map.addControl(attributionControl);
 
 /*
  * Layer control listeners that allow for a single markerClusters layer
@@ -559,96 +674,6 @@ map.on("moveend", function(e) {
 map.on("click", function(e) {
     highlight.clearLayers();
 });
-
-/**
- * Attribution control
- */
-function updateAttribution() {
-    $.each(map._layers, function(index, layer) {
-        if (layer.getAttribution) {
-            $("#attribution").html(layer.getAttribution());
-        }
-    });
-}
-map.on("layeradd", updateAttribution);
-map.on("layerremove", updateAttribution);
-
-var attributionControl = L.control({
-    position: "bottomright"
-});
-attributionControl.onAdd = function(map) {
-    var div = L.DomUtil.create("div", "leaflet-control-attribution");
-    div.innerHTML =
-        "<span class='hidden-xs'><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Basemaps</a>";
-    return div;
-};
-map.addControl(attributionControl);
-
-/**
- * GPS enabled geolocation control set to follow the user's location
- */
-var locateControl = L.control
-    .locate({
-        position: "topleft",
-        drawCircle: true,
-        follow: true,
-        setView: true,
-        keepCurrentZoomLevel: false,
-        markerStyle: {
-            weight: 1,
-            opacity: 0.8,
-            fillOpacity: 0.8
-        },
-        circleStyle: {
-            weight: 1,
-            clickable: false
-        },
-        icon: "fa fa-location-arrow",
-        metric: false,
-        strings: {
-            title: "My location",
-            popup: "You are within {distance} {unit} from this point",
-            outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
-        },
-        locateOptions: {
-            maxZoom: 17,
-            watch: true,
-            enableHighAccuracy: true,
-            maximumAge: 10000,
-            timeout: 10000
-        }
-    })
-    .addTo(map);
-
-/**
- * Larger screens get expanded layer control and visible sidebar
- */
-if (document.body.clientWidth <= 767) {
-    var isCollapsed = true;
-} else {
-    var isCollapsed = false;
-}
-
-var baseLayers = {
-    "Street Map": cartoLight,
-    "Night Map": cartoDark,
-    "Black n' Gold": mapStack,
-    "Aerial Imagery": mapboxImagery,
-    Vintage: vintage
-};
-
-var groupedOverlays = {
-    "Fish Frys": {
-        "&nbsp;On/Off": fishFryLayer
-    }
-};
-
-var layerControl = L.control
-    .groupedLayers(baseLayers, groupedOverlays, {
-        collapsed: isCollapsed,
-        position: "topright"
-    })
-    .addTo(map);
 
 /**
  * FILTERING
@@ -757,15 +782,6 @@ function filterFeatures(f) {
 
         //console.log(">>> " + prop_id + ": " + test);
     });
-
-    /*
-                           // 2016 map filter example:
-                           var lunch_box = $("#lunch").prop("checked");
-                           var lunch_prop = feature.properties.lunch === true;
-                           var lunch = (lunch_box === lunch_prop);
-                           if (lunch_box) checkboxed.push(lunch);
-                           //console.log("lunch ", lunch)
-                           */
 
     // the business of filtering:
 
