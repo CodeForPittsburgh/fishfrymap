@@ -171,7 +171,8 @@ gulp.task("build", gulp.parallel("pack-js", "pack-css", "copy-assets"));
 
 // Run a development server
 gulp.task("runserver", function() {
-    var proc = exec("jekyll serve");
+    // var proc = exec("jekyll serve");
+    var proc = exec("http-server -p 4000");
 });
 // sync the browser
 gulp.task("browser-sync", function() {
