@@ -1,4 +1,6 @@
 # Pittsburgh Lenten Fish Fry Map
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FCodeForPittsburgh%2Ffishfrymap.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FCodeForPittsburgh%2Ffishfrymap?ref=badge_shield)
+
 
 The Pittsburgh Lenten Fish Fry Map is the brainchild of [Hollen Barmer](https://twitter.com/hollenbarmer), who has tirelessly dedicated her time since 2012 inventorying the rich array of Lenten Fish Fry events that occur every spring in Western Pennsylvania. Code for Pittsburgh helps with website development, hosting, and data maintenance!
 
@@ -64,3 +66,7 @@ Our nice basemaps come from all over!
 ### Icons
 
 Church and Warehouse icons come from © Mapbox.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FCodeForPittsburgh%2Ffishfrymap.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FCodeForPittsburgh%2Ffishfrymap?ref=badge_large)
