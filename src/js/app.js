@@ -60,17 +60,46 @@ function booleanLookup(v) {
     return b;
 }
 
-$(window).resize(function() {
+
+// Some code to help figure out Good Friday
+
+function padout(number) {
+    return (number < 10) ? '0' + number : number;
+}
+
+function Easter(Y) {
+    var C = Math.floor(Y / 100);
+    var N = Y - 19 * Math.floor(Y / 19);
+    var K = Math.floor((C - 17) / 25);
+    var I = C - Math.floor(C / 4) - Math.floor((C - K) / 3) + 19 * N + 15;
+    I = I - 30 * Math.floor((I / 30));
+    I = I - Math.floor(I / 28) * (1 - Math.floor(I / 28) * Math.floor(29 / (I + 1)) * Math.floor((21 - N) / 11));
+    var J = Y + Math.floor(Y / 4) + I + 2 - C + Math.floor(C / 4);
+    J = J - 7 * Math.floor(J / 7);
+    var L = I - J;
+    var M = 3 + Math.floor((L + 40) / 44);
+    var D = L + 28 - 31 * Math.floor(M / 4);
+
+    return Y + '-' + padout(M) + '-' + padout(D);
+}
+
+// thisYear = 2019;
+thisYear = moment().year();
+easterThisYear = moment(Easter(thisYear));
+goodFridayThisYear = easterThisYear.subtract(2, 'd');
+
+
+$(window).resize(function () {
     sizeLayerControl();
 });
 
-$(document).on("click", ".feature-row", function(e) {
+$(document).on("click", ".feature-row", function (e) {
     $(document).off("mouseout", ".feature-row", clearHighlight);
     sidebarClick(parseInt($(this).attr("id"), 10));
 });
 
 if (!("ontouchstart" in window)) {
-    $(document).on("mouseover", ".feature-row", function(e) {
+    $(document).on("mouseover", ".feature-row", function (e) {
         highlight
             .clearLayers()
             .addLayer(
@@ -93,58 +122,58 @@ if (document.body.clientWidth <= 767) {
     var isCollapsed = false;
 }
 
-$("#about-btn").click(function() {
+$("#about-btn").click(function () {
     $("#aboutModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#login-btn").click(function() {
+$("#login-btn").click(function () {
     $("#loginModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#full-extent-btn").click(function() {
+$("#full-extent-btn").click(function () {
     map.fitBounds(fishfrys.getBounds());
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#legend-btn").click(function() {
+$("#legend-btn").click(function () {
     $("#legendModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#filterNav-btn").click(function() {
+$("#filterNav-btn").click(function () {
     $("#filterModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#filterSidebar-btn").click(function() {
+$("#filterSidebar-btn").click(function () {
     $("#filterModal").modal("show");
     $(".navbar-collapse.in").collapse("hide");
     return false;
 });
 
-$("#list-btn").click(function() {
+$("#list-btn").click(function () {
     animateSidebar();
     return false;
 });
 
-$("#nav-btn").click(function() {
+$("#nav-btn").click(function () {
     $(".navbar-collapse").collapse("toggle");
     return false;
 });
 
-$("#sidebar-toggle-btn").click(function() {
+$("#sidebar-toggle-btn").click(function () {
     animateSidebar();
     return false;
 });
 
-$("#sidebar-hide-btn").click(function() {
+$("#sidebar-hide-btn").click(function () {
     animateSidebar();
     return false;
 });
@@ -154,7 +183,7 @@ function animateSidebar() {
             width: "toggle"
         },
         350,
-        function() {
+        function () {
             map.invalidateSize();
         }
     );
@@ -183,7 +212,7 @@ function syncSidebar() {
     /* Empty sidebar features */
     $("#feature-list tbody").empty();
     /* Loop through fishfrys layer and add only features which are in the map bounds */
-    fishfrys.eachLayer(function(layer) {
+    fishfrys.eachLayer(function (layer) {
         if (map.hasLayer(fishFryLayer)) {
             if (map.getBounds().contains(layer.getLatLng())) {
                 $("#feature-list tbody").append(
@@ -288,7 +317,7 @@ var now = moment();
 
 function parseDateTimes(fishfry_events) {
     var sortList = [];
-    $.each(fishfry_events, function(k, v) {
+    $.each(fishfry_events, function (k, v) {
         // read each dateimte/pair into moment js objects "begin" and "end"
         var begin = moment(v.dt_start);
         var end = moment(v.dt_end);
@@ -300,7 +329,7 @@ function parseDateTimes(fishfry_events) {
     });
     //console.log(sortList);
     // sort the array based on the first element in each element
-    sortList.sort(function(a, b) {
+    sortList.sort(function (a, b) {
         if (a[0].isBefore(b[0])) {
             return -1;
         }
@@ -316,9 +345,9 @@ function parseDateTimes(fishfry_events) {
     var s;
     var OpenGoodFriday = false;
     var datecounter = 0;
-    $.each(sortList, function(i, a) {
+    $.each(sortList, function (i, a) {
         // compare them - if on same day, write to content a human-friendly string
-        if (moment(a[0]).isSame("2018-03-30", "day")) {
+        if (moment(a[0]).isSame(goodFridayThisYear, "day")) {
             OpenGoodFriday = true;
             // s = "Open Good " + a[0].format("dddd, MMMM Do") + ", " + a[0].format("h:mm a") + " to " + a[1].format("h:mm a");
         }
@@ -372,15 +401,15 @@ function parseDateTimes(fishfry_events) {
 /* Empty layer placeholder to add to layer control for listening when to add/remove fishfrys to markerClusters layer */
 var fishFryLayer = L.geoJson(null);
 var fishfrys = L.geoJson(null, {
-    pointToLayer: function(feature, latlng) {
+    pointToLayer: function (feature, latlng) {
         if (feature.properties.publish) {
             return L.marker(latlng, {
                 icon: L.icon({
                     // feature.properties.icon is added to fishfrys in this script
                     iconUrl: feature.properties.icon,
                     iconSize: [30, 76] // size of the icon
-                        //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-                        //popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                    //iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                    //popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
                 }),
                 title: feature.properties.venue_name,
                 riseOnHover: true
@@ -396,7 +425,7 @@ var fishfrys = L.geoJson(null, {
             });
         }
     },
-    onEachFeature: function(feature, layer) {
+    onEachFeature: function (feature, layer) {
         // create feature pop-up modal content
         var nl = "URL:";
         if (feature.properties) {
@@ -404,7 +433,7 @@ var fishfrys = L.geoJson(null, {
             var infoTemplate = $("#info-template").html();
             var infoTemplateCompiled = Handlebars.compile(infoTemplate);
             layer.on({
-                click: function(e) {
+                click: function (e) {
                     //parse date times into object {"today": eventList_Today, "future": eventList_Future}
                     events = parseDateTimes(feature.properties.events);
                     // build Handlebars content object for the info-modal
@@ -436,7 +465,7 @@ var fishfrys = L.geoJson(null, {
 
                     if (!feature.properties.publish) {
                         infoContent.notify =
-                            'This Fish Fry has not yet been verified this year. If you have info about this location for 2018, please head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><u>Facebook page</u></a> and help us out. Thanks!';
+                            'This Fish Fry has not yet been verified this year. If you have info about this location for ' + thisYear + ', please head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/"><u>Facebook page</u></a> and help us out. Thanks!';
                     }
                     //console.log(infoContent);
 
@@ -487,10 +516,10 @@ var fishfrys = L.geoJson(null, {
  */
 var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfries/";
 // var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap2018.geojson"; //?" + now.unix();
-$.getJSON(geojsonSrc, function(data) {
+$.getJSON(geojsonSrc, function (data) {
     console.log("Fish Frys successfully loaded");
     // once we get the data, we need to do a few things to each feature:
-    $(data.features).each(function(i, e) {
+    $(data.features).each(function (i, e) {
         // rewrite web urls to make sure they have http/s in front
         if (e.properties.website) {
             var str = e.properties.website;
@@ -624,7 +653,7 @@ map.addControl(
  * Attribution control
  */
 function updateAttribution() {
-    $.each(map._layers, function(index, layer) {
+    $.each(map._layers, function (index, layer) {
         if (layer.getAttribution) {
             $("#attribution").html(layer.getAttribution());
         }
@@ -636,7 +665,7 @@ map.on("layerremove", updateAttribution);
 var attributionControl = L.control({
     position: "bottomright"
 });
-attributionControl.onAdd = function(map) {
+attributionControl.onAdd = function (map) {
     var div = L.DomUtil.create("div", "leaflet-control-attribution");
     div.innerHTML =
         "<span><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a></span>";
@@ -647,14 +676,14 @@ map.addControl(attributionControl);
 /*
  * Layer control listeners that allow for a single markerClusters layer
  */
-map.on("overlayadd", function(e) {
+map.on("overlayadd", function (e) {
     if (e.layer === fishFryLayer) {
         markerClusters.addLayer(fishfrys);
         syncSidebar();
     }
 });
 
-map.on("overlayremove", function(e) {
+map.on("overlayremove", function (e) {
     if (e.layer === fishFryLayer) {
         markerClusters.removeLayer(fishfrys);
         syncSidebar();
@@ -664,14 +693,14 @@ map.on("overlayremove", function(e) {
 /**
  * Filter sidebar feature list to only show features in current map bounds
  */
-map.on("moveend", function(e) {
+map.on("moveend", function (e) {
     syncSidebar();
 });
 
 /**
  * Clear feature highlight when map is clicked
  */
-map.on("click", function(e) {
+map.on("click", function (e) {
     highlight.clearLayers();
 });
 
@@ -682,7 +711,7 @@ map.on("click", function(e) {
 /**
  * uncheck all filter checkboxes all by default
  */
-$(".filter").each(function(i, e) {
+$(".filter").each(function (i, e) {
     e.checked = false;
 });
 
@@ -694,7 +723,7 @@ var noFiltersApplied = true;
 /**
  * click event for checkboxes, applies a filter function to every feature
  */
-$("input[class='filter']").click(function(c) {
+$("input[class='filter']").click(function (c) {
     //console.log(c.target.id + ": " + c.target.checked);
     //setFilter applies the showFeature function to every feature in runLayer
     fishfrys.setFilter(filterFeatures);
@@ -739,7 +768,7 @@ function filterFeatures(f) {
     noFiltersApplied = true;
 
     // check all the checkboxes to get the combination of filters applied.
-    $("input[class='filter']").each(function(i, e) {
+    $("input[class='filter']").each(function (i, e) {
         // get the checkbox value
         var filtered = $(e).prop("checked");
         // the presence of any checked checkbox will set noFiltersApplied to false
@@ -759,10 +788,10 @@ function filterFeatures(f) {
             //console.log(">>> " + prop_id + ": ");
             var fishfry_events = f.properties.events;
             //var sortList = [];
-            $.each(fishfry_events, function(k, v) {
+            $.each(fishfry_events, function (k, v) {
                 // read each dateimte/pair into moment js objects "begin" and "end"
 
-                if (moment(v.dt_start).isSame("2018-03-30", "day")) {
+                if (moment(v.dt_start).isSame(goodFridayThisYear, "day")) {
                     //console.log("Found Good Friday");
                     prop_boolean = true;
 
@@ -808,36 +837,38 @@ function filterFeatures(f) {
 }
 
 /* Highlight search box text on click */
-$("#searchbox").click(function() {
+$("#searchbox").click(function () {
     $(this).select();
 });
 
 /* Prevent hitting enter from refreshing the page */
-$("#searchbox").keypress(function(e) {
+$("#searchbox").keypress(function (e) {
     if (e.which == 13) {
         e.preventDefault();
     }
 });
 
-$("#featureModal").on("hidden.bs.modal", function(e) {
+$("#featureModal").on("hidden.bs.modal", function (e) {
     $(document).on("mouseout", ".feature-row", clearHighlight);
 });
 
 /**
  * Typeahead search functionality
  */
-$(document).one("ajaxStop", function() {
+$(document).one("ajaxStop", function () {
     $("#loading").hide();
     sizeLayerControl();
     featureList = new List("features", {
         valueNames: ["feature-name"],
         page: 1000
     });
-    featureList.sort("feature-name", { order: "asc" });
+    featureList.sort("feature-name", {
+        order: "asc"
+    });
 
     var fishfrysBH = new Bloodhound({
         name: "FishFrys",
-        datumTokenizer: function(d) {
+        datumTokenizer: function (d) {
             return Bloodhound.tokenizers.whitespace(d.name);
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -847,14 +878,14 @@ $(document).one("ajaxStop", function() {
 
     var geonamesBH = new Bloodhound({
         name: "Mapbox",
-        datumTokenizer: function(d) {
+        datumTokenizer: function (d) {
             return Bloodhound.tokenizers.whitespace(d.name);
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
             url: "https://api.mapbox.com/geocoding/v5/mapbox.places/%QUERY.json?&access_token=pk.eyJ1IjoiY2l2aWNtYXBwZXIiLCJhIjoiY2pkZGR2YnRkMDBiYTMzbmFqemRhemYzdSJ9.Cny85WNd4zd6C3WhC6v9Rw&country=us&proximity=-79.9976593%2C40.4396267&autocomplete=true&limit=5",
-            filter: function(data) {
-                return $.map(data.features, function(feature) {
+            filter: function (data) {
+                return $.map(data.features, function (feature) {
                     return {
                         name: feature.place_name,
                         lat: feature.geometry.coordinates[1],
@@ -864,12 +895,12 @@ $(document).one("ajaxStop", function() {
                 });
             },
             ajax: {
-                beforeSend: function(jqXhr, settings) {
+                beforeSend: function (jqXhr, settings) {
                     $("#searchicon")
                         .removeClass("fa-search")
                         .addClass("fa-refresh fa-spin");
                 },
-                complete: function(jqXHR, status) {
+                complete: function (jqXHR, status) {
                     $("#searchicon")
                         .removeClass("fa-refresh fa-spin")
                         .addClass("fa-search");
@@ -905,7 +936,7 @@ $(document).one("ajaxStop", function() {
                 header: "<h4 class='typeahead-header'>Places</h4>"
             }
         })
-        .on("typeahead:selected", function(obj, datum) {
+        .on("typeahead:selected", function (obj, datum) {
             if (datum.source === "FishFrys") {
                 if (!map.hasLayer(fishFryLayer)) {
                     map.addLayer(fishFryLayer);
@@ -922,7 +953,7 @@ $(document).one("ajaxStop", function() {
                 $(".navbar-collapse").collapse("hide");
             }
         })
-        .on("typeahead:opened", function() {
+        .on("typeahead:opened", function () {
             $(".navbar-collapse.in").css(
                 "max-height",
                 $(document).height() - $(".navbar-header").height()
@@ -932,7 +963,7 @@ $(document).one("ajaxStop", function() {
                 $(document).height() - $(".navbar-header").height()
             );
         })
-        .on("typeahead:closed", function() {
+        .on("typeahead:closed", function () {
             $(".navbar-collapse.in").css("max-height", "");
             $(".navbar-collapse.in").css("height", "");
         });
