@@ -3,7 +3,10 @@
  */
 
 // jQuery + Bootstrap
-var $ = (jQuery = require("jquery"));
+var $ = require('../../node_modules/jquery/dist/jquery')
+window.jQuery = $;
+window.$ = $;
+
 require("bootstrap");
 
 // Leaflet + plugins
@@ -16,10 +19,12 @@ require("leafletgeojsonfilter");
 require("../../node_modules/@unchartedsoftware/leaflet.zoomhome/dist/leaflet.zoomhome");
 
 // other things
-// Misc
+// user a local copy of typeahead
+require('../js/lib/typeahead.js/dist/typeahead.bundle')
+
 var Handlebars = require("handlebars");
-require("typeahead.js/dist/typeahead.bundle.js");
-// require("list.js"); doesnt work with browserify, loaded via script tag instead.
+
+const List = require('list.js');
 var moment = require("moment");
 
 /************************************************
@@ -84,9 +89,9 @@ function Easter(Y) {
 }
 
 // thisYear = 2019;
-thisYear = moment().year();
-easterThisYear = moment(Easter(thisYear));
-goodFridayThisYear = easterThisYear.subtract(2, 'd');
+var thisYear = moment().year();
+var easterThisYear = moment(Easter(thisYear));
+var goodFridayThisYear = easterThisYear.subtract(2, 'd');
 
 
 $(window).resize(function () {
@@ -180,8 +185,8 @@ $("#sidebar-hide-btn").click(function () {
 
 function animateSidebar() {
     $("#sidebar").animate({
-            width: "toggle"
-        },
+        width: "toggle"
+    },
         350,
         function () {
             map.invalidateSize();
@@ -249,37 +254,31 @@ function syncSidebar() {
 
 var cartoDark = L.tileLayer(
     "https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
-    }
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
+}
 );
 // http://mapstack.stamen.com/edit.html#terrain-background[mask=mapbox-water,bright=-30,sat=20,tint=$1b334b@100];watercolor[mask=!mapbox-water,invert=1,tint=3E3F3A@100];terrain-background[mask=!mapbox-water,bright=-40,tint=DFD7CA@100,comp=screen,alpha=60];streets-and-labels[tint=$fedd9a@100,alpha=50]/10/40.4088/-79.9963
 var mapStack = L.tileLayer(
     "http://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png", {
-        attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
-        maxZoom: 18
-    }
+    attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
+    maxZoom: 18
+}
 );
 var cartoLight = L.tileLayer(
     "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>'
-    }
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>'
+}
 );
 var mapboxImagery = L.tileLayer(
     "https://api.mapbox.com/styles/v1/civicmapper/citn32v7h002v2iprmp4xzjkr/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2l2aWNtYXBwZXIiLCJhIjoiY2l6cmdnaXc4MDExNTJ2b2F3NThkZm5wNiJ9.N8lpb_oxpIX22eTk1-hI2w", {
-        maxZoom: 19,
-        attribution: "&copy; Mapbox &copy; OpenStreetMap &copy; DigitalGlobe"
-    }
-);
-var vintage = L.tileLayer(
-    "https://api.mapbox.com/styles/v1/civicmapper/cj7cit4zc09o62rplga61yafh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2l2aWNtYXBwZXIiLCJhIjoiY2l0bjMyMGN2MDJ3MTJ5bjBxajNwamw2cyJ9.K-5Q3F2q-8g9k-eIRlV9Yw", {
-        maxZoom: 19,
-        attribution: "&copy; Mapbox &copy; OpenStreetMap &copy; DigitalGlobe"
-    }
+    maxZoom: 19,
+    attribution: "&copy; Mapbox &copy; OpenStreetMap &copy; DigitalGlobe"
+}
 );
 
-var basemaps = [cartoLight, cartoDark, mapStack, mapboxImagery, vintage];
+var basemaps = [cartoLight, cartoDark, mapStack, mapboxImagery];
 
 /**
  * Overlay Layers

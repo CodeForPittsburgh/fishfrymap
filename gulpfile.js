@@ -1,16 +1,24 @@
-var gulp = require("gulp");
-var concat = require("gulp-concat");
-var uglify = require("gulp-uglify");
-var cleanCss = require("gulp-clean-css");
-var sourcemaps = require("gulp-sourcemaps");
-// var babelify = require("babelify");
-var browserify = require("browserify");
-var watchify = require("watchify");
-var source = require("vinyl-source-stream");
-var buffer = require("vinyl-buffer");
+// process.env.BROWSERIFYSHIM_DIAGNOSTICS=1
 
-var browserSync = require("browser-sync");
-var exec = require("child_process").exec;
+/* eslint-disable */
+var gulp = require('gulp')
+var concat = require('gulp-concat')
+var cleanCss = require('gulp-clean-css')
+var sourcemaps = require('gulp-sourcemaps')
+var uglify = require('gulp-uglify')
+var browserify = require('browserify')
+var vinylSource = require('vinyl-source-stream')
+var vinylBuffer = require('vinyl-buffer')
+var environments = require('gulp-environments')
+var browserSync = require('browser-sync')
+var exec = require('child_process').exec
+
+/**
+ * ENVIRONMENTS
+ */
+
+const development = environments.development;
+const production = environments.production;
 
 // Configuration
 var static_assets_folder = "assets";
@@ -47,40 +55,33 @@ var bundlingConfigs = Object.keys(bundles);
 /**
  * BUNDLE JS
  */
-bundlingConfigs.forEach(function(bundleName) {
-    gulp.task("scripts:" + bundleName, function() {
+bundlingConfigs.forEach(function (bundleName) {
+    gulp.task("scripts:" + bundleName, function () {
         return (
             browserify({
                 basedir: ".",
-                insertGlobalVars: {
-                    $: function(file, dir) {
-                        return 'require("jquery")';
-                    },
-                    jQuery: function(file, dir) {
-                        return 'require("jquery")';
-                    }
-                },
                 debug: true,
                 entries: bundles[bundleName].js.src
-                    // cache: {},
-                    // packageCache: {}
             })
-            // .transform('babelify', {
-            //     presets: ['es2015'],
-            //     extensions: ['.js']
-            // })
-            .bundle()
-            .pipe(source(bundles[bundleName].js.dist.file))
-            .pipe(buffer())
-            // .pipe(sourcemaps.init({ loadMaps: true }))
-            // .pipe(uglify())
-            .pipe(sourcemaps.write("./"))
-            .pipe(gulp.dest(bundles[bundleName].js.dist.path))
-            .pipe(
-                browserSync.reload({
-                    stream: true
+                .transform('babelify', {
+                    presets: ['@babel/preset-env'],
+                    sourceMaps: true,
+                    global: true,
+                    // ignore: ['/node_modules/'],
+                    "plugins": ["transform-remove-strict-mode"]
                 })
-            )
+                .bundle()
+                .pipe(vinylSource(bundles[bundleName].js.dist.file))
+                .pipe(vinylBuffer())
+                .pipe(development(sourcemaps.init({ loadMaps: true })))
+                .pipe(production(uglify()))
+                .pipe(development(sourcemaps.write("./")))
+                .pipe(gulp.dest(bundles[bundleName].js.dist.path))
+                .pipe(
+                    browserSync.reload({
+                        stream: true
+                    })
+                )
         );
     });
 });
@@ -88,7 +89,7 @@ bundlingConfigs.forEach(function(bundleName) {
 gulp.task(
     "pack-js",
     gulp.parallel(
-        bundlingConfigs.map(function(name) {
+        bundlingConfigs.map(function (name) {
             return "scripts:" + name;
         })
     )
@@ -97,12 +98,12 @@ gulp.task(
 /**
  * BUNDLE CSS
  */
-bundlingConfigs.forEach(function(bundleName) {
-    gulp.task("styles:" + bundleName, function() {
+bundlingConfigs.forEach(function (bundleName) {
+    gulp.task("styles:" + bundleName, function () {
         return gulp
             .src(bundles[bundleName].css.src)
             .pipe(concat(bundles[bundleName].css.dist.file))
-            .pipe(cleanCss())
+            .pipe(production(cleanCss()))
             .pipe(gulp.dest(bundles[bundleName].css.dist.path))
             .pipe(
                 browserSync.reload({
@@ -115,7 +116,7 @@ bundlingConfigs.forEach(function(bundleName) {
 gulp.task(
     "pack-css",
     gulp.parallel(
-        bundlingConfigs.map(function(name) {
+        bundlingConfigs.map(function (name) {
             return "styles:" + name;
         })
     )
@@ -140,8 +141,8 @@ var assets = {
 
 var assetConfigs = Object.keys(assets);
 
-assetConfigs.forEach(function(assetName) {
-    gulp.task("assets:" + assetName, function() {
+assetConfigs.forEach(function (assetName) {
+    gulp.task("assets:" + assetName, function () {
         return gulp
             .src(assets[assetName].src)
             .pipe(gulp.dest(assets[assetName].dist))
@@ -156,7 +157,7 @@ assetConfigs.forEach(function(assetName) {
 gulp.task(
     "copy-assets",
     gulp.parallel(
-        assetConfigs.map(function(name) {
+        assetConfigs.map(function (name) {
             return "assets:" + name;
         })
     )
@@ -170,12 +171,12 @@ gulp.task(
 gulp.task("build", gulp.parallel("pack-js", "pack-css", "copy-assets"));
 
 // Run a development server
-gulp.task("runserver", function() {
+gulp.task("runserver", function () {
     // var proc = exec("jekyll serve");
     var proc = exec("http-server -p 4000");
 });
 // sync the browser
-gulp.task("browser-sync", function() {
+gulp.task("browser-sync", function () {
     browserSync({
         notify: true,
         proxy: "localhost:4000"
@@ -194,7 +195,7 @@ gulp.task(
         "pack-js",
         "copy-assets",
         // re-run these tasks if source directories change
-        function() {
+        function () {
             gulp.watch("src/css/*.css", gulp.parallel("pack-css"));
             gulp.watch("src/js/*.js", gulp.parallel("pack-js"));
         }
