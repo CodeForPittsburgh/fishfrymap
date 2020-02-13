@@ -45295,8 +45295,8 @@ exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate :
 "use strict";
 
 /************************************************
- * dependencies
- */
+* dependencies
+*/
 // jQuery + Bootstrap
 var $ = require('../../node_modules/jquery/dist/jquery');
 
@@ -45330,9 +45330,9 @@ var List = require('list.js');
 
 var moment = require("moment");
 /************************************************
- * Application Code
- * TODO: break this up!
- */
+* Application Code
+* TODO: break this up!
+*/
 
 
 var map,
@@ -45406,8 +45406,8 @@ if (!("ontouchstart" in window)) {
 
 $(document).on("mouseout", ".feature-row", clearHighlight);
 /**
- * screen detection (larger screens get expanded layer control and visible sidebar)
- */
+* screen detection (larger screens get expanded layer control and visible sidebar)
+*/
 
 if (document.body.clientWidth <= 767) {
   var isCollapsed = true;
@@ -45515,31 +45515,27 @@ function syncSidebar() {
   });
 }
 /**
- * Basemap Layers
- */
+* Basemap Layers
+*/
 
 
 var cartoDark = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png", {
   maxZoom: 19,
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
 }); // http://mapstack.stamen.com/edit.html#terrain-background[mask=mapbox-water,bright=-30,sat=20,tint=$1b334b@100];watercolor[mask=!mapbox-water,invert=1,tint=3E3F3A@100];terrain-background[mask=!mapbox-water,bright=-40,tint=DFD7CA@100,comp=screen,alpha=60];streets-and-labels[tint=$fedd9a@100,alpha=50]/10/40.4088/-79.9963
 
 var mapStack = L.tileLayer("http://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png", {
-  attribution: '<pa style="font-size:0.9rem">Library from <a style="color:black" href="http://www.mapbox.com">Mapbox</a>, Map tiles from <a style="color:black" href="http://stamen.com">Stamen Design</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a>, under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.</pa>',
+  attribution: '<a style="color:black" href="http://stamen.com">Stamen Design</a> under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license + <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a> under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.',
   maxZoom: 18
 });
 var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
   maxZoom: 19,
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>'
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
 });
-var mapboxImagery = L.tileLayer("https://api.mapbox.com/styles/v1/civicmapper/citn32v7h002v2iprmp4xzjkr/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2l2aWNtYXBwZXIiLCJhIjoiY2l6cmdnaXc4MDExNTJ2b2F3NThkZm5wNiJ9.N8lpb_oxpIX22eTk1-hI2w", {
-  maxZoom: 19,
-  attribution: "&copy; Mapbox &copy; OpenStreetMap &copy; DigitalGlobe"
-});
-var basemaps = [cartoLight, cartoDark, mapStack, mapboxImagery];
+var basemaps = [cartoDark, cartoLight, mapStack];
 /**
- * Overlay Layers
- */
+* Overlay Layers
+*/
 
 var highlight = L.geoJson(null);
 var highlightStyle = {
@@ -45565,10 +45561,10 @@ function attrClean(attr) {
   }
 }
 /**
- * parse the events object that comes from the geojson into something
- * we can use to make readable text. use moment js
- * This could be moved to server-side and returned natively by the API.
- */
+* parse the events object that comes from the geojson into something
+* we can use to make readable text. use moment js
+* This could be moved to server-side and returned natively by the API.
+*/
 
 
 var now = moment();
@@ -45668,11 +45664,11 @@ var fishfrys = L.geoJson(null, {
       });
     } else {
       return L.circleMarker(latlng, {
-        radius: 3,
+        radius: 4,
         color: "#fedb96",
         fillColor: "#fff",
         fillOpacity: 1,
-        weight: 5,
+        weight: 6,
         opacity: 0.5
       });
     }
@@ -45688,7 +45684,7 @@ var fishfrys = L.geoJson(null, {
       layer.on({
         click: function click(e) {
           //parse date times into object {"today": eventList_Today, "future": eventList_Future}
-          events = parseDateTimes(feature.properties.events); // build Handlebars content object for the info-modal
+          var events = parseDateTimes(feature.properties.events); // build Handlebars content object for the info-modal
 
           var infoContent = {
             // for strings, us attrClean to return empty string if value is null
@@ -45740,8 +45736,8 @@ var fishfrys = L.geoJson(null, {
   }
 });
 /**
- * Request the GeoJSON, add it to the layer and add the layer to the map
- */
+* Request the GeoJSON, add it to the layer and add the layer to the map
+*/
 
 var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfries/"; // var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap2018.geojson"; //?" + now.unix();
 
@@ -45779,20 +45775,21 @@ $.getJSON(geojsonSrc, function (data) {
   map.addLayer(fishFryLayer);
 });
 /**
- * MAP SETUP
- */
+* MAP SETUP
+*/
 
 map = L.map("map", {
   zoom: 10,
   center: [40.4452, -79.9866],
   layers: [cartoLight, markerClusters, highlight],
-  // these are added later:
-  zoomControl: false
+  // these are customized and added later:
+  zoomControl: false,
+  attributionControl: false
 }); // map.addLayer(fishfrys);
 
 /**
- * custom zoomhome-control
- */
+* custom zoomhome-control
+*/
 
 map.addControl(L.Control.zoomHome({
   position: "topleft"
@@ -45835,8 +45832,8 @@ map.addControl(L.control.layers({}, {
   collapsed: true
 }));
 /**
- * GPS enabled geolocation control set to follow the user's location
- */
+* GPS enabled geolocation control set to follow the user's location
+*/
 
 map.addControl(L.control.locate({
   position: "topleft",
@@ -45868,34 +45865,14 @@ map.addControl(L.control.locate({
     timeout: 10000
   }
 }));
-/**
- * Attribution control
- */
-
-function updateAttribution() {
-  $.each(map._layers, function (index, layer) {
-    if (layer.getAttribution) {
-      $("#attribution").html(layer.getAttribution());
-    }
-  });
-}
-
-map.on("layeradd", updateAttribution);
-map.on("layerremove", updateAttribution);
-var attributionControl = L.control({
-  position: "bottomright"
+var attributionControl = L.control.attribution({
+  position: "bottomright",
+  prefix: "<a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a>"
 });
-
-attributionControl.onAdd = function (map) {
-  var div = L.DomUtil.create("div", "leaflet-control-attribution");
-  div.innerHTML = "<span><a href='http://codeforpittsburgh.github.io'>Code for Pittsburgh</a></span>";
-  return div;
-};
-
 map.addControl(attributionControl);
 /*
- * Layer control listeners that allow for a single markerClusters layer
- */
+* Layer control listeners that allow for a single markerClusters layer
+*/
 
 map.on("overlayadd", function (e) {
   if (e.layer === fishFryLayer) {
@@ -45910,38 +45887,38 @@ map.on("overlayremove", function (e) {
   }
 });
 /**
- * Filter sidebar feature list to only show features in current map bounds
- */
+* Filter sidebar feature list to only show features in current map bounds
+*/
 
 map.on("moveend", function (e) {
   syncSidebar();
 });
 /**
- * Clear feature highlight when map is clicked
- */
+* Clear feature highlight when map is clicked
+*/
 
 map.on("click", function (e) {
   highlight.clearLayers();
 });
 /**
- * FILTERING
- */
+* FILTERING
+*/
 
 /**
- * uncheck all filter checkboxes all by default
- */
+* uncheck all filter checkboxes all by default
+*/
 
 $(".filter").each(function (i, e) {
   e.checked = false;
 });
 /**
- * a global variable that lets us store whether filtering has happened
- */
+* a global variable that lets us store whether filtering has happened
+*/
 
 var noFiltersApplied = true;
 /**
- * click event for checkboxes, applies a filter function to every feature
- */
+* click event for checkboxes, applies a filter function to every feature
+*/
 
 $("input[class='filter']").click(function (c) {
   //console.log(c.target.id + ": " + c.target.checked);
@@ -45965,22 +45942,22 @@ $("input[class='filter']").click(function (c) {
 
 function filterFeatures(f) {
   /**
-   * This function is applied to every feature by the setFilter function.
-   *
-   * It can only can pass to setFilter a boolean: true or false.
-   *
-   * For each feature, figure out whether the feature's properties matches
-   * the checkboxes.
-   *
-   * If the feature properties match the corresponding checkbox fields, return true
-   * if there is a mismatch between any checkbox and feature property, return false
-   *
-   * We're only interested in the checking properties against checked
-   * checkboxes - we ignore the unchecked checkboxes in the comparison
-   *
-   * If no checkboxes are checked (all checkboxes return false), then all
-   * features are shown - this function will just return true.
-   */
+  * This function is applied to every feature by the setFilter function.
+  *
+  * It can only can pass to setFilter a boolean: true or false.
+  *
+  * For each feature, figure out whether the feature's properties matches
+  * the checkboxes.
+  *
+  * If the feature properties match the corresponding checkbox fields, return true
+  * if there is a mismatch between any checkbox and feature property, return false
+  *
+  * We're only interested in the checking properties against checked
+  * checkboxes - we ignore the unchecked checkboxes in the comparison
+  *
+  * If no checkboxes are checked (all checkboxes return false), then all
+  * features are shown - this function will just return true.
+  */
   var show = true;
   var checkboxed = []; //var OpenGoodFriday = false;
   // reset noFilters applied - we'll make that determination again here
@@ -46031,11 +46008,11 @@ function filterFeatures(f) {
   if (noFiltersApplied) {
     show = true;
     /**
-     * if one or more filters are applied, check to see if the attributes of
-     * the feature match only those filters checked (and don't worry about the
-     * unchecked filters).	Get the match results for those with checked-boxes,
-     * and if there if there are any non-matches, the feature returns false
-     */
+    * if one or more filters are applied, check to see if the attributes of
+    * the feature match only those filters checked (and don't worry about the
+    * unchecked filters).	Get the match results for those with checked-boxes,
+    * and if there if there are any non-matches, the feature returns false
+    */
   } else if (checkboxed.indexOf(false) !== -1) {
     show = false;
   } else {
@@ -46065,8 +46042,8 @@ $("#featureModal").on("hidden.bs.modal", function (e) {
   $(document).on("mouseout", ".feature-row", clearHighlight);
 });
 /**
- * Typeahead search functionality
- */
+* Typeahead search functionality
+*/
 
 $(document).one("ajaxStop", function () {
   $("#loading").hide();
