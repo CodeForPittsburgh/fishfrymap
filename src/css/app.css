@@ -150,11 +150,11 @@ input[type="checkbox"] {
 }
 
 .typeahead {
-  background-color: #ffffff;
+  background-color: #222222;
 }
 
 .tt-dropdown-menu {
-  background-color: #ffffff;
+  background-color: #222222;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px 4px 4px 4px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -172,7 +172,7 @@ input[type="checkbox"] {
 }
 
 .tt-suggestion.tt-cursor {
-  background-color: #0097cf;
+  background-color: #fcb82e;
   /* color: #ffffff; */
   color: #000;
   cursor: pointer;
