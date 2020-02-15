@@ -33,25 +33,29 @@ Those two things need to be available globally. the `-g` flag in those commands 
 
 GulpJS is a task-runner that compiles and bundles source code from `src` folder into the `assets` folder. Since the deployment path for this is GitHub pages, we put things into the `assets` folder, which is where Jekyll, the software that runs GitHub pages, expects those things to be.
 
-Running `gulp build` will compile and bundle the source code one time.
+We run those tasks with `npm` scripts.
 
-Running `gulp watch` will do that, plus run `http-server`, open the site in a web browser at [http://localhost:3000](http://localhost:3000), and, upon detecting changes to files in `src`, re-runs compiling/bundling and refreshes your browser. Nice!
+Running `npm run build` will compile and bundle the source code one time.
 
-If the site doesn't load after `gulp watch`, check [http://localhost:4000](http://localhost:4000) in your browser. This is where `http-server` lives. If you don't see anything there, make sure you can run `http-server` from the command line (see **prerequisites** above).
+Running `npm run dev` will do that, plus run `http-server`, open the site in a web browser at [http://localhost:3000](http://localhost:3000), and, upon detecting changes to files in `src`, re-runs compiling/bundling and refreshes your browser. Nice!
+
+If the site doesn't load after `pnpm run dev`, check [http://localhost:4000](http://localhost:4000) in your browser. This is where `http-server` lives. If you don't see anything there, make sure you can run `http-server` from the command line (see **prerequisites** above).
 
 ### Where the functionality lives / where you can hack on the code
 
-Most of the work is happening in `src/js/app.js`. The rest happens in `index.html`. Be warned: it's a bit of a mess...the result of quick prototyping.
+Most of the work is happening in `src/js/app.js`. The rest happens in `index.html`. 
+
+> TODO: the source code for this app is a bit of a mess...the result of quick prototyping.
 
 ### Deploying this Site
 
-Run `gulp build`, commit changes, and push to GitHub to deploy.
+Run `npm run build`, commit changes, and push as-is to GitHub to deploy.
 
 ## Credits
 
 The Fish Fry Map is built and maintained by members of Code for Pittsburgh.
 
-It uses <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a> (which we've adapted it and modified it really quite heavily for this project), <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>, among other things.
+It started with <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a> (which we've adapted it and modified heavily for this project), and uses <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>, among other things.
 
 ### Basemaps
 
@@ -59,7 +63,6 @@ Our nice basemaps come from all over!
 
 * **Light** and **Dark** basemaps: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>
 * **Black n' Gold** basemap: Map tiles from <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.
-* **Aerial Imagery** and **Vintage** basemaps: © Mapbox © OpenStreetMap © DigitalGlobe
 
 ### Icons
 
