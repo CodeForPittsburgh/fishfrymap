@@ -21,13 +21,5 @@ module.exports = {
             '../../node_modules/jquery/dist/jquery.js:jQuery',
             '../../node_modules/jquery/dist/jquery.js:$'
         ]
-    },
-    // '../../node_modules/typeahead.js/dist/bloodhound.js': {
-    //   'exports': 'Bloodhound' 
-    // },
-    // '../../node_modules/typeahead.js/dist/typeahead.jquery.js': {
-    //   'depends': { 
-    //     '../../node_modules/jquery/dist/jquery.js': null 
-    //   }
-    // }
+    }
 }
