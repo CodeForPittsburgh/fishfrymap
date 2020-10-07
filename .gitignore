@@ -1,3 +1,4 @@
 /_site
 /.vscode
 /node_modules
+/nbproject/private/
