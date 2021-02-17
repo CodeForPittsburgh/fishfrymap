@@ -49,20 +49,60 @@ var iconLookup = {
 };
 
 function booleanLookup(v) {
+  // let unsure = "b"
+  let unsure = `<p class="text-center"><i class="fa fa-question fa-2x" aria-hidden="true"></i><br><small>Unsure</small></p>`
+
+  if (v === undefined) {
+    return unsure
+  }
+
   var b;
   if (v === true || $.inArray(v, ["true", "True", 1, "Yes", "yes"]) > -1) {
-    b = "Yes";
+    // b = "Yes";
+    b = `<p class="text-center"><i class="fa fa-check fa-2x" aria-hidden="true"></i><br><small>Yes</small></p>`
   } else if (
     v === false ||
     $.inArray(v, ["false", "False", 0, "No", "no"]) > -1
   ) {
-    b = "No";
+    // b = "No";
+    b = `<p class="text-center"><i class="fa fa-times fa-2x" aria-hidden="true"></i><br><small>No</small></p>`
   } else if (v === null || v === "") {
-    b = "Unsure";
+    b = unsure
   } else {
-    b = "Unsure";
+    b = unsure
   }
   return b;
+}
+
+function booleanPanel(label, value) {
+
+  let unsure = `<p class="text-center"><i class="fa fa-question fa-2x" aria-hidden="true"></i><br><small>Unsure</small></p>`
+
+  var p;
+  var c = "panel panel-default"
+
+  if (value === true || $.inArray(value, ["true", "True", 1, "Yes", "yes"]) > -1) {
+    p = `<p class="text-center"><i class="fa fa-check fa-2x" aria-hidden="true"></i><br><small>Yes</small></p>`
+    c = "panel panel-default bool-card-true"
+  } else if (
+    value === false ||
+    $.inArray(value, ["false", "False", 0, "No", "no"]) > -1
+  ) {
+    p = `<p class="text-center"><i class="fa fa-times fa-2x" aria-hidden="true"></i><br><small>No</small></p>`
+  } else if (value === null || value === "") {
+    p = unsure
+  } else {
+    p = unsure
+  }
+
+  let markup = `
+    <div class="${c}">
+      <div class="panel-body">
+      <p class="text-center">${label}</p>
+      ${p}
+    </div></div>  
+  `
+  return markup;
 }
 
 
@@ -260,7 +300,7 @@ var cartoDark = L.tileLayer(
 );
 // http://mapstack.stamen.com/edit.html#terrain-background[mask=mapbox-water,bright=-30,sat=20,tint=$1b334b@100];watercolor[mask=!mapbox-water,invert=1,tint=3E3F3A@100];terrain-background[mask=!mapbox-water,bright=-40,tint=DFD7CA@100,comp=screen,alpha=60];streets-and-labels[tint=$fedd9a@100,alpha=50]/10/40.4088/-79.9963
 var mapStack = L.tileLayer(
-  "http://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png", {
+  "https://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png", {
   attribution: '<a style="color:black" href="http://stamen.com">Stamen Design</a> under <a style="color:black"href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license + <a style="color:black"href="http://openstreetmap.org">OpenStreetMap</a> under <a style="color:black"href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.',
   maxZoom: 18
 }
@@ -272,7 +312,7 @@ var cartoLight = L.tileLayer(
 }
 );
 
-var basemaps = [cartoDark, cartoLight, mapStack];
+var basemaps = [cartoDark, cartoLight]; // mapStack];
 
 /**
 * Overlay Layers
@@ -409,11 +449,11 @@ var fishfrys = L.geoJson(null, {
       });
     } else {
       return L.circleMarker(latlng, {
-        radius: 4,
+        radius: 3,
         color: "#fedb96",
         fillColor: "#fff",
         fillOpacity: 1,
-        weight: 6,
+        weight: 5,
         opacity: 0.5
       });
     }
@@ -439,18 +479,17 @@ var fishfrys = L.geoJson(null, {
             etc: attrClean(feature.properties.etc),
             menu_text: attrClean(feature.properties.menu.text),
             menu_url: attrClean(feature.properties.menu.url),
-            //menu: attrClean(feature.properties.menu),
+            procedures: attrClean(feature.properties.procedures),
             venue_notes: attrClean(feature.properties.venue_notes),
             venue_type: attrClean(feature.properties.venue_type),
-            // for booleans, use booleanLookup to return human friendly text
-            lunch: booleanLookup(feature.properties.lunch),
-            homemade_pierogies: booleanLookup(
-              feature.properties.homemade_pierogies
-            ),
-            alcohol: booleanLookup(feature.properties.alcohol),
-            take_out: booleanLookup(feature.properties.take_out),
-            handicap: booleanLookup(feature.properties.handicap),
-            GoodFriday: booleanLookup(events.GoodFriday),
+            // for booleans, use booleanPanel to return human friendly text w/ markup
+            lunch: booleanPanel("Lunch Served", feature.properties.lunch),
+            homemade_pierogies: booleanPanel("Homemade Pierogies", feature.properties.homemade_pierogies),
+            alcohol: booleanPanel("Alcohol Served", feature.properties.alcohol),
+            take_out: booleanPanel("Take-Out Available", feature.properties.take_out),
+            drive_thru: booleanPanel("Drive-Thru Available", feature.properties.drive_thru),
+            handicap: booleanPanel("Handicap Accessible", feature.properties.handicap),
+            GoodFriday: booleanPanel("Open Good Friday", events.GoodFriday),
             // event lists parsed by function above
             events_future: events.future,
             events_today: events.today

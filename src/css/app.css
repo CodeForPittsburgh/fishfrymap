@@ -121,6 +121,11 @@ input[type="checkbox"] {
   margin-bottom: 0px;
 }
 
+.bool-card-true {
+  background-color: #fcb82e;
+  color: #000;
+}
+
 .navbar-default {
   background-color: #303030 !important;
 }
