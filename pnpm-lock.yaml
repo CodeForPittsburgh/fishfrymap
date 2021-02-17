@@ -50,7 +50,7 @@ devDependencies:
   vinyl-named: 1.1.0
   vinyl-source-stream: 2.0.0
   watchify: 3.11.1
-lockfileVersion: 5.1
+lockfileVersion: 5.2
 packages:
   /@babel/code-frame/7.8.3:
     dependencies:
@@ -3183,7 +3183,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha1-t303q8046gt3Qmu4vCkizmtCZBE=
-      tarball: esprima-fb/-/esprima-fb-3001.0001.0000-dev-harmony-fb.tgz
   /esprima/1.0.4:
     dev: true
     engines:
@@ -3565,6 +3564,8 @@ packages:
     engines:
       node: '>=4.0'
     optional: true
+    os:
+      - darwin
     requiresBuild: true
     resolution:
       integrity: sha512-+ux3lx6peh0BpvY0JebGyZoiR4D+oYzdPZMKJwkZ+sFkNJzpL7tXc/wehS49gUAxg3tmMHPHZkA8JU2rhhgDHw==
@@ -7428,7 +7429,6 @@ packages:
     dev: false
     name: '@unchartedsoftware/leaflet.zoomhome'
     resolution:
-      registry: 'https://registry.npmjs.org/'
       tarball: 'https://codeload.github.com/gassc/leaflet.zoomhome/tar.gz/dc2618f7dcac00f60cb664802ed3e02dcbc62d26'
     version: 0.0.1
 specifiers:
