@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-93928848-1"></script>
@@ -25,8 +24,6 @@
     <title>2023 Pittsburgh Lenten Fish Fry Map</title>
 
     <link rel="stylesheet" href="assets/css/bundle.core.css">
-
-
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">
     <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon-152.png">
@@ -402,8 +399,6 @@
     </div>
     <!-- /.modal -->
 
-
-
     <!-- modal info template used by Handlebars -->
     <script id="info-template" type="text/x-handlebars-template">
         <div class="modal-header">
@@ -465,7 +460,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     {{#if events_today}}
-                    <h2>Open Today: {{#each events_today}} <span>{{this}}</span> {{/each}} 
+                    <h2>Open Today: {{#each events_today}} <span>{{this}}</span> {{/each}}
                     </h2>
                     {{/if}}
                 </div>
@@ -478,7 +473,7 @@
                         </div>
                         <div class="col-sm-7 text-right">
                             <h2><small>
-                                {{#if menu_url}} 
+                                {{#if menu_url}}
                                 <a class='url-break' href='{{menu_url}}' target='_blank'>View menu/listing</a>
                                 {{/if}}
                             </small></h2>
@@ -507,10 +502,10 @@
                     <h3>Upcoming Date(s)</h3>
                 {{/if}}
                     <ul class="list-unstyled">
-                        {{#if events_future}} 
+                        {{#if events_future}}
                         {{#each events_future}}
                         <li><small>{{this}}</small></li>
-                        {{/each}} 
+                        {{/each}}
                         {{else}}
                         <p class="small text-muted">Nothing here? We may not have gotten around to recording this information yet. If it's not in the notes below, check with the venue for dates/times.</p>
                         {{/if}}
@@ -518,12 +513,12 @@
                 </div>
             </div>
             <br>
-            <!-- 
+            <!--
                 <i class="fa fa-check" aria-hidden="true"></i> &#10003;
                 <i class="fa fa-times" aria-hidden="true"></i> X
                 <i class="fa fa-question" aria-hidden="true"></i>
              -->
-             
+
              <div class="row">
                 <div class="col-sm-3">
                     <!-- <div class="panel panel-default"><div class="panel-body">
@@ -548,9 +543,9 @@
                     <p class="text-center">Open Good Friday</p> -->
                     {{{GoodFriday}}}
                     <!-- </div></div> -->
-                </div>                
-            </div>             
-            
+                </div>
+            </div>
+
             <div class="row margin">
                 <div class="col-sm-3">
                     <!-- <div class="panel panel-default"><div class="panel-body">
@@ -563,7 +558,7 @@
                     <p class="text-center">Take-out Available</p> -->
                     {{{take_out}}}
                     <!-- </div></div> -->
-                </div>                
+                </div
                 <div class="col-sm-3">
                     <!-- <div class="panel panel-default"><div class="panel-body">
                     <p class="text-center">Handicap Accessible</p> -->
@@ -571,14 +566,14 @@
                     <!-- </div></div> -->
                 </div>
             </div>
-            
+
             <!-- <div class="row">
                 <div class="col-sm-12">
                     <table class='table table-condensed well'>
                         <tr>
                             <th>Drive-Thru Available?</th>
                             <td>{{drive_thru}}</td>
-                        </tr>                    
+                        </tr>
                         <tr>
                             <th>Homemade Pierogies?</th>
                             <td>{{homemade_pierogies}}</td>
@@ -613,7 +608,7 @@
                 <div class="col-sm-11">
                     {{#if etc}}
                     <p>{{etc}}</p>
-                    {{/if}} 
+                    {{/if}}
                     {{#if venue_notes}}
                     <p>{{venue_notes}}</p>
                     {{/if}}
@@ -631,7 +626,7 @@
                             <th>Venue Website</th>
                             <td>
                                 {{#if website}}
-                                <a class='url-break' href='{{website}}' target='_blank'>Venue Website</a> 
+                                <a class='url-break' href='{{website}}' target='_blank'>Venue Website</a>
                                 {{/if}}
                             </td>
                         </tr>
@@ -646,7 +641,7 @@
                     <table>
                 </div>
             </div>
-     
+
         </div>
         <div class="modal-footer">
             <p class="small text-muted">
@@ -673,7 +668,5 @@
         ga('create', 'UA-93928848-1', 'auto');
         ga('send', 'pageview');
     </script>
-
 </body>
-
 </html>
