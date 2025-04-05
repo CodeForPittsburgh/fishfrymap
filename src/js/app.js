@@ -75,7 +75,6 @@ function booleanLookup(v) {
 }
 
 function booleanPanel(label, value) {
-
   let unsure = `<p class="text-center"><i class="fa fa-question fa-2x" aria-hidden="true"></i><br><small>Unsure</small></p>`
 
   var p;
@@ -105,9 +104,7 @@ function booleanPanel(label, value) {
   return markup;
 }
 
-
 // Some code to help figure out Good Friday
-
 function padout(number) {
   return (number < 10) ? '0' + number : number;
 }
@@ -276,8 +273,9 @@ function syncSidebar() {
       }
     }
   });
+
   var count = $("#feature-list tbody tr").length;
-  //console.log(count);
+
   /* Update list.js featureList */
   featureList = new List("features", {
     valueNames: ["feature-name"],
@@ -419,10 +417,12 @@ function parseDateTimes(fishfry_events) {
     datecounter++;
     eventList_Future.push(s);
   });
+
   if (!OpenGoodFriday && datecounter > 0) {
     s = "Closed on Good Friday";
     eventList_Future.push(s);
   }
+
   //console.log(eventList);
   return {
     today: eventList_Today,
@@ -543,6 +543,7 @@ var fishfrys = L.geoJson(null, {
     }
   }
 });
+
 /**
 * Request the GeoJSON, add it to the layer and add the layer to the map
 */
@@ -681,7 +682,6 @@ map.addControl(
     }
   })
 );
-
 
 var attributionControl = L.control.attribution({
   position: "bottomright",
