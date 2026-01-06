@@ -548,7 +548,7 @@ var fishfrys = L.geoJson(null, {
 */
 //var geojsonSrc = "https://fishfry.codeforpgh.com/api/fishfries/";
 // temp location 2026 M Howe
-var geojsonSrc = "https://pghfishfry-christianbgass.pythonanywhere.com/api/fishfries/";
+var geojsonSrc = "https://pghfishfry-christianbgass.pythonanywhere.com/";
 // var geojsonSrc = "https://raw.githubusercontent.com/CodeForPittsburgh/fishfrymap/master/data/fishfrymap2018.geojson"; //?" + now.unix();
 $.getJSON(geojsonSrc, function (data) {
   console.log("Fish Frys successfully loaded");
