@@ -53,7 +53,7 @@ Run `npm run build`, commit changes, and push as-is to GitHub to deploy.
 
 ## Credits
 
-The Fish Fry Map is built and maintained by friends of Fish Fries.
+The Fish Fry Map is built and maintained by members of Code for Pittsburgh.
 
 It started with <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a> (which we've adapted it and modified heavily for this project), and uses <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>, among other things.
 
