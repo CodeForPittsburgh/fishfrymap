@@ -1,6 +1,6 @@
 # Pittsburgh Lenten Fish Fry Map
 
-The Pittsburgh Lenten Fish Fry Map is the brainchild of [Hollen Barmer](https://twitter.com/hollenbarmer), who has tirelessly dedicated her time since 2012 inventorying the rich array of Lenten Fish Fry events that occur every spring in Western Pennsylvania. Code for Pittsburgh helps with website development, hosting, and data maintenance!
+The Pittsburgh Lenten Fish Fry Map is the brainchild of Hollen Barmer, who has tirelessly dedicated her time since 2012 inventorying the rich array of Lenten Fish Fry events that occur every spring in Western Pennsylvania. Friends of Fish Fries helps with website development, hosting, and data maintenance!
 
 ## Where Does the Fish Fry data shown on the map come from?
 
@@ -53,7 +53,7 @@ Run `npm run build`, commit changes, and push as-is to GitHub to deploy.
 
 ## Credits
 
-The Fish Fry Map is built and maintained by friends of Fish Fries.
+The Fish Fry Map is built and maintained by Friends of Fish Fries.
 
 It started with <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a> (which we've adapted it and modified heavily for this project), and uses <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>, among other things.
 
