@@ -1,6 +1,6 @@
 # Pittsburgh Lenten Fish Fry Map
 
-The Pittsburgh Lenten Fish Fry Map is the brainchild of [Hollen Barmer](https://twitter.com/hollenbarmer), who has tirelessly dedicated her time since 2012 inventorying the rich array of Lenten Fish Fry events that occur every spring in Western Pennsylvania. Code for Pittsburgh helps with website development, hosting, and data maintenance!
+The Pittsburgh Lenten Fish Fry Map is the brainchild of Hollen Barmer, who has tirelessly dedicated her time since 2012 inventorying the rich array of Lenten Fish Fry events that occur every spring in Western Pennsylvania. Friends of Fish Fries help with website development, hosting, and data maintenance!
 
 ## Where Does the Fish Fry data shown on the map come from?
 
