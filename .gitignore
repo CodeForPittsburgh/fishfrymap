@@ -1,5 +1,9 @@
 /_site
 /.vscode
 /node_modules
+/dist
+/.env
+/test-results
+/playwright-report
 /nbproject/private/
 /nbproject

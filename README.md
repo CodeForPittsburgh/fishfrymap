@@ -22,28 +22,53 @@ Then, in the root of this directory, run:
 
 This will use the `package.json` file to get and install NodeJS dependencies locally, in a `node_modules` folder.
 
-You will also need these things (available on [NPM](https://www.npmjs.com)):
+For legacy development only, you will also need these things (available on [NPM](https://www.npmjs.com)):
 
 * [GulpJS](https://www.npmjs.com/package/gulp), with `gulp` callable from the command line. Install with `npm install gulp@4.0 -g`
 * [Http-Server](https://www.npmjs.com/package/http-server), with `http-server` callable from the command line. Install with: `npm install http-server -g`
 
 Those two things need to be available globally. the `-g` flag in those commands makes sure of that.
 
-### Building and Watching
+### Building and Watching (React/Vite)
 
-GulpJS is a task-runner that compiles and bundles source code from `src` folder into the `assets` folder. Since the deployment path for this is GitHub pages, we put things into the `assets` folder, which is where Jekyll, the software that runs GitHub pages, expects those things to be.
+The primary app now runs with Vite + React.
 
 We run those tasks with `npm` scripts.
 
-Running `npm run build` will compile and bundle the source code one time.
+Running `npm run dev` will start Vite at [http://localhost:5173](http://localhost:5173).
 
-Running `npm run dev` will do that, plus run `http-server`, open the site in a web browser at [http://localhost:3000](http://localhost:3000), and, upon detecting changes to files in `src`, re-runs compiling/bundling and refreshes your browser. Nice!
+Running `npm run build` will create a production build in `dist/`.
 
-If the site doesn't load after `pnpm run dev`, check [http://localhost:4000](http://localhost:4000) in your browser. This is where `http-server` lives. If you don't see anything there, make sure you can run `http-server` from the command line (see **prerequisites** above).
+Running `npm run preview` will serve the built app for smoke testing.
+
+### Testing
+
+- `npm run test:unit` runs unit tests for extracted domain logic.
+- `npm run test:parity` runs Playwright parity tests.
+- `npm run test` runs both unit and parity suites.
+
+### Environment variables
+
+Copy `.env.example` to `.env` and set:
+
+- `VITE_FISHFRY_API_URL` for the primary data API
+- `VITE_FISHFRY_FALLBACK_URL` for local fallback GeoJSON
+- `VITE_MAPBOX_TOKEN` for geocoding suggestions
+
+### Legacy Gulp path
+
+The pre-migration app remains available for parity checks:
+
+- `npm run legacy:dev`
+- `npm run legacy:build`
+
+It can also be opened via `/?legacy=1` from the Vite app.
 
 ### Where the functionality lives / where you can hack on the code
 
-Most of the work is happening in `src/js/app.js`. The rest happens in `index.html`. 
+React app source lives in `src/react`.
+
+Legacy app source remains in `src/js/app.js` and `legacy.html`.
 
 > TODO: the source code for this app is a bit of a mess...the result of quick prototyping.
 

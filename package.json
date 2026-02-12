@@ -1,9 +1,10 @@
 {
     "name": "fishfrymap",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "description": "Pittsburgh Lenten Fish Fry Map",
     "main": "gulpfile.js",
     "dependencies": {
+        "@reduxjs/toolkit": "^2.5.0",
         "@unchartedsoftware/leaflet.zoomhome": "git+https://github.com/gassc/leaflet.zoomhome.git#dc2618f7dcac00f60cb664802ed3e02dcbc62d26",
         "bootstrap": "^3.3.7",
         "font-awesome": "^4.7.0",
@@ -20,11 +21,17 @@
         "list.js": "^1.2.0",
         "moment": "^2.21.0",
         "npm": "^5.7.1",
+        "react": "^18.3.1",
+        "react-bootstrap": "^2.10.9",
+        "react-dom": "^18.3.1",
+        "react-redux": "^9.2.0",
         "typeahead.js": "^0.10.5"
     },
     "devDependencies": {
+        "@playwright/test": "^1.50.1",
         "@babel/core": "^7.7.5",
         "@babel/preset-env": "^7.7.5",
+        "@vitejs/plugin-react": "^4.3.4",
         "@fortawesome/fontawesome-free": "^5.11.2",
         "babel-eslint": "^10.0.3",
         "babel-plugin-transform-remove-strict-mode": "^0.0.2",
@@ -53,14 +60,23 @@
         "gulp-sourcemaps": "^1.12.1",
         "gulp-uglify": "^3.0.2",
         "prettier-eslint": "^8.8.2",
+        "vitest": "^3.0.5",
+        "vite": "^6.1.1",
         "vinyl-buffer": "^1.0.1",
         "vinyl-named": "^1.1.0",
         "vinyl-source-stream": "^2.0.0",
         "watchify": "^3.11.1"
     },
     "scripts": {
-        "dev": "gulp watch --env development",
-        "build": "gulp build --env production"
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "test:unit": "vitest run",
+        "test:unit:watch": "vitest",
+        "legacy:dev": "gulp watch --env development",
+        "legacy:build": "gulp build --env production",
+        "test:parity": "playwright test",
+        "test": "npm run test:unit && npm run test:parity"
     },
     "repository": {
         "type": "git",
