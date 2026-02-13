@@ -10,6 +10,7 @@
         "@reduxjs/toolkit": "^2.5.0",
         "@unchartedsoftware/leaflet.zoomhome": "git+https://github.com/gassc/leaflet.zoomhome.git#dc2618f7dcac00f60cb664802ed3e02dcbc62d26",
         "bootstrap": "^5.3.3",
+        "bootswatch": "^5.3.8",
         "leaflet": "1.6",
         "leaflet-basemaps": "^0.2.3",
         "leaflet-groupedlayercontrol": "^0.6.0",

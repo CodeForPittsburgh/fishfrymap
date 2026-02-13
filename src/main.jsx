@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { config } from "@fortawesome/fontawesome-svg-core";
 
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootswatch/dist/darkly/bootstrap.min.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
