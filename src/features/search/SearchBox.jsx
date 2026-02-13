@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, InputGroup } from "react-bootstrap";
 
 import { faMagnifyingGlass, faSpinner } from "@/icons/fontAwesome";
+import "./SearchBox.css";
 
 const SearchBox = ({
   query,

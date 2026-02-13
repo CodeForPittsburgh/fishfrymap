@@ -10,7 +10,9 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet-basemaps/L.Control.Basemaps.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 
-import "@/styles/index.css";
+import "@/styles/theme-overrides.css";
+import "@/styles/markercluster-default.css";
+import "@/styles/app.css";
 
 import { store } from "@/store";
 import App from "@/App";

@@ -1,5 +1,6 @@
 import React from "react";
 import { ProgressBar } from "react-bootstrap";
+import "./LoadingOverlay.css";
 
 const LoadingOverlay = ({ show }) => {
   if (!show) {

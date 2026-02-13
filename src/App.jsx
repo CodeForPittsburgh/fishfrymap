@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "react-bootstrap";
+import "./App.css";
 
 import TopNav from "@/features/layout/TopNav";
 import Sidebar from "@/features/layout/Sidebar";
@@ -178,6 +179,7 @@ const App = () => {
     dispatch(searchActions.setSuggestionsOpen(false));
     dispatch(uiActions.setNavbarExpanded(false));
   };
+  const mapboxAlertOffsetClass = dataSource === "fallback" ? "fishfry-error--offset-116" : "fishfry-error--offset-64";
 
   return (
     <>
@@ -210,7 +212,7 @@ const App = () => {
         }}
       />
 
-      <div id="container" style={{ marginTop: "10px", paddingBottom: "10px" }}>
+      <div id="container" className="app-container">
         <Sidebar
           visible={ui.sidebarVisible}
           features={visibleFeatures}
@@ -299,13 +301,13 @@ const App = () => {
       ) : null}
 
       {!error && dataSource === "fallback" ? (
-        <Alert className="fishfry-error" variant="info" style={{ bottom: "64px" }}>
+        <Alert className="fishfry-error fishfry-error--offset-64" variant="info">
           Primary API is unreachable; showing fallback data.
         </Alert>
       ) : null}
 
       {!hasMapboxToken && searchQuery.trim().length >= 3 ? (
-        <Alert className="fishfry-error" variant="info" style={{ bottom: dataSource === "fallback" ? "116px" : "64px" }}>
+        <Alert className={`fishfry-error ${mapboxAlertOffsetClass}`} variant="info">
           Mapbox geocoding is disabled because <code>VITE_MAPBOX_TOKEN</code> is not set.
         </Alert>
       ) : null}

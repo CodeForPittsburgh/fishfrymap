@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Card, Col, Modal, Nav, Row, Tab } from "react-bootstrap";
 import { faCircleExclamation, faCircleQuestion, faCode, faEnvelope } from "@/icons/fontAwesome";
+import "./AboutModal.css";
 
 const AboutModal = ({ show, onHide }) => {
   return (
@@ -34,7 +35,7 @@ const AboutModal = ({ show, onHide }) => {
             </Nav.Item>
           </Nav>
 
-          <Tab.Content id="aboutTabsContent" style={{ paddingTop: "10px" }}>
+          <Tab.Content id="aboutTabsContent" className="about-tabs-content">
             <Tab.Pane eventKey="about">
               <h3>Fish Fry Map</h3>
               <p>

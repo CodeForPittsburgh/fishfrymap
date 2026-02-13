@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Container, Form, Nav, Navbar } from "react-bootstrap";
+import "./TopNav.css";
 
 import SearchBox from "@/features/search/SearchBox";
 import { faBars, faCircleQuestion, faDatabase, faFilter } from "@/icons/fontAwesome";

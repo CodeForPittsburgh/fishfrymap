@@ -6,6 +6,7 @@ import { Alert, Button, Card, Col, Modal, Row, Table } from "react-bootstrap";
 import { attrClean, boolValue } from "@/domain/featureUtils";
 import { parseDateTimes } from "@/domain/dateUtils";
 import { faCheck, faQuestion, faXmark } from "@/icons/fontAwesome";
+import "./FeatureModal.css";
 
 function BooleanPanel({ label, value }) {
   const isTrue = boolValue(value);

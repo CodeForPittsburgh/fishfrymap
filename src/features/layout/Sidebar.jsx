@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight, faFilter } from "@/icons/fontAwesome";
 import { Button, Card, Table } from "react-bootstrap";
+import "./Sidebar.css";
 
 const Sidebar = ({
   visible,
@@ -14,7 +15,7 @@ const Sidebar = ({
   onRowMouseOut
 }) => {
   return (
-    <div id="sidebar" style={{ display: visible ? "block" : "none" }}>
+    <div id="sidebar" className={visible ? "sidebar-visible" : "sidebar-hidden"}>
       <div className="sidebar-wrapper">
         <Card id="features" className="h-100 border-0 rounded-0">
           <Card.Header>
@@ -63,11 +64,11 @@ const Sidebar = ({
                     onMouseOver={() => onRowMouseOver(feature.id)}
                     onMouseOut={onRowMouseOut}
                   >
-                    <td style={{ verticalAlign: "middle" }}>
+                    <td className="sidebar-cell-align">
                       <img width="20" src={feature.properties.icon} alt="marker" />
                     </td>
                     <td className="feature-name">{feature.properties.venue_name}</td>
-                    <td style={{ verticalAlign: "middle" }}>
+                    <td className="sidebar-cell-align">
                       <FontAwesomeIcon icon={faChevronRight} className="float-end" />
                     </td>
                   </tr>
