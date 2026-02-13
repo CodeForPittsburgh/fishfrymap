@@ -1,4 +1,5 @@
 import React from "react";
+import { ProgressBar } from "react-bootstrap";
 
 const LoadingOverlay = ({ show }) => {
   if (!show) {
@@ -8,9 +9,7 @@ const LoadingOverlay = ({ show }) => {
   return (
     <div id="loading">
       <div className="loading-indicator">
-        <div className="progress progress-striped active">
-          <div className="progress-bar progress-bar-info progress-bar-full" />
-        </div>
+        <ProgressBar animated now={100} variant="info" className="progress-bar-full" />
       </div>
     </div>
   );

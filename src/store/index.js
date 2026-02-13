@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import uiReducer from "./slices/uiSlice";
-import filtersReducer from "./slices/filtersSlice";
-import selectionReducer from "./slices/selectionSlice";
-import mapReducer from "./slices/mapSlice";
-import searchReducer from "./slices/searchSlice";
-import { fishfryApi } from "./api/fishfryApi";
-import { geocodeApi } from "./api/geocodeApi";
+import uiReducer from "@/store/slices/uiSlice";
+import filtersReducer from "@/store/slices/filtersSlice";
+import selectionReducer from "@/store/slices/selectionSlice";
+import mapReducer from "@/store/slices/mapSlice";
+import searchReducer from "@/store/slices/searchSlice";
+import { fishfryApi } from "@/store/api/fishfryApi";
+import { geocodeApi } from "@/store/api/geocodeApi";
 
 export const store = configureStore({
   reducer: {

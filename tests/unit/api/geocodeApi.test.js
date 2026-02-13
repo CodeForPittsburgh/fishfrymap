@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { queryMapboxSuggestions } from "../../../src/react/store/api/geocodeApi";
+import { queryMapboxSuggestions } from "../../../src/store/api/geocodeApi";
 
 describe("geocodeApi token and query behavior", () => {
   it("returns empty suggestions when token is missing", async () => {

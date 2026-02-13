@@ -47,10 +47,13 @@ Copy `.env.example` to `.env` and set:
 - `VITE_FISHFRY_API_URL` for the primary data API
 - `VITE_FISHFRY_FALLBACK_URL` for local fallback GeoJSON
 - `VITE_MAPBOX_TOKEN` for geocoding suggestions
+- `VITE_CLIENT_ERROR_DSN` for client-side error reporting endpoint
+- `VITE_CLIENT_ERROR_SAMPLE_RATE` between `0` and `1` (default `1`)
 
 ### Where the functionality lives / where you can hack on the code
 
-React app source lives in `src/react`.
+React app source lives in `src`.
+Use `@/` import aliases for app modules (for example `@/features/map/MapView`), and central style entry is `src/styles/index.css`.
 
 ### Deploying this Site
 

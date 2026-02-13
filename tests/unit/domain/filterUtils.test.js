@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { computeGoodFriday } from "../../../src/react/domain/dateUtils";
+import { computeGoodFriday } from "../../../src/domain/dateUtils";
 import {
   featureIsInBounds,
   filterFeature,
   filterFeatures,
   hasActiveFilters
-} from "../../../src/react/domain/filterUtils";
+} from "../../../src/domain/filterUtils";
 
 const baseFeature = {
   properties: {

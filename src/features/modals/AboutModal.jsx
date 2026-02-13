@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Modal, Nav, Tab } from "react-bootstrap";
-import { faCircleExclamation, faCircleQuestion, faCode, faEnvelope } from "../icons/fontAwesome";
+import { Button, Card, Col, Modal, Nav, Row, Tab } from "react-bootstrap";
+import { faCircleExclamation, faCircleQuestion, faCode, faEnvelope } from "@/icons/fontAwesome";
 
 const AboutModal = ({ show, onHide }) => {
   return (
@@ -11,7 +11,7 @@ const AboutModal = ({ show, onHide }) => {
       </Modal.Header>
       <Modal.Body>
         <Tab.Container defaultActiveKey="about">
-          <Nav variant="tabs" className="nav-justified" id="aboutTabs">
+          <Nav variant="tabs" fill id="aboutTabs">
             <Nav.Item>
               <Nav.Link eventKey="about">
                 <FontAwesomeIcon icon={faCircleQuestion} /> About the project
@@ -72,17 +72,17 @@ const AboutModal = ({ show, onHide }) => {
             </Tab.Pane>
 
             <Tab.Pane eventKey="contact">
-              <div className="well well-sm">
-                <div className="row">
-                  <div className="col-md-12">
+              <Card body bg="light">
+                <Row>
+                  <Col md={12}>
                     <p>
                       Head over to our{" "}
                       <a href="https://www.facebook.com/PittsburghLentenFishFryMap/">Facebook page</a> to suggest a
                       Fish Fry, share Fish Fry photos and news, and discuss all things Fish Fry!
                     </p>
-                  </div>
-                </div>
-              </div>
+                  </Col>
+                </Row>
+              </Card>
             </Tab.Pane>
 
             <Tab.Pane eventKey="build">
@@ -122,9 +122,9 @@ const AboutModal = ({ show, onHide }) => {
         </Tab.Container>
       </Modal.Body>
       <Modal.Footer>
-        <button type="button" className="btn btn-default" onClick={onHide}>
+        <Button type="button" variant="secondary" onClick={onHide}>
           Close
-        </button>
+        </Button>
       </Modal.Footer>
     </Modal>
   );

@@ -1,6 +1,7 @@
 import React from "react";
+import { Alert } from "react-bootstrap";
 
-import { logClientError } from "../utils/errorLogging";
+import { logClientError } from "@/utils/errorLogging";
 
 class ModalErrorBoundary extends React.Component {
   constructor(props) {
@@ -33,9 +34,9 @@ class ModalErrorBoundary extends React.Component {
     if (this.state.hasError) {
       const label = this.props.label || "dialog";
       return (
-        <div className="fishfry-error alert alert-danger" role="alert">
+        <Alert className="fishfry-error" variant="danger">
           Unable to render the {label}. Please close and reopen it.
-        </div>
+        </Alert>
       );
     }
 
@@ -44,4 +45,3 @@ class ModalErrorBoundary extends React.Component {
 }
 
 export default ModalErrorBoundary;
-

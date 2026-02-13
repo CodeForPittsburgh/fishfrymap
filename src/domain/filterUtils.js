@@ -1,4 +1,4 @@
-import { isOpenOnGoodFriday } from "./dateUtils";
+import { isOpenOnGoodFriday } from "@/domain/dateUtils";
 
 export function filterFeature(feature, filters, goodFridayDate) {
   let noFiltersApplied = true;

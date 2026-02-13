@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { FILTER_KEYS } from "../../domain/featureUtils";
+import { FILTER_KEYS } from "@/domain/featureUtils";
 
 const initialFilters = FILTER_KEYS.reduce((acc, key) => {
   acc[key] = false;

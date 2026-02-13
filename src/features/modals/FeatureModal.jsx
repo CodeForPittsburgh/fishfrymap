@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
-import { Modal } from "react-bootstrap";
+import { Alert, Button, Card, Col, Modal, Row, Table } from "react-bootstrap";
 
-import { attrClean, boolValue } from "../domain/featureUtils";
-import { parseDateTimes } from "../domain/dateUtils";
-import { faCheck, faQuestion, faXmark } from "../icons/fontAwesome";
+import { attrClean, boolValue } from "@/domain/featureUtils";
+import { parseDateTimes } from "@/domain/dateUtils";
+import { faCheck, faQuestion, faXmark } from "@/icons/fontAwesome";
 
 function BooleanPanel({ label, value }) {
   const isTrue = boolValue(value);
@@ -13,28 +13,28 @@ function BooleanPanel({ label, value }) {
 
   let icon = <FontAwesomeIcon icon={faQuestion} size="2x" aria-hidden="true" />;
   let text = "Unsure";
-  let panelClass = "panel panel-default";
+  let variantClass = "";
 
   if (isTrue) {
     icon = <FontAwesomeIcon icon={faCheck} size="2x" aria-hidden="true" />;
     text = "Yes";
-    panelClass = "panel panel-default bool-card-true";
+    variantClass = "bool-card-true";
   } else if (isFalse) {
     icon = <FontAwesomeIcon icon={faXmark} size="2x" aria-hidden="true" />;
     text = "No";
   }
 
   return (
-    <div className={panelClass}>
-      <div className="panel-body">
+    <Card className={`h-100 ${variantClass}`.trim()}>
+      <Card.Body>
         <p className="text-center">{label}</p>
         <p className="text-center">
           {icon}
           <br />
           <small>{text}</small>
         </p>
-      </div>
-    </div>
+      </Card.Body>
+    </Card>
   );
 }
 
@@ -62,54 +62,51 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
     <Modal show={show} onHide={onHide} size="lg" id="featureModal">
       <Modal.Header closeButton>
         <div id="feature-info-header">
-          <div className="row">
-            <div className="col-md-9">
+          <Row>
+            <Col md={9}>
               <h3 className="modal-title">
                 <span id="feature-title">{attrClean(feature.properties.venue_name)}</span>
               </h3>
-            </div>
-            <div className="col-md-3">
-              <h3 className="modal-title text-right hidden-sm hidden-xs">
+            </Col>
+            <Col md={3}>
+              <h3 className="modal-title text-md-end">
                 <small>{attrClean(feature.properties.venue_type)}</small>
               </h3>
-              <h3 className="modal-title hidden-md hidden-lg">
-                <small>{attrClean(feature.properties.venue_type)}</small>
-              </h3>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-9">
+            </Col>
+          </Row>
+          <Row>
+            <Col md={9}>
               <h4 className="modal-title">
                 <span id="feature-subtitle">{address}</span>&nbsp;
               </h4>
-            </div>
-            <div className="col-md-3">
-              <h4 className="modal-title text-right">
+            </Col>
+            <Col md={3}>
+              <h4 className="modal-title text-md-end">
                 <small>
                   <a href={directionsUrl} target="_blank" rel="noreferrer">
                     Get directions &rarr;
                   </a>
                 </small>
               </h4>
-            </div>
-          </div>
+            </Col>
+          </Row>
         </div>
       </Modal.Header>
       <Modal.Body>
         {!feature.properties.publish ? (
-          <div className="alert alert-info" role="alert">
+          <Alert variant="info">
             <h4>
               This Fish Fry has not yet been verified this year. If you have info about this location for {currentYear},
               please head to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/">Facebook page</a>.
             </h4>
-          </div>
+          </Alert>
         ) : null}
 
         {feature.properties.procedures ? (
-          <div className="alert alert-info" role="alert">
+          <Alert variant="info">
             <h4>A Note About Operations with COVID-19</h4>
             <p>{feature.properties.procedures}</p>
-          </div>
+          </Alert>
         ) : null}
 
         {events.today.length > 0 ? (
@@ -121,8 +118,8 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
           </h2>
         ) : null}
 
-        <div className="row">
-          <div className="col-sm-7">
+        <Row>
+          <Col sm={7}>
             <h2>Menu</h2>
             {feature.properties.menu?.url ? (
               <h4>
@@ -142,8 +139,8 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
                   : "Nothing here? We may not have gotten around to recording this information yet. Check with the venue for their menu."}
               </p>
             )}
-          </div>
-          <div className="col-sm-5">
+          </Col>
+          <Col sm={5}>
             <h3>{events.today.length > 0 ? "Upcoming Dates" : "Upcoming Date(s)"}</h3>
             <ul className="list-unstyled">
               {events.future.length > 0 ? (
@@ -153,54 +150,54 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
                   </li>
                 ))
               ) : (
-                <p className="small text-muted">
+                <li className="small text-muted">
                   Nothing here? We may not have gotten around to recording this information yet. If it&apos;s not in the
                   notes below, check with the venue for dates/times.
-                </p>
+                </li>
               )}
             </ul>
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="row">
-          <div className="col-sm-3">
+        <Row>
+          <Col sm={3}>
             <BooleanPanel label="Homemade Pierogies" value={feature.properties.homemade_pierogies} />
-          </div>
-          <div className="col-sm-3">
+          </Col>
+          <Col sm={3}>
             <BooleanPanel label="Alcohol Served" value={feature.properties.alcohol} />
-          </div>
-          <div className="col-sm-3">
+          </Col>
+          <Col sm={3}>
             <BooleanPanel label="Lunch Served" value={feature.properties.lunch} />
-          </div>
-          <div className="col-sm-3">
+          </Col>
+          <Col sm={3}>
             <BooleanPanel label="Open Good Friday" value={events.GoodFriday} />
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="row margin">
-          <div className="col-sm-3">
+        <Row className="margin">
+          <Col sm={3}>
             <BooleanPanel label="Drive-Thru Available" value={feature.properties.drive_thru} />
-          </div>
-          <div className="col-sm-3">
+          </Col>
+          <Col sm={3}>
             <BooleanPanel label="Take-Out Available" value={feature.properties.take_out} />
-          </div>
-          <div className="col-sm-3">
+          </Col>
+          <Col sm={3}>
             <BooleanPanel label="Handicap Accessible" value={feature.properties.handicap} />
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="row">
-          <div className="col-sm-12">
+        <Row>
+          <Col sm={12}>
             <h4>Notes</h4>
             {feature.properties.etc ? <p>{feature.properties.etc}</p> : null}
             {feature.properties.venue_notes ? <p>{feature.properties.venue_notes}</p> : null}
-          </div>
-        </div>
+          </Col>
+        </Row>
 
-        <div className="row">
-          <div className="col-sm-12">
+        <Row>
+          <Col sm={12}>
             <h4>Contact</h4>
-            <table className="table table-condensed well">
+            <Table size="sm" striped bordered>
               <tbody>
                 <tr>
                   <th>Phone</th>
@@ -227,9 +224,9 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
                   </td>
                 </tr>
               </tbody>
-            </table>
-          </div>
-        </div>
+            </Table>
+          </Col>
+        </Row>
       </Modal.Body>
       <Modal.Footer>
         <p className="small text-muted">
@@ -239,9 +236,9 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
           </a>{" "}
           page.
         </p>
-        <button type="button" className="btn btn-default" onClick={onHide}>
+        <Button type="button" variant="secondary" onClick={onHide}>
           Close
-        </button>
+        </Button>
       </Modal.Footer>
     </Modal>
   );

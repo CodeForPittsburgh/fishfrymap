@@ -11,7 +11,7 @@ import {
   normalizeFeatureCollection,
   normalizeUrl,
   resolveIcon
-} from "../../../src/react/domain/featureUtils";
+} from "../../../src/domain/featureUtils";
 
 describe("featureUtils", () => {
   it("normalizes URLs", () => {

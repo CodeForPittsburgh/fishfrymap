@@ -1,27 +1,29 @@
 import React, { useEffect, useMemo } from "react";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
+import { Alert } from "react-bootstrap";
 
-import TopNav from "./components/TopNav";
-import Sidebar from "./components/Sidebar";
-import MapView from "./components/MapView";
-import AboutModal from "./components/AboutModal";
-import FilterModal from "./components/FilterModal";
-import FeatureModal from "./components/FeatureModal";
-import LoadingOverlay from "./components/LoadingOverlay";
-import ModalErrorBoundary from "./components/ModalErrorBoundary";
+import TopNav from "@/features/layout/TopNav";
+import Sidebar from "@/features/layout/Sidebar";
+import MapView from "@/features/map/MapView";
+import AboutModal from "@/features/modals/AboutModal";
+import FilterModal from "@/features/filters/FilterModal";
+import FeatureModal from "@/features/modals/FeatureModal";
+import LoadingOverlay from "@/features/layout/LoadingOverlay";
+import ModalErrorBoundary from "@/features/modals/ModalErrorBoundary";
 
-import { useGetFishfriesQuery } from "./store/api/fishfryApi";
-import { useSearchPlacesQuery } from "./store/api/geocodeApi";
-import { uiActions } from "./store/slices/uiSlice";
-import { filtersActions } from "./store/slices/filtersSlice";
-import { mapActions } from "./store/slices/mapSlice";
-import { searchActions } from "./store/slices/searchSlice";
-import { selectionActions } from "./store/slices/selectionSlice";
+import { useGetFishfriesQuery } from "@/store/api/fishfryApi";
+import { useSearchPlacesQuery } from "@/store/api/geocodeApi";
+import { uiActions } from "@/store/slices/uiSlice";
+import { filtersActions } from "@/store/slices/filtersSlice";
+import { mapActions } from "@/store/slices/mapSlice";
+import { searchActions } from "@/store/slices/searchSlice";
+import { selectionActions } from "@/store/slices/selectionSlice";
 
-import { computeGoodFriday } from "./domain/dateUtils";
-import { normalizeFeatureCollection, matchesSearch } from "./domain/featureUtils";
-import { featureIsInBounds, filterFeatures, hasActiveFilters } from "./domain/filterUtils";
+import { computeGoodFriday } from "@/domain/dateUtils";
+import { normalizeFeatureCollection, matchesSearch } from "@/domain/featureUtils";
+import { featureIsInBounds, filterFeatures, hasActiveFilters } from "@/domain/filterUtils";
+import { logClientError } from "@/utils/errorLogging";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -97,6 +99,37 @@ const App = () => {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    const onWindowError = (event) => {
+      const fallbackError = new Error(event.message || "Unhandled window error");
+      logClientError("window.error", event.error || fallbackError, {
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno
+      });
+    };
+
+    const onUnhandledRejection = (event) => {
+      const reason = event.reason;
+      const rejectionError =
+        reason instanceof Error
+          ? reason
+          : new Error(typeof reason === "string" ? reason : "Unhandled promise rejection");
+
+      logClientError("window.unhandledrejection", rejectionError, {
+        reasonType: typeof reason
+      });
+    };
+
+    window.addEventListener("error", onWindowError);
+    window.addEventListener("unhandledrejection", onUnhandledRejection);
+
+    return () => {
+      window.removeEventListener("error", onWindowError);
+      window.removeEventListener("unhandledrejection", onUnhandledRejection);
+    };
+  }, []);
+
   const onFeatureClick = ({ featureId }) => {
     dispatch(selectionActions.setSelectedFeatureId(featureId));
     dispatch(selectionActions.setHighlightedFeatureId(featureId));
@@ -150,22 +183,18 @@ const App = () => {
     <>
       <TopNav
         navbarExpanded={ui.navbarExpanded}
-        onToggleNavbar={(event) => {
-          event.preventDefault();
+        onToggleNavbar={() => {
           dispatch(uiActions.setNavbarExpanded(!ui.navbarExpanded));
         }}
-        onToggleSidebar={(event) => {
-          event.preventDefault();
+        onToggleSidebar={() => {
           dispatch(uiActions.toggleSidebar());
           dispatch(uiActions.setNavbarExpanded(false));
         }}
-        onOpenAbout={(event) => {
-          event.preventDefault();
+        onOpenAbout={() => {
           dispatch(uiActions.setAboutModalOpen(true));
           dispatch(uiActions.setNavbarExpanded(false));
         }}
-        onOpenFilterModal={(event) => {
-          event.preventDefault();
+        onOpenFilterModal={() => {
           dispatch(uiActions.setFilterModalOpen(true));
           dispatch(uiActions.setNavbarExpanded(false));
         }}
@@ -186,8 +215,7 @@ const App = () => {
           visible={ui.sidebarVisible}
           features={visibleFeatures}
           hasActiveFilters={hasActiveFilters(filters)}
-          onOpenFilter={(event) => {
-            event.preventDefault();
+          onOpenFilter={() => {
             dispatch(uiActions.setFilterModalOpen(true));
           }}
           onHide={() => dispatch(uiActions.toggleSidebar())}
@@ -265,25 +293,21 @@ const App = () => {
       </ModalErrorBoundary>
 
       {error ? (
-        <div className="fishfry-error alert alert-warning" role="alert">
+        <Alert className="fishfry-error" variant="warning">
           Unable to load data from the primary API and fallback source.
-        </div>
+        </Alert>
       ) : null}
 
       {!error && dataSource === "fallback" ? (
-        <div className="fishfry-error alert alert-info" role="alert" style={{ bottom: "64px" }}>
+        <Alert className="fishfry-error" variant="info" style={{ bottom: "64px" }}>
           Primary API is unreachable; showing fallback data.
-        </div>
+        </Alert>
       ) : null}
 
       {!hasMapboxToken && searchQuery.trim().length >= 3 ? (
-        <div
-          className="fishfry-error alert alert-info"
-          role="alert"
-          style={{ bottom: dataSource === "fallback" ? "116px" : "64px" }}
-        >
+        <Alert className="fishfry-error" variant="info" style={{ bottom: dataSource === "fallback" ? "116px" : "64px" }}>
           Mapbox geocoding is disabled because <code>VITE_MAPBOX_TOKEN</code> is not set.
-        </div>
+        </Alert>
       ) : null}
     </>
   );

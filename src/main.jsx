@@ -10,12 +10,10 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet-basemaps/L.Control.Basemaps.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 
-import "../css/MarkerCluster.Default.css";
-import "../css/app.css";
-import "./styles/react-app.css";
+import "@/styles/index.css";
 
-import { store } from "./store";
-import App from "./App";
+import { store } from "@/store";
+import App from "@/App";
 
 config.autoAddCss = false;
 

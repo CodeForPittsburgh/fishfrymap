@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { fetchFishfriesWithFallback } from "../../../src/react/store/api/fishfryApi";
+import { fetchFishfriesWithFallback } from "../../../src/store/api/fishfryApi";
 
 describe("fishfryApi fallback behavior", () => {
   it("returns primary data when primary API succeeds", async () => {

@@ -1,7 +1,7 @@
 import moment from "moment";
 import { describe, expect, it } from "vitest";
 
-import { computeGoodFriday, isOpenOnGoodFriday, parseDateTimes } from "../../../src/react/domain/dateUtils";
+import { computeGoodFriday, isOpenOnGoodFriday, parseDateTimes } from "../../../src/domain/dateUtils";
 
 describe("dateUtils", () => {
   it("computes known Good Friday dates", () => {
@@ -60,5 +60,24 @@ describe("dateUtils", () => {
     const parsed = parseDateTimes(events, now, goodFriday);
     expect(parsed.GoodFriday).toBe(false);
     expect(parsed.future.at(-1)).toBe("Closed on Good Friday");
+  });
+
+  it("handles malformed events payloads without throwing", () => {
+    const goodFriday = computeGoodFriday(2026);
+    const now = moment("2026-03-01T10:00:00");
+
+    const parsedFromString = parseDateTimes("invalid", now, goodFriday);
+    const parsedFromObject = parseDateTimes({ dt_start: "2026-03-01T12:00:00" }, now, goodFriday);
+
+    expect(parsedFromString).toEqual({
+      today: [],
+      future: [],
+      GoodFriday: false
+    });
+    expect(parsedFromObject).toEqual({
+      today: [],
+      future: [],
+      GoodFriday: false
+    });
   });
 });

@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faChevronRight, faFilter } from "../icons/fontAwesome";
+import { faChevronLeft, faChevronRight, faFilter } from "@/icons/fontAwesome";
+import { Button, Card, Table } from "react-bootstrap";
 
 const Sidebar = ({
   visible,
@@ -15,33 +16,36 @@ const Sidebar = ({
   return (
     <div id="sidebar" style={{ display: visible ? "block" : "none" }}>
       <div className="sidebar-wrapper">
-        <div className="panel panel-default" id="features">
-          <div className="panel-heading">
-            <h3 className="panel-title">
-              Fish Fry Filter
-              <button type="button" className="btn btn-xs btn-default pull-right" id="sidebar-hide-btn" onClick={onHide}>
+        <Card id="features" className="h-100 border-0 rounded-0">
+          <Card.Header>
+            <h3 className="h5 m-0 d-flex align-items-center justify-content-between">
+              <span>Fish Fry Filter</span>
+              <Button
+                type="button"
+                variant="outline-secondary"
+                size="sm"
+                id="sidebar-hide-btn"
+                onClick={onHide}
+              >
                 <FontAwesomeIcon icon={faChevronLeft} />
-              </button>
+              </Button>
             </h3>
-          </div>
-          <div className="panel-body">
-            <div className="row">
-              <div className="col-md-12">
-                <a
-                  className={`btn btn-block btn-sm ${hasActiveFilters ? "btn-primary" : "btn-default"}`}
-                  id="filterSidebar-btn"
-                  href="#"
-                  role="button"
-                  onClick={onOpenFilter}
-                >
-                  <FontAwesomeIcon icon={faFilter} /> {hasActiveFilters ? "Filtered" : "Filter"}
-                </a>
-              </div>
-            </div>
-          </div>
+          </Card.Header>
+          <Card.Body>
+            <Button
+              type="button"
+              size="sm"
+              variant={hasActiveFilters ? "primary" : "outline-secondary"}
+              className="w-100"
+              id="filterSidebar-btn"
+              onClick={onOpenFilter}
+            >
+              <FontAwesomeIcon icon={faFilter} /> {hasActiveFilters ? "Filtered" : "Filter"}
+            </Button>
+          </Card.Body>
           <div className="sidebar-table">
-            <table className="table table-hover table-condensed" id="feature-list">
-              <thead className="hidden">
+            <Table hover size="sm" id="feature-list">
+              <thead className="visually-hidden">
                 <tr>
                   <th>Icon</th>
                   <th>Name</th>
@@ -63,14 +67,14 @@ const Sidebar = ({
                     </td>
                     <td className="feature-name">{feature.properties.venue_name}</td>
                     <td style={{ verticalAlign: "middle" }}>
-                      <FontAwesomeIcon icon={faChevronRight} className="pull-right" />
+                      <FontAwesomeIcon icon={faChevronRight} className="float-end" />
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </Table>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );

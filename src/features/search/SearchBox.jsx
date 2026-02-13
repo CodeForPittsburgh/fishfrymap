@@ -1,7 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Form, InputGroup } from "react-bootstrap";
 
-import { faMagnifyingGlass, faSpinner } from "../icons/fontAwesome";
+import { faMagnifyingGlass, faSpinner } from "@/icons/fontAwesome";
 
 const SearchBox = ({
   query,
@@ -17,30 +18,31 @@ const SearchBox = ({
   const showMenu = suggestionsOpen && query.trim().length >= 3;
 
   return (
-    <div className="form-group has-feedback fishfry-search">
-      <input
-        id="searchbox"
-        type="text"
-        placeholder="Search All Fish Fries"
-        className="form-control"
-        value={query}
-        onChange={(event) => {
-          onQueryChange(event.target.value);
-          onSuggestionsOpen(true);
-        }}
-        onFocus={() => onSuggestionsOpen(true)}
-        onBlur={() => {
-          window.setTimeout(() => onSuggestionsOpen(false), 120);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            event.preventDefault();
-          }
-        }}
-      />
-      <span id="searchicon" className="form-control-feedback">
-        <FontAwesomeIcon icon={isSearching ? faSpinner : faMagnifyingGlass} spin={isSearching} />
-      </span>
+    <div className="fishfry-search">
+      <InputGroup>
+        <Form.Control
+          id="searchbox"
+          type="text"
+          placeholder="Search All Fish Fries"
+          value={query}
+          onChange={(event) => {
+            onQueryChange(event.target.value);
+            onSuggestionsOpen(true);
+          }}
+          onFocus={() => onSuggestionsOpen(true)}
+          onBlur={() => {
+            window.setTimeout(() => onSuggestionsOpen(false), 120);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+            }
+          }}
+        />
+        <InputGroup.Text id="searchicon">
+          <FontAwesomeIcon icon={isSearching ? faSpinner : faMagnifyingGlass} spin={isSearching} />
+        </InputGroup.Text>
+      </InputGroup>
 
       {showMenu ? (
         <div className="tt-dropdown-menu fishfry-search__menu">

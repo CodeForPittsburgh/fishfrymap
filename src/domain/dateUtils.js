@@ -37,8 +37,9 @@ export function isOpenOnGoodFriday(events, goodFridayDate) {
 export function parseDateTimes(events, nowMoment, goodFridayDate) {
   const now = nowMoment || moment();
   const sortList = [];
+  const eventList = Array.isArray(events) ? events : [];
 
-  (events || []).forEach((event) => {
+  eventList.forEach((event) => {
     const begin = moment(event?.dt_start);
     const end = moment(event?.dt_end);
 

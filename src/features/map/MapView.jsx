@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { LeafletController } from "../map/LeafletController";
-import { logClientError } from "../utils/errorLogging";
+import { LeafletController } from "@/features/map/LeafletController";
+import { logClientError } from "@/utils/errorLogging";
 
 const MapView = ({
   features,
@@ -49,13 +49,15 @@ const MapView = ({
 
   useEffect(() => {
     let cancelled = false;
+    const abortController = new AbortController();
     const controller = new LeafletController();
     controllerRef.current = controller;
 
     controller
-      .init(mapRef.current)
+      .init(mapRef.current, { signal: abortController.signal })
       .then(() => {
-        if (cancelled) {
+        if (cancelled || abortController.signal.aborted) {
+          controller.destroy();
           return;
         }
 
@@ -68,11 +70,15 @@ const MapView = ({
         setReady(true);
       })
       .catch((error) => {
+        if (cancelled || abortController.signal.aborted) {
+          return;
+        }
         logClientError("map.init", error);
       });
 
     return () => {
       cancelled = true;
+      abortController.abort();
       controller.destroy();
     };
   }, []);

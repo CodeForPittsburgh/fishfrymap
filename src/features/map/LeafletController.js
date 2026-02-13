@@ -6,7 +6,7 @@ import {
   faSpinner,
   faUpDownLeftRight,
   iconHtml
-} from "../icons/fontAwesome";
+} from "@/icons/fontAwesome";
 
 let pluginsLoaded = false;
 
@@ -86,8 +86,12 @@ export class LeafletController {
     );
   }
 
-  async init(containerEl) {
+  async init(containerEl, options = {}) {
+    const signal = options.signal;
     await ensureLeafletPlugins();
+    if (signal?.aborted) {
+      return;
+    }
 
     this.baseLayers.dark = L.tileLayer(
       "https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png",

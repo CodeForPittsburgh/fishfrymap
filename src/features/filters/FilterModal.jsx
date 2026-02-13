@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Modal } from "react-bootstrap";
-import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair } from "../icons/fontAwesome";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair } from "@/icons/fontAwesome";
 
 const FILTER_FIELDS = [
   { key: "drive_thru", label: "Drive-Thru Available" },
@@ -58,48 +58,41 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
         <Modal.Title>Other than fish, these are the things I&apos;m looking for in a Fish Fry:</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="row">
-          <div className="col-sm-8 col-sm-offset-2">
+        <Row>
+          <Col sm={{ span: 8, offset: 2 }}>
             {FILTER_FIELDS.map((filter) => (
-              <div className="checkbox" key={filter.key}>
+              <Form.Group className="mb-3" key={filter.key}>
                 <h4>
-                  <label>
-                    <input
-                      className="filter"
-                      id={filter.key}
-                      type="checkbox"
-                      checked={Boolean(filters[filter.key])}
-                      onChange={(event) => onChange(filter.key, event.target.checked)}
-                    />
-                    {" "}
-                    {filter.label}
-                  </label>
+                  <Form.Check
+                    className="filter"
+                    inline
+                    id={filter.key}
+                    type="checkbox"
+                    checked={Boolean(filters[filter.key])}
+                    onChange={(event) => onChange(filter.key, event.target.checked)}
+                    label={filter.label}
+                  />
                 </h4>
                 <hr />
-              </div>
+              </Form.Group>
             ))}
-          </div>
-        </div>
+          </Col>
+        </Row>
         <hr />
-        <div className="row">
-          <div className="col-sm-8 col-sm-offset-2 bg-info">
-            <div className="checkbox">
-              <label>
-                <input
-                  className="filter"
-                  id="publish"
-                  type="checkbox"
-                  checked={Boolean(filters.publish)}
-                  onChange={(event) => onChange("publish", event.target.checked)}
-                />
-                {" "}
-                Show only those verified for {thisYear}.
-              </label>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-sm-8 col-sm-offset-2">
+        <Row>
+          <Col sm={{ span: 8, offset: 2 }} className="bg-info-subtle rounded py-2">
+            <Form.Check
+              className="filter"
+              id="publish"
+              type="checkbox"
+              checked={Boolean(filters.publish)}
+              onChange={(event) => onChange("publish", event.target.checked)}
+              label={`Show only those verified for ${thisYear}.`}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{ span: 8, offset: 2 }}>
             <h4>
               <small>
                 Note that while we try our best to verify all details about Fish Fries, some details may be
@@ -107,13 +100,13 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
                 own discretion.
               </small>
             </h4>
-          </div>
-        </div>
+          </Col>
+        </Row>
       </Modal.Body>
       <Modal.Footer>
-        <button type="button" className="btn btn-default" onClick={onHide}>
+        <Button type="button" variant="secondary" onClick={onHide}>
           Find those Fish Fries!
-        </button>
+        </Button>
       </Modal.Footer>
     </Modal>
   );
