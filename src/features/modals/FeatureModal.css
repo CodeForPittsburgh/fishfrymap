@@ -7,3 +7,16 @@
   background-color: #fcb82e;
   color: #000000;
 }
+
+#featureModal .bool-panel-card {
+  border-radius: 0.5rem;
+}
+
+#featureModal .bool-panel-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-wrap: balance;
+  font-size: 1rem;
+}

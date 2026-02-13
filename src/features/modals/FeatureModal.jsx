@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationArrow } from "@/icons/fontAwesome";
 import moment from "moment";
 import { Alert, Button, Card, Col, Modal, Row, Table } from "react-bootstrap";
 
@@ -7,6 +8,7 @@ import { attrClean, boolValue } from "@/domain/featureUtils";
 import { parseDateTimes } from "@/domain/dateUtils";
 import { faCheck, faQuestion, faXmark } from "@/icons/fontAwesome";
 import "./FeatureModal.css";
+import { faRoute } from "@fortawesome/free-solid-svg-icons";
 
 function BooleanPanel({ label, value }) {
   const isTrue = boolValue(value);
@@ -26,16 +28,18 @@ function BooleanPanel({ label, value }) {
   }
 
   return (
-    <Card className={`h-100 ${variantClass}`.trim()}>
-      <Card.Body>
-        <p className="text-center">{label}</p>
-        <p className="text-center">
-          {icon}
-          <br />
-          <small>{text}</small>
-        </p>
-      </Card.Body>
-    </Card>
+    <div className="ratio ratio-1x1 shadow">
+      <Card className={`h-100 bool-panel-card ${variantClass}`.trim()}>
+        <Card.Body className="bool-panel-body">
+          <p className="text-center mb-2">{label}</p>
+          <p className="text-center mb-0">
+            {icon}
+            <br />
+            <small>{text}</small>
+          </p>
+        </Card.Body>
+      </Card>
+    </div>
   );
 }
 
@@ -58,44 +62,54 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
 
   const address = attrClean(feature.properties.venue_address);
   const directionsUrl = `https://www.google.com/maps/dir//${encodeURIComponent(address)}`;
+  const booleanPanels = [
+    { label: "Homemade Pierogies", value: feature.properties.homemade_pierogies },
+    { label: "Alcohol Served", value: feature.properties.alcohol },
+    { label: "Lunch Served", value: feature.properties.lunch },
+    { label: "Open Good Friday", value: events.GoodFriday },
+    { label: "Drive-Thru Available", value: feature.properties.drive_thru },
+    { label: "Take-Out Available", value: feature.properties.take_out },
+    { label: "Handicap Accessible", value: feature.properties.handicap }
+  ];
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" id="featureModal">
+    <Modal 
+      show={show} 
+      onHide={onHide} 
+      size="xl" 
+      fullscreen={'md-down'}
+      id="featureModal"
+      className="shadow-lg"
+    >
       <Modal.Header closeButton>
         <div id="feature-info-header">
-          <Row>
-            <Col md={9}>
-              <h3 className="modal-title">
-                <span id="feature-title">{attrClean(feature.properties.venue_name)}</span>
-              </h3>
-            </Col>
-            <Col md={3}>
-              <h3 className="modal-title text-md-end">
-                <small>{attrClean(feature.properties.venue_type)}</small>
-              </h3>
-            </Col>
-          </Row>
-          <Row>
-            <Col md={9}>
-              <h4 className="modal-title">
-                <span id="feature-subtitle">{address}</span>&nbsp;
-              </h4>
-            </Col>
-            <Col md={3}>
-              <Button>
-                
-              </Button>
-                <a 
-                  href={directionsUrl} target="_blank" rel="noreferrer">
-                  Get directions &rarr;
-                </a>
-            </Col>
-          </Row>
+          <h3>
+            <span id="feature-title">{attrClean(feature.properties.venue_name)}</span>
+          </h3>
+          <span className="fs-6 text-secondary">
+            {attrClean(feature.properties.venue_type)}
+          </span>
         </div>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="p-3">
+
+          <Row className="mb-3 pb-3 border-bottom border-secondary">
+            <Col md={8}>
+              <span id="feature-subtitle" className="fs-5">{address}</span>
+            </Col>
+            <Col md={4}>
+              <Button
+                href={directionsUrl} target="_blank" rel="noreferrer"
+                className="w-100"
+                size="sm"
+              >
+                Get Directions <FontAwesomeIcon icon={faLocationArrow}></FontAwesomeIcon>
+              </Button>
+            </Col>
+          </Row>        
+
         {!feature.properties.publish ? (
-          <Alert variant="info">
+          <Alert variant="info" className="my-3">
             <h4>
               This Fish Fry has not yet been verified this year. If you have info about this location for {currentYear},
               please head to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/">Facebook page</a>.
@@ -105,7 +119,7 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
 
         {feature.properties.procedures ? (
           <Alert variant="info">
-            <h4>A Note About Operations with COVID-19</h4>
+            <h4>Something to note about this Fish Fry:</h4>
             <p>{feature.properties.procedures}</p>
           </Alert>
         ) : null}
@@ -119,8 +133,8 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
           </h2>
         ) : null}
 
-        <Row>
-          <Col sm={7}>
+        <Row className="mb-3">
+          <Col lg={7}>
             <h2>Menu</h2>
             {feature.properties.menu?.url ? (
               <h4>
@@ -141,7 +155,7 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
               </p>
             )}
           </Col>
-          <Col sm={5}>
+          <Col lg={5}>
             <h3>{events.today.length > 0 ? "Upcoming Dates" : "Upcoming Date(s)"}</h3>
             <ul className="list-unstyled">
               {events.future.length > 0 ? (
@@ -160,40 +174,27 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
           </Col>
         </Row>
 
-        <Row>
-          <Col sm={3}>
-            <BooleanPanel label="Homemade Pierogies" value={feature.properties.homemade_pierogies} />
-          </Col>
-          <Col sm={3}>
-            <BooleanPanel label="Alcohol Served" value={feature.properties.alcohol} />
-          </Col>
-          <Col sm={3}>
-            <BooleanPanel label="Lunch Served" value={feature.properties.lunch} />
-          </Col>
-          <Col sm={3}>
-            <BooleanPanel label="Open Good Friday" value={events.GoodFriday} />
-          </Col>
+        <Row xs={1} sm={2} md={3} lg={5} xl={12} className="g-2 mb-3">
+          {booleanPanels.map((panel) => (
+            <Col key={panel.label}>
+              <BooleanPanel label={panel.label} value={panel.value} />
+            </Col>
+          ))}
         </Row>
 
-        <Row className="margin">
-          <Col sm={3}>
-            <BooleanPanel label="Drive-Thru Available" value={feature.properties.drive_thru} />
-          </Col>
-          <Col sm={3}>
-            <BooleanPanel label="Take-Out Available" value={feature.properties.take_out} />
-          </Col>
-          <Col sm={3}>
-            <BooleanPanel label="Handicap Accessible" value={feature.properties.handicap} />
-          </Col>
-        </Row>
+        {feature.properties.etc || feature.properties.venue_notes ? (
 
-        <Row>
-          <Col sm={12}>
-            <h4>Notes</h4>
-            {feature.properties.etc ? <p>{feature.properties.etc}</p> : null}
-            {feature.properties.venue_notes ? <p>{feature.properties.venue_notes}</p> : null}
-          </Col>
-        </Row>
+          <Row>
+            <Col sm={12}>
+              <h4>Notes</h4>
+              {feature.properties.etc ? <p>{feature.properties.etc}</p> : null}
+              {feature.properties.venue_notes ? <p>{feature.properties.venue_notes}</p> : null}
+            </Col>
+          </Row>
+
+        ) : (null)
+        }
+
 
         <Row>
           <Col sm={12}>
