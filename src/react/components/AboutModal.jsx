@@ -1,5 +1,7 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal, Nav, Tab } from "react-bootstrap";
+import { faCircleExclamation, faCircleQuestion, faCode, faEnvelope } from "../icons/fontAwesome";
 
 const AboutModal = ({ show, onHide }) => {
   return (
@@ -12,22 +14,22 @@ const AboutModal = ({ show, onHide }) => {
           <Nav variant="tabs" className="nav-justified" id="aboutTabs">
             <Nav.Item>
               <Nav.Link eventKey="about">
-                <i className="fa fa-question-circle" /> About the project
+                <FontAwesomeIcon icon={faCircleQuestion} /> About the project
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="contact">
-                <i className="fa fa-envelope" /> Contact Us
+                <FontAwesomeIcon icon={faEnvelope} /> Contact Us
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="disclaimer">
-                <i className="fa fa-exclamation-circle" /> Disclaimer
+                <FontAwesomeIcon icon={faCircleExclamation} /> Disclaimer
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="build">
-                <i className="fa fa-code" /> Build With Us
+                <FontAwesomeIcon icon={faCode} /> Build With Us
               </Nav.Link>
             </Nav.Item>
           </Nav>

@@ -1,6 +1,8 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import SearchBox from "./SearchBox";
+import { faBars, faCircleQuestion, faDatabase, faFilter } from "../icons/fontAwesome";
 
 const TopNav = ({
   navbarExpanded,
@@ -16,7 +18,7 @@ const TopNav = ({
         <div className="navbar-header">
           <div className="navbar-icon-container">
             <a href="#" className="navbar-icon pull-right visible-xs" id="nav-btn" onClick={onToggleNavbar}>
-              <i className="fa fa-bars fa-lg white" />
+              <FontAwesomeIcon icon={faBars} size="lg" className="white" />
             </a>
             <a
               href="#"
@@ -24,7 +26,7 @@ const TopNav = ({
               id="sidebar-toggle-btn"
               onClick={onToggleSidebar}
             >
-              <i className="fa fa-filter fa-lg white" />
+              <FontAwesomeIcon icon={faFilter} size="lg" className="white" />
             </a>
           </div>
           <span className="navbar-brand hidden-xs hidden-sm">Pittsburgh Lenten Fish Fry Map</span>
@@ -37,12 +39,12 @@ const TopNav = ({
           <ul className="nav navbar-nav navbar-right">
             <li className="hidden-xs">
               <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn" onClick={onToggleSidebar}>
-                <i className="fa fa-filter white" />&nbsp;&nbsp;Filter
+                <FontAwesomeIcon icon={faFilter} className="white" />&nbsp;&nbsp;Filter
               </a>
             </li>
             <li>
               <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn" onClick={onOpenAbout}>
-                <i className="fa fa-question-circle white" />&nbsp;&nbsp;About
+                <FontAwesomeIcon icon={faCircleQuestion} className="white" />&nbsp;&nbsp;About
               </a>
             </li>
             <li>
@@ -54,12 +56,12 @@ const TopNav = ({
                 data-target=".navbar-collapse.in"
                 id="data-btn"
               >
-                <i className="fa fa-database" />&nbsp;&nbsp;Data
+                <FontAwesomeIcon icon={faDatabase} />&nbsp;&nbsp;Data
               </a>
             </li>
             <li className="visible-xs">
               <a href="#" id="filterNav-btn" onClick={onOpenFilterModal}>
-                <i className="fa fa-filter white" />&nbsp;&nbsp;Filter options
+                <FontAwesomeIcon icon={faFilter} className="white" />&nbsp;&nbsp;Filter options
               </a>
             </li>
           </ul>

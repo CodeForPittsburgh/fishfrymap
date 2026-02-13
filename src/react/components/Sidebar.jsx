@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faChevronRight, faFilter } from "../icons/fontAwesome";
 
 const Sidebar = ({
   visible,
@@ -18,7 +20,7 @@ const Sidebar = ({
             <h3 className="panel-title">
               Fish Fry Filter
               <button type="button" className="btn btn-xs btn-default pull-right" id="sidebar-hide-btn" onClick={onHide}>
-                <i className="fa fa-chevron-left" />
+                <FontAwesomeIcon icon={faChevronLeft} />
               </button>
             </h3>
           </div>
@@ -32,7 +34,7 @@ const Sidebar = ({
                   role="button"
                   onClick={onOpenFilter}
                 >
-                  <i className="fa fa-filter" /> {hasActiveFilters ? "Filtered" : "Filter"}
+                  <FontAwesomeIcon icon={faFilter} /> {hasActiveFilters ? "Filtered" : "Filter"}
                 </a>
               </div>
             </div>
@@ -61,7 +63,7 @@ const Sidebar = ({
                     </td>
                     <td className="feature-name">{feature.properties.venue_name}</td>
                     <td style={{ verticalAlign: "middle" }}>
-                      <i className="fa fa-chevron-right pull-right" />
+                      <FontAwesomeIcon icon={faChevronRight} className="pull-right" />
                     </td>
                   </tr>
                 ))}

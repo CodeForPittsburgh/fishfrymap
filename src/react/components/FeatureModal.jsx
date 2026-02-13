@@ -1,24 +1,26 @@
 import React, { useMemo } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
 import { Modal } from "react-bootstrap";
 
 import { attrClean, boolValue } from "../domain/featureUtils";
 import { parseDateTimes } from "../domain/dateUtils";
+import { faCheck, faQuestion, faXmark } from "../icons/fontAwesome";
 
 function BooleanPanel({ label, value }) {
   const isTrue = boolValue(value);
   const isFalse = value === false || ["false", "False", 0, "No", "no"].includes(value);
 
-  let icon = <i className="fa fa-question fa-2x" aria-hidden="true" />;
+  let icon = <FontAwesomeIcon icon={faQuestion} size="2x" aria-hidden="true" />;
   let text = "Unsure";
   let panelClass = "panel panel-default";
 
   if (isTrue) {
-    icon = <i className="fa fa-check fa-2x" aria-hidden="true" />;
+    icon = <FontAwesomeIcon icon={faCheck} size="2x" aria-hidden="true" />;
     text = "Yes";
     panelClass = "panel panel-default bool-card-true";
   } else if (isFalse) {
-    icon = <i className="fa fa-times fa-2x" aria-hidden="true" />;
+    icon = <FontAwesomeIcon icon={faXmark} size="2x" aria-hidden="true" />;
     text = "No";
   }
 

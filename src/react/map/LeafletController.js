@@ -1,4 +1,12 @@
 import L from "leaflet";
+import {
+  faLocationArrow,
+  faMinus,
+  faPlus,
+  faSpinner,
+  faUpDownLeftRight,
+  iconHtml
+} from "../icons/fontAwesome";
 
 let pluginsLoaded = false;
 
@@ -51,6 +59,7 @@ export class LeafletController {
     this.map = null;
     this.markerClusters = null;
     this.highlightLayer = null;
+    this.locateIconObserver = null;
     this.markersById = new Map();
     this.featuresById = new Map();
     this.filteredFeatures = [];
@@ -115,9 +124,9 @@ export class LeafletController {
     const zoomOut = document.querySelector(".leaflet-control-zoomhome-out");
     const zoomIn = document.querySelector(".leaflet-control-zoomhome-in");
     const zoomHome = document.querySelector(".leaflet-control-zoomhome-home");
-    if (zoomOut) zoomOut.innerHTML = '<i class="fa fa-minus"></i>';
-    if (zoomIn) zoomIn.innerHTML = '<i class="fa fa-plus"></i>';
-    if (zoomHome) zoomHome.innerHTML = '<i class="fa fa-arrows-alt"></i>';
+    if (zoomOut) zoomOut.innerHTML = iconHtml(faMinus);
+    if (zoomIn) zoomIn.innerHTML = iconHtml(faPlus);
+    if (zoomHome) zoomHome.innerHTML = iconHtml(faUpDownLeftRight);
 
     this.map.addControl(
       L.control.basemaps({
@@ -140,38 +149,48 @@ export class LeafletController {
     );
     overlayControl.addTo(this.map);
 
-    this.map.addControl(
-      L.control.locate({
-        position: "topleft",
-        drawCircle: true,
-        follow: true,
-        setView: true,
-        keepCurrentZoomLevel: false,
-        markerStyle: {
-          weight: 1,
-          opacity: 0.8,
-          fillOpacity: 0.8
-        },
-        circleStyle: {
-          weight: 1,
-          clickable: false
-        },
-        icon: "fa fa-location-arrow",
-        metric: false,
-        strings: {
-          title: "My location",
-          popup: "You are within {distance} {unit} from this point",
-          outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
-        },
-        locateOptions: {
-          maxZoom: 17,
-          watch: true,
-          enableHighAccuracy: true,
-          maximumAge: 10000,
-          timeout: 10000
-        }
-      })
-    );
+    const locateControl = L.control.locate({
+      position: "topleft",
+      drawCircle: true,
+      follow: true,
+      setView: true,
+      keepCurrentZoomLevel: false,
+      markerStyle: {
+        weight: 1,
+        opacity: 0.8,
+        fillOpacity: 0.8
+      },
+      circleStyle: {
+        weight: 1,
+        clickable: false
+      },
+      icon: "fishfry-locate-icon",
+      iconLoading: "fishfry-locate-icon-loading",
+      createButtonCallback: (container, options) => {
+        const link = L.DomUtil.create("a", "leaflet-bar-part leaflet-bar-part-single", container);
+        link.title = options.strings.title;
+
+        const iconEl = L.DomUtil.create(options.iconElementTag, options.icon, link);
+        iconEl.innerHTML = iconHtml(faLocationArrow);
+
+        return { link, icon: iconEl };
+      },
+      metric: false,
+      strings: {
+        title: "My location",
+        popup: "You are within {distance} {unit} from this point",
+        outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
+      },
+      locateOptions: {
+        maxZoom: 17,
+        watch: true,
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 10000
+      }
+    });
+    this.map.addControl(locateControl);
+    this.observeLocateIcon(locateControl);
 
     this.map.addControl(
       L.control.attribution({
@@ -241,6 +260,33 @@ export class LeafletController {
 
   emit(eventName, payload) {
     (this.listeners.get(eventName) || []).forEach((listener) => listener(payload));
+  }
+
+  observeLocateIcon(locateControl) {
+    if (!locateControl?._icon) {
+      return;
+    }
+
+    const iconEl = locateControl._icon;
+    const updateIcon = () => {
+      if (iconEl.classList.contains("fishfry-locate-icon-loading")) {
+        iconEl.innerHTML = iconHtml(faSpinner, { classes: ["fa-spin"] });
+        return;
+      }
+      iconEl.innerHTML = iconHtml(faLocationArrow);
+    };
+
+    updateIcon();
+
+    if (typeof MutationObserver === "undefined") {
+      return;
+    }
+
+    this.locateIconObserver = new MutationObserver(updateIcon);
+    this.locateIconObserver.observe(iconEl, {
+      attributes: true,
+      attributeFilter: ["class"]
+    });
   }
 
   sizeLayerControl() {
@@ -379,6 +425,11 @@ export class LeafletController {
   }
 
   destroy() {
+    if (this.locateIconObserver) {
+      this.locateIconObserver.disconnect();
+      this.locateIconObserver = null;
+    }
+
     this.listeners.clear();
     this.markersById.clear();
     this.featuresById.clear();

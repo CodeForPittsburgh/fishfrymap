@@ -6,11 +6,11 @@ test("app shell loads", async ({ page }) => {
   await expect(page.locator("#searchbox")).toBeVisible();
 });
 
-test("legacy fallback route is available", async ({ page }) => {
+test("legacy query param is ignored and app still loads", async ({ page }) => {
   await page.goto("/?legacy=1");
-  await expect(page).toHaveURL(/legacy\.html/);
+  await expect(page).not.toHaveURL(/legacy\.html/);
   await expect(page.locator("#map")).toBeVisible();
-  await expect(page.locator("#feature-list")).toHaveCount(1);
+  await expect(page.locator("#searchbox")).toBeVisible();
 });
 
 test("filter modal opens", async ({ page }) => {

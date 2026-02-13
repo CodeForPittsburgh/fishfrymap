@@ -1,5 +1,7 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
+import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair } from "../icons/fontAwesome";
 
 const FILTER_FIELDS = [
   { key: "drive_thru", label: "Drive-Thru Available" },
@@ -7,8 +9,8 @@ const FILTER_FIELDS = [
     key: "lunch",
     label: (
       <>
-        Open for Lunch <i className="fa fa-cutlery" aria-hidden="true" />{" "}
-        <i className="fa fa-clock-o" aria-hidden="true" />
+        Open for Lunch <FontAwesomeIcon icon={faUtensils} aria-hidden="true" />{" "}
+        <FontAwesomeIcon icon={faClock} aria-hidden="true" />
       </>
     )
   },
@@ -17,7 +19,7 @@ const FILTER_FIELDS = [
     key: "alcohol",
     label: (
       <>
-        Serves Alcohol <i className="fa fa-beer" aria-hidden="true" />
+        Serves Alcohol <FontAwesomeIcon icon={faBeerMugEmpty} aria-hidden="true" />
       </>
     )
   },
@@ -25,7 +27,7 @@ const FILTER_FIELDS = [
     key: "take_out",
     label: (
       <>
-        Takeout Available <i className="fa fa-shopping-bag" aria-hidden="true" />
+        Takeout Available <FontAwesomeIcon icon={faBagShopping} aria-hidden="true" />
       </>
     )
   },
@@ -33,7 +35,7 @@ const FILTER_FIELDS = [
     key: "handicap",
     label: (
       <>
-        Handicap Accessible <i className="fa fa-wheelchair" aria-hidden="true" />
+        Handicap Accessible <FontAwesomeIcon icon={faWheelchair} aria-hidden="true" />
       </>
     )
   },
@@ -41,7 +43,7 @@ const FILTER_FIELDS = [
     key: "GoodFriday",
     label: (
       <>
-        Open Good Friday <i className="fa fa-shopping-bag" aria-hidden="true" />
+        Open Good Friday <FontAwesomeIcon icon={faBagShopping} aria-hidden="true" />
       </>
     )
   }

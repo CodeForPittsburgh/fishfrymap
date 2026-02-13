@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const DEFAULT_URL = "https://data.pghfishfry.org/api/fishfries/";
-const DEFAULT_FALLBACK_URL = "/assets/data/fishfrymap.geojson";
+const DEFAULT_FALLBACK_URL = "/data/fishfrymap.geojson";
 
 export const fishfryApi = createApi({
   reducerPath: "fishfryApi",

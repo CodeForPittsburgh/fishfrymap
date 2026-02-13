@@ -23,14 +23,6 @@
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
   </head>
   <body>
-    <script>
-      (function redirectLegacy() {
-        var params = new URLSearchParams(window.location.search);
-        if (params.get("legacy") === "1") {
-          window.location.replace("/legacy.html" + window.location.search);
-        }
-      })();
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/react/main.jsx"></script>
     <script>

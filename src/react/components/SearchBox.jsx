@@ -1,4 +1,7 @@
-import React, { useMemo } from "react";
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { faMagnifyingGlass, faSpinner } from "../icons/fontAwesome";
 
 const SearchBox = ({
   query,
@@ -12,13 +15,6 @@ const SearchBox = ({
 }) => {
   const hasResults = fishSuggestions.length > 0 || placeSuggestions.length > 0;
   const showMenu = suggestionsOpen && query.trim().length >= 3;
-
-  const iconClassName = useMemo(() => {
-    if (isSearching) {
-      return "fa fa-refresh fa-spin form-control-feedback";
-    }
-    return "fa fa-search form-control-feedback";
-  }, [isSearching]);
 
   return (
     <div className="form-group has-feedback fishfry-search">
@@ -42,7 +38,9 @@ const SearchBox = ({
           }
         }}
       />
-      <span id="searchicon" className={iconClassName} />
+      <span id="searchicon" className="form-control-feedback">
+        <FontAwesomeIcon icon={isSearching ? faSpinner : faMagnifyingGlass} spin={isSearching} />
+      </span>
 
       {showMenu ? (
         <div className="tt-dropdown-menu fishfry-search__menu">

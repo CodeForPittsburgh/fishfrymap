@@ -6,7 +6,7 @@ The Pittsburgh Lenten Fish Fry Map is the brainchild of Hollen Barmer, who has t
 
 The raw data isn't here! That is by design. The map gets data from the Fish Fry API @ [fishfry.codeforpgh.com/api/fishfries](http://fishfry.codeforpgh.com/api/fishfries). Anyone can use that URL to get data to make their own fish fry map, or do things with the Fish Fry data that we haven't thought of. If you want to learn more about the database and API, head over to the [Fish Fry Form](https://github.com/CodeForPittsburgh/fishfryform) repository.
 
-Occassional snapshots of the data from are being dumped into the `data` folder of this repo, but only for posterity.
+Occassional snapshots of the data are kept in `public/data` for local fallback and posterity.
 
 ## Development
 
@@ -21,13 +21,6 @@ Then, in the root of this directory, run:
 `npm install`
 
 This will use the `package.json` file to get and install NodeJS dependencies locally, in a `node_modules` folder.
-
-For legacy development only, you will also need these things (available on [NPM](https://www.npmjs.com)):
-
-* [GulpJS](https://www.npmjs.com/package/gulp), with `gulp` callable from the command line. Install with `npm install gulp@4.0 -g`
-* [Http-Server](https://www.npmjs.com/package/http-server), with `http-server` callable from the command line. Install with: `npm install http-server -g`
-
-Those two things need to be available globally. the `-g` flag in those commands makes sure of that.
 
 ### Building and Watching (React/Vite)
 
@@ -55,22 +48,9 @@ Copy `.env.example` to `.env` and set:
 - `VITE_FISHFRY_FALLBACK_URL` for local fallback GeoJSON
 - `VITE_MAPBOX_TOKEN` for geocoding suggestions
 
-### Legacy Gulp path
-
-The pre-migration app remains available for parity checks:
-
-- `npm run legacy:dev`
-- `npm run legacy:build`
-
-It can also be opened via `/?legacy=1` from the Vite app.
-
 ### Where the functionality lives / where you can hack on the code
 
 React app source lives in `src/react`.
-
-Legacy app source remains in `src/js/app.js` and `legacy.html`.
-
-> TODO: the source code for this app is a bit of a mess...the result of quick prototyping.
 
 ### Deploying this Site
 
@@ -79,8 +59,6 @@ Run `npm run build`, commit changes, and push as-is to GitHub to deploy.
 ## Credits
 
 The Fish Fry Map is built and maintained by members of Code for Pittsburgh.
-
-It started with <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a> (which we've adapted it and modified heavily for this project), and uses <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>, among other things.
 
 ### Basemaps
 
