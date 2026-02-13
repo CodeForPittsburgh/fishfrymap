@@ -57,9 +57,9 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
       <Modal.Header closeButton>
         <Modal.Title>Other than fish, these are the things I&apos;m looking for in a Fish Fry:</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="p-4">
         <Row>
-          <Col sm={{ span: 8, offset: 2 }}>
+          <Col >
             {FILTER_FIELDS.map((filter) => (
               <Form.Group className="mb-3" key={filter.key}>
                 <h4>
@@ -78,9 +78,9 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
             ))}
           </Col>
         </Row>
-        <hr />
+        
         <Row>
-          <Col sm={{ span: 8, offset: 2 }} className="bg-info-subtle rounded py-2">
+          <Col className="bg-primary rounded py-2 my-2">
             <Form.Check
               className="filter"
               id="publish"
@@ -92,14 +92,12 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
           </Col>
         </Row>
         <Row>
-          <Col sm={{ span: 8, offset: 2 }}>
-            <h4>
-              <small>
+          <Col >
+            <p>
                 Note that while we try our best to verify all details about Fish Fries, some details may be
                 incomplete. Please check with the Fish Fry venue ahead of time and rely on the above filters at your
                 own discretion.
-              </small>
-            </h4>
+            </p>
           </Col>
         </Row>
       </Modal.Body>

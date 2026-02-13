@@ -43,17 +43,15 @@ const TopNav = ({
         <Navbar.Brand className="text-white fw-bold fs-6 d-md-none">Fish Fry Map</Navbar.Brand>
 
         <Navbar.Collapse>
-          <Form className="ms-auto fishfry-search-form" role="search" onSubmit={(event) => event.preventDefault()}>
-            <SearchBox {...searchProps} />
-          </Form>
-          <Nav className="ms-md-3">
+
+          <Nav className="ms-auto">
             <Nav.Item className="d-none d-md-block">
-              <Nav.Link as="button" type="button" id="list-btn" onClick={onToggleSidebar} className="text-white">
+              <Nav.Link as="button" type="button" id="list-btn" onClick={onToggleSidebar} >
                 <FontAwesomeIcon icon={faFilter} className="white" />&nbsp;&nbsp;Filter
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as="button" type="button" id="about-btn" onClick={onOpenAbout} className="text-white">
+              <Nav.Link as="button" type="button" id="about-btn" onClick={onOpenAbout}>
                 <FontAwesomeIcon icon={faCircleQuestion} className="white" />&nbsp;&nbsp;About
               </Nav.Link>
             </Nav.Item>
@@ -63,7 +61,7 @@ const TopNav = ({
                 target="_blank"
                 rel="noreferrer"
                 id="data-btn"
-                className="text-white"
+
               >
                 <FontAwesomeIcon icon={faDatabase} />&nbsp;&nbsp;Data
               </Nav.Link>
@@ -80,6 +78,9 @@ const TopNav = ({
               </Nav.Link>
             </Nav.Item>
           </Nav>
+          <Form className="fishfry-search-form" role="search" onSubmit={(event) => event.preventDefault()}>
+            <SearchBox {...searchProps} />
+          </Form>
         </Navbar.Collapse>
       </Container>
     </Navbar>

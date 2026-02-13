@@ -18,11 +18,11 @@ const Sidebar = ({
       <div className="sidebar-wrapper">
         <Card id="features" className="h-100 border-0 rounded-0">
           <Card.Header>
-            <h3 className="h5 m-0 d-flex align-items-center justify-content-between">
+            <h3 className="h5 mt-3 d-flex align-items-center justify-content-between">
               <span>Fish Fry Filter</span>
               <Button
                 type="button"
-                variant="outline-secondary"
+                variant="primary"
                 size="sm"
                 id="sidebar-hide-btn"
                 onClick={onHide}
@@ -31,19 +31,20 @@ const Sidebar = ({
               </Button>
             </h3>
           </Card.Header>
-          <Card.Body>
+          <Card.Body className="px-0">
+            <div className="mx-2">
             <Button
               type="button"
               size="sm"
-              variant={hasActiveFilters ? "primary" : "outline-secondary"}
+              variant={hasActiveFilters ? "primary" : "outline-primary"}
               className="w-100"
               id="filterSidebar-btn"
               onClick={onOpenFilter}
             >
               <FontAwesomeIcon icon={faFilter} /> {hasActiveFilters ? "Filtered" : "Filter"}
             </Button>
-          </Card.Body>
-          <div className="sidebar-table">
+            </div>
+          <div className="sidebar-table mt-3">
             <Table hover size="sm" id="feature-list">
               <thead className="visually-hidden">
                 <tr>
@@ -73,7 +74,9 @@ const Sidebar = ({
                 ))}
               </tbody>
             </Table>
-          </div>
+          </div>            
+          </Card.Body>
+
         </Card>
       </div>
     </div>
