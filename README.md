@@ -8,56 +8,116 @@ The raw data isn't here! That is by design. The map gets data from the Fish Fry 
 
 Occassional snapshots of the data are kept in `public/data` for local fallback and posterity.
 
-## Development
-
-This is a static web site. We're serving it up with GitHub pages, but it can run on any web server as-is, really.
+## Developer Quickstart
 
 ### Prerequisites
 
-To develop this, you have [NodeJS](https://nodejs.org/en/) installed, such that you can call `node` and `npm` from the command line.
+- Node.js `22.x` (matches CI)
+- npm `10+`
 
-Then, in the root of this directory, run:
+### 1) Install dependencies
 
-`npm install`
+```bash
+npm ci
+```
 
-This will use the `package.json` file to get and install NodeJS dependencies locally, in a `node_modules` folder.
+### 2) Configure environment
 
-### Building and Watching (React/Vite)
+Create a local env file:
 
-The primary app now runs with Vite + React.
+```bash
+cp .env.example .env
+```
 
-We run those tasks with `npm` scripts.
+Current variables:
 
-Running `npm run dev` will start Vite at [http://localhost:5173](http://localhost:5173).
+- `VITE_FISHFRY_API_URL=https://data.pghfishfry.org/api/fishfries/`
+- `VITE_FISHFRY_FALLBACK_URL=/data/fishfrymap.geojson`
+- `VITE_MAPBOX_TOKEN=` (optional, enables Mapbox geocoding suggestions)
+- `VITE_CLIENT_ERROR_DSN=` (optional, client-side error reporting target)
+- `VITE_CLIENT_ERROR_SAMPLE_RATE=1` (`0..1`)
 
-Running `npm run build` will create a production build in `dist/`.
+### 3) Start local development server
 
-Running `npm run preview` will serve the built app for smoke testing.
+```bash
+npm run dev
+```
 
-### Testing
+App runs at `http://localhost:5173`.
 
-- `npm run test:unit` runs unit tests for extracted domain logic.
-- `npm run test:parity` runs Playwright parity tests.
-- `npm run test` runs both unit and parity suites.
+### 4) Run tests
 
-### Environment variables
+Unit tests:
 
-Copy `.env.example` to `.env` and set:
+```bash
+npm run test:unit
+```
 
-- `VITE_FISHFRY_API_URL` for the primary data API
-- `VITE_FISHFRY_FALLBACK_URL` for local fallback GeoJSON
-- `VITE_MAPBOX_TOKEN` for geocoding suggestions
-- `VITE_CLIENT_ERROR_DSN` for client-side error reporting endpoint
-- `VITE_CLIENT_ERROR_SAMPLE_RATE` between `0` and `1` (default `1`)
+Playwright parity tests (first-time setup):
 
-### Where the functionality lives / where you can hack on the code
+```bash
+npx playwright install --with-deps chromium
+npm run test:parity
+```
 
-React app source lives in `src`.
-Use `@/` import aliases for app modules (for example `@/features/map/MapView`), and central style entry is `src/styles/index.css`.
+Run all tests:
 
-### Deploying this Site
+```bash
+npm test
+```
 
-Run `npm run build`, commit changes, and push as-is to GitHub to deploy.
+### 5) Build and preview production bundle
+
+```bash
+npm run build
+npm run preview
+```
+
+`npm run build` outputs to `dist/`.
+
+## Scripts
+
+- `npm run dev` starts Vite dev server
+- `npm run build` builds production bundle
+- `npm run preview` serves the production bundle
+- `npm run test:unit` runs Vitest unit tests
+- `npm run test:parity` runs Playwright parity tests
+- `npm test` runs both suites
+
+## Project Layout
+
+- `src/` app source code
+- `src/features/` UI and map features
+- `src/store/` Redux Toolkit slices and APIs
+- `src/domain/` shared business logic (filters, date logic, normalization)
+- `src/styles/` app styles and theme overrides
+- `public/data/fishfrymap.geojson` fallback dataset used when API is unavailable
+
+## Theming
+
+- Base theme: `bootswatch/dist/darkly/bootstrap.min.css` (imported in `src/main.jsx`)
+- Brand overrides: `src/styles/theme-overrides.css`
+- App-level custom styles: `src/styles/app.css`
+
+Primary brand color is set to `#fcb82e` in `src/styles/theme-overrides.css`.
+
+## Data Source
+
+Map data is fetched from:
+
+- `https://data.pghfishfry.org/api/fishfries/`
+
+If the primary API is unavailable, the app falls back to:
+
+- `/data/fishfrymap.geojson`
+
+If you want to learn more about the API and curation tooling, see:
+
+- [CodeForPittsburgh/fishfryform](https://github.com/CodeForPittsburgh/fishfryform)
+
+## Deployment
+
+Run `npm run build` and deploy the generated `dist/` assets.
 
 ## Credits
 
@@ -65,11 +125,9 @@ The Fish Fry Map is built and maintained by members of Code for Pittsburgh.
 
 ### Basemaps
 
-Our nice basemaps come from all over!
-
-* **Light** and **Dark** basemaps: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>
-* **Black n' Gold** basemap: Map tiles from <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.
+- **Light** and **Dark** basemaps: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>
+- **Black n' Gold** basemap: Map tiles from <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.
 
 ### Icons
 
-Church and Warehouse icons come from © Mapbox.
+Church and Warehouse icons come from &copy; Mapbox.
