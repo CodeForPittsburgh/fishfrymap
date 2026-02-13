@@ -82,13 +82,13 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
               </h4>
             </Col>
             <Col md={3}>
-              <h4 className="modal-title text-md-end">
-                <small>
-                  <a href={directionsUrl} target="_blank" rel="noreferrer">
-                    Get directions &rarr;
-                  </a>
-                </small>
-              </h4>
+              <Button>
+                
+              </Button>
+                <a 
+                  href={directionsUrl} target="_blank" rel="noreferrer">
+                  Get directions &rarr;
+                </a>
             </Col>
           </Row>
         </div>

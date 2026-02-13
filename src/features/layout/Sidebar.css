@@ -53,17 +53,34 @@
   flex-direction: column;
 }
 
+.sidebar-wrapper #features .card-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .sidebar-table {
   flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .feature-row {
   cursor: pointer;
-  width: 250px;
+  width: 100%;
+  text-align: left;
 }
 
-.sidebar-cell-align {
-  vertical-align: middle;
+.feature-icon {
+  flex: 0 0 auto;
+}
+
+.feature-name {
+  line-height: 1.2;
+}
+
+.feature-chevron {
+  flex: 0 0 auto;
 }
