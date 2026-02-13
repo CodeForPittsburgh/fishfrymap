@@ -23,8 +23,8 @@
   margin-top: 4px;
   padding: 4px 0;
   width: 100%;
-  max-height: 300px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .tt-suggestion {
