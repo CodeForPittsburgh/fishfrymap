@@ -1,6 +1,6 @@
 import { deriveLiturgicalOpenFlags } from "@/domain/dateUtils";
 
-const iconPath = "/assets/img/";
+const iconPath = `${import.meta.env.BASE_URL}assets/img/`;
 
 export const iconLookup = {
   Church: `${iconPath}Church.png`,
