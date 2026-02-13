@@ -117,7 +117,8 @@ If you want to learn more about the API and curation tooling, see:
 
 ## Deployment
 
-Run `npm run build` and deploy the generated `dist/` assets.
+GitHub Actions deploys to GitHub Pages on pushes to `main`/`master` using `gh-pages -d dist`.
+You can also run `npm run build` and publish the generated `dist/` assets manually.
 
 ## Credits
 
