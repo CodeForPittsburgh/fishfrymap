@@ -11,6 +11,9 @@ import { uiActions } from "@/store/slices/uiSlice";
 const TopNav = ({ fishSuggestions, placeSuggestions, isSearching }) => {
   const dispatch = useDispatch();
   const navbarExpanded = useSelector((state) => state.ui.navbarExpanded);
+  const fishfryYear = import.meta.env.VITE_FISHFRY_YEAR?.trim();
+  const desktopTitle = fishfryYear ? `${fishfryYear} Pittsburgh Lenten Fish Fry Map ` : "Pittsburgh Lenten Fish Fry Map";
+  const mobileTitle = fishfryYear ? `${fishfryYear} Fish Fry Map ` : "Fish Fry Map";
 
   const onToggleNavbar = () => {
     dispatch(uiActions.setNavbarExpanded(!navbarExpanded));
@@ -55,10 +58,8 @@ const TopNav = ({ fishSuggestions, placeSuggestions, isSearching }) => {
           </Button>
         </div>
 
-        <Navbar.Brand className="text-white fw-bold fs-4 d-none d-md-block">
-          Pittsburgh Lenten Fish Fry Map
-        </Navbar.Brand>
-        <Navbar.Brand className="text-white fw-bold fs-6 d-md-none">Fish Fry Map</Navbar.Brand>
+        <Navbar.Brand className="text-primary fw-bold fs-4 d-none d-md-block">{desktopTitle}</Navbar.Brand>
+        <Navbar.Brand className="text-primary fw-bold fs-6 d-md-none">{mobileTitle}</Navbar.Brand>
 
         <Navbar.Collapse>
 
