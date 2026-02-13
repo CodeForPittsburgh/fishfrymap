@@ -1,0 +1,58 @@
+.fishfry-search {
+  position: relative;
+}
+
+.fishfry-search__menu {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 1100;
+}
+
+#searchicon {
+  border-left: 0;
+}
+
+.tt-dropdown-menu {
+  background-color: #222222;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 4px;
+  padding: 4px 0;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.tt-suggestion {
+  font-size: 14px;
+  line-height: 20px;
+  padding: 3px 10px;
+}
+
+.tt-suggestion.tt-cursor {
+  background-color: #fcb82e;
+  color: #000000;
+  cursor: pointer;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.tt-suggestion + .tt-suggestion {
+  border-top: 1px solid #cccccc;
+}
+
+.typeahead-header {
+  margin: 0 5px 5px;
+  padding: 3px 0;
+  border-bottom: 2px solid #333333;
+}
+
+#searchicon .svg-inline--fa {
+  vertical-align: middle;
+}

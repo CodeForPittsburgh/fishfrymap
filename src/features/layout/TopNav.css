@@ -1,0 +1,30 @@
+.fishfry-navbar {
+  background-color: #303030 !important;
+}
+
+.fishfry-navbar .navbar-brand {
+  color: #ffffff;
+}
+
+.fishfry-navbar .nav-link {
+  color: #ffffff;
+}
+
+.fishfry-navbar .nav-link:hover,
+.fishfry-navbar .nav-link:focus {
+  color: #f8f9fa;
+}
+
+.fishfry-navbar-icon {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0;
+}
+
+.fishfry-search-form {
+  width: min(460px, 100%);
+}
+
+.white {
+  color: #ffffff;
+}

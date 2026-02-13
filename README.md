@@ -6,64 +6,128 @@ The Pittsburgh Lenten Fish Fry Map is the brainchild of Hollen Barmer, who has t
 
 The raw data isn't here! That is by design. The map gets data from the Fish Fry API @ [fishfry.codeforpgh.com/api/fishfries](http://fishfry.codeforpgh.com/api/fishfries). Anyone can use that URL to get data to make their own fish fry map, or do things with the Fish Fry data that we haven't thought of. If you want to learn more about the database and API, head over to the [Fish Fry Form](https://github.com/CodeForPittsburgh/fishfryform) repository.
 
-Occassional snapshots of the data from are being dumped into the `data` folder of this repo, but only for posterity.
+Occassional snapshots of the data are kept in `public/data` for local fallback and posterity.
 
-## Development
-
-This is a static web site. We're serving it up with GitHub pages, but it can run on any web server as-is, really.
+## Developer Quickstart
 
 ### Prerequisites
 
-To develop this, you have [NodeJS](https://nodejs.org/en/) installed, such that you can call `node` and `npm` from the command line.
+- Node.js `22.x` (matches CI)
+- npm `10+`
 
-Then, in the root of this directory, run:
+### 1) Install dependencies
 
-`npm install`
+```bash
+npm ci
+```
 
-This will use the `package.json` file to get and install NodeJS dependencies locally, in a `node_modules` folder.
+### 2) Configure environment
 
-You will also need these things (available on [NPM](https://www.npmjs.com)):
+Create a local env file:
 
-* [GulpJS](https://www.npmjs.com/package/gulp), with `gulp` callable from the command line. Install with `npm install gulp@4.0 -g`
-* [Http-Server](https://www.npmjs.com/package/http-server), with `http-server` callable from the command line. Install with: `npm install http-server -g`
+```bash
+cp .env.example .env
+```
 
-Those two things need to be available globally. the `-g` flag in those commands makes sure of that.
+Current variables:
 
-### Building and Watching
+- `VITE_FISHFRY_API_URL=https://data.pghfishfry.org/api/fishfries/`
+- `VITE_FISHFRY_FALLBACK_URL=/data/fishfrymap.geojson`
+- `VITE_MAPBOX_TOKEN=` (optional, enables Mapbox geocoding suggestions)
+- `VITE_CLIENT_ERROR_DSN=` (optional, client-side error reporting target)
+- `VITE_CLIENT_ERROR_SAMPLE_RATE=1` (`0..1`)
 
-GulpJS is a task-runner that compiles and bundles source code from `src` folder into the `assets` folder. Since the deployment path for this is GitHub pages, we put things into the `assets` folder, which is where Jekyll, the software that runs GitHub pages, expects those things to be.
+### 3) Start local development server
 
-We run those tasks with `npm` scripts.
+```bash
+npm run dev
+```
 
-Running `npm run build` will compile and bundle the source code one time.
+App runs at `http://localhost:5173`.
 
-Running `npm run dev` will do that, plus run `http-server`, open the site in a web browser at [http://localhost:3000](http://localhost:3000), and, upon detecting changes to files in `src`, re-runs compiling/bundling and refreshes your browser. Nice!
+### 4) Run tests
 
-If the site doesn't load after `pnpm run dev`, check [http://localhost:4000](http://localhost:4000) in your browser. This is where `http-server` lives. If you don't see anything there, make sure you can run `http-server` from the command line (see **prerequisites** above).
+Unit tests:
 
-### Where the functionality lives / where you can hack on the code
+```bash
+npm run test:unit
+```
 
-Most of the work is happening in `src/js/app.js`. The rest happens in `index.html`. 
+Playwright parity tests (first-time setup):
 
-> TODO: the source code for this app is a bit of a mess...the result of quick prototyping.
+```bash
+npx playwright install --with-deps chromium
+npm run test:parity
+```
 
-### Deploying this Site
+Run all tests:
 
-Run `npm run build`, commit changes, and push as-is to GitHub to deploy.
+```bash
+npm test
+```
+
+### 5) Build and preview production bundle
+
+```bash
+npm run build
+npm run preview
+```
+
+`npm run build` outputs to `dist/`.
+
+## Scripts
+
+- `npm run dev` starts Vite dev server
+- `npm run build` builds production bundle
+- `npm run preview` serves the production bundle
+- `npm run test:unit` runs Vitest unit tests
+- `npm run test:parity` runs Playwright parity tests
+- `npm test` runs both suites
+
+## Project Layout
+
+- `src/` app source code
+- `src/features/` UI and map features
+- `src/store/` Redux Toolkit slices and APIs
+- `src/domain/` shared business logic (filters, date logic, normalization)
+- `src/styles/` app styles and theme overrides
+- `public/data/fishfrymap.geojson` fallback dataset used when API is unavailable
+
+## Theming
+
+- Base theme: `bootswatch/dist/darkly/bootstrap.min.css` (imported in `src/main.jsx`)
+- Brand overrides: `src/styles/theme-overrides.css`
+- App-level custom styles: `src/styles/app.css`
+
+Primary brand color is set to `#fcb82e` in `src/styles/theme-overrides.css`.
+
+## Data Source
+
+Map data is fetched from:
+
+- `https://data.pghfishfry.org/api/fishfries/`
+
+If the primary API is unavailable, the app falls back to:
+
+- `/data/fishfrymap.geojson`
+
+If you want to learn more about the API and curation tooling, see:
+
+- [CodeForPittsburgh/fishfryform](https://github.com/CodeForPittsburgh/fishfryform)
+
+## Deployment
+
+Run `npm run build` and deploy the generated `dist/` assets.
 
 ## Credits
 
 The Fish Fry Map is built and maintained by members of Code for Pittsburgh.
 
-It started with <a href='https://github.com/bmcbride/bootleaf'>Bootleaf</a> (which we've adapted it and modified heavily for this project), and uses <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>, among other things.
-
 ### Basemaps
 
-Our nice basemaps come from all over!
-
-* **Light** and **Dark** basemaps: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>
-* **Black n' Gold** basemap: Map tiles from <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.
+- **Light** and **Dark** basemaps: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>
+- **Black n' Gold** basemap: Map tiles from <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license. Basemap data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.
 
 ### Icons
 
-Church and Warehouse icons come from © Mapbox.
+Church and Warehouse icons come from &copy; Mapbox.
