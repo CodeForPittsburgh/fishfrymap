@@ -1,3 +1,5 @@
+import { deriveLiturgicalOpenFlags } from "@/domain/dateUtils";
+
 const iconPath = "/assets/img/";
 
 export const iconLookup = {
@@ -19,6 +21,7 @@ export const FILTER_KEYS = [
   "take_out",
   "handicap",
   "GoodFriday",
+  "AshWednesday",
   "publish"
 ];
 
@@ -51,6 +54,7 @@ export function resolveIcon(feature) {
 
 export function normalizeFeature(rawFeature, index = 0) {
   const properties = rawFeature?.properties || {};
+  const liturgicalFlags = deriveLiturgicalOpenFlags(properties.events);
   const geometry = rawFeature?.geometry || {};
   const coordinates = geometry?.coordinates || [];
 
@@ -59,6 +63,8 @@ export function normalizeFeature(rawFeature, index = 0) {
     id: `${rawFeature?.id ?? index}`,
     properties: {
       ...properties,
+      GoodFriday: liturgicalFlags.GoodFriday,
+      AshWednesday: liturgicalFlags.AshWednesday,
       website: normalizeUrl(properties.website),
       menu: {
         text: properties?.menu?.text || "",

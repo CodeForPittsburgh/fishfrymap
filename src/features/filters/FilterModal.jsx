@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Col, Form, ListGroup, Modal, Row } from "react-bootstrap";
-import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair } from "@/icons/fontAwesome";
+import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair, faPlus } from "@/icons/fontAwesome";
 import "./FilterModal.css";
 
 const FILTER_FIELDS = [
@@ -41,13 +41,21 @@ const FILTER_FIELDS = [
     )
   },
   {
+    key: "AshWednesday",
+    label: (
+      <>
+        Open Ash Wednesday <FontAwesomeIcon icon={faPlus} aria-hidden="true" />
+      </>
+    )
+  },  
+  {
     key: "GoodFriday",
     label: (
       <>
-        Open Good Friday <FontAwesomeIcon icon={faBagShopping} aria-hidden="true" />
+        Open Good Friday <FontAwesomeIcon icon={faPlus} aria-hidden="true" />
       </>
     )
-  }
+  },
 ];
 
 const FilterModal = ({ show, onHide, filters, onChange }) => {
@@ -87,7 +95,7 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
             </ListGroup>
           </Col>
         </Row>
-        
+
         <Row>
           <Col>
             <ListGroup className="publish-filter-list my-2">
@@ -112,9 +120,9 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
         <Row>
           <Col >
             <p>
-                Note that while we try our best to verify all details about Fish Fries, some details may be
-                incomplete. Please check with the Fish Fry venue ahead of time and rely on the above filters at your
-                own discretion.
+              Note that while we try our best to verify all details about Fish Fries, some details may be
+              incomplete. Please check with the Fish Fry venue ahead of time and rely on the above filters at your
+              own discretion.
             </p>
           </Col>
         </Row>

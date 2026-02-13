@@ -1,7 +1,12 @@
 import moment from "moment";
 import { describe, expect, it } from "vitest";
 
-import { computeGoodFriday, isOpenOnGoodFriday, parseDateTimes } from "../../../src/domain/dateUtils";
+import {
+  computeAshWednesday,
+  computeGoodFriday,
+  deriveLiturgicalOpenFlags,
+  parseDateTimes
+} from "../../../src/domain/dateUtils";
 
 describe("dateUtils", () => {
   it("computes known Good Friday dates", () => {
@@ -10,22 +15,39 @@ describe("dateUtils", () => {
     expect(computeGoodFriday(2026).format("YYYY-MM-DD")).toBe("2026-04-03");
   });
 
-  it("detects good friday opening from events", () => {
-    const goodFriday = computeGoodFriday(2026);
+  it("computes known Ash Wednesday dates", () => {
+    expect(computeAshWednesday(2024).format("YYYY-MM-DD")).toBe("2024-02-14");
+    expect(computeAshWednesday(2025).format("YYYY-MM-DD")).toBe("2025-03-05");
+    expect(computeAshWednesday(2026).format("YYYY-MM-DD")).toBe("2026-02-18");
+  });
+
+  it("derives liturgical open flags from events", () => {
     const events = [
+      {
+        dt_start: "2024-02-14T16:00:00",
+        dt_end: "2024-02-14T19:00:00"
+      },
       {
         dt_start: "2026-04-03T16:00:00",
         dt_end: "2026-04-03T19:00:00"
       }
     ];
 
-    expect(isOpenOnGoodFriday(events, goodFriday)).toBe(true);
-    expect(isOpenOnGoodFriday([], goodFriday)).toBe(false);
-    expect(isOpenOnGoodFriday(null, goodFriday)).toBe(false);
+    expect(deriveLiturgicalOpenFlags(events)).toEqual({
+      GoodFriday: true,
+      AshWednesday: true
+    });
+    expect(deriveLiturgicalOpenFlags([])).toEqual({
+      GoodFriday: false,
+      AshWednesday: false
+    });
+    expect(deriveLiturgicalOpenFlags(null)).toEqual({
+      GoodFriday: false,
+      AshWednesday: false
+    });
   });
 
   it("parses event windows into today/future labels", () => {
-    const goodFriday = computeGoodFriday(2026);
     const now = moment("2026-03-20T10:00:00");
     const events = [
       {
@@ -38,7 +60,7 @@ describe("dateUtils", () => {
       }
     ];
 
-    const parsed = parseDateTimes(events, now, goodFriday);
+    const parsed = parseDateTimes(events, now);
 
     expect(parsed.today).toEqual(["12:00 pm to 2:00 pm"]);
     expect(parsed.GoodFriday).toBe(true);
@@ -48,7 +70,6 @@ describe("dateUtils", () => {
   });
 
   it("adds closed-on-good-friday label when applicable", () => {
-    const goodFriday = computeGoodFriday(2026);
     const now = moment("2026-03-01T10:00:00");
     const events = [
       {
@@ -57,17 +78,16 @@ describe("dateUtils", () => {
       }
     ];
 
-    const parsed = parseDateTimes(events, now, goodFriday);
+    const parsed = parseDateTimes(events, now);
     expect(parsed.GoodFriday).toBe(false);
     expect(parsed.future.at(-1)).toBe("Closed on Good Friday");
   });
 
   it("handles malformed events payloads without throwing", () => {
-    const goodFriday = computeGoodFriday(2026);
     const now = moment("2026-03-01T10:00:00");
 
-    const parsedFromString = parseDateTimes("invalid", now, goodFriday);
-    const parsedFromObject = parseDateTimes({ dt_start: "2026-03-01T12:00:00" }, now, goodFriday);
+    const parsedFromString = parseDateTimes("invalid", now);
+    const parsedFromObject = parseDateTimes({ dt_start: "2026-03-01T12:00:00" }, now);
 
     expect(parsedFromString).toEqual({
       today: [],

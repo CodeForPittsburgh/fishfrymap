@@ -12,7 +12,7 @@ test("feature modal opens from sidebar row click", async ({ page }) => {
   await page.goto("/");
   await waitForSidebarData(page);
 
-  const firstRow = page.locator("#feature-list tbody tr").first();
+  const firstRow = page.locator("#feature-list .feature-row").first();
   await firstRow.click();
 
   await expect(page.locator("#feature-title")).toBeVisible({ timeout: 10000 });

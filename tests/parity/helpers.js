@@ -4,7 +4,7 @@ async function waitForSidebarData(page, minRows = 1) {
   await expect(page.locator("#map")).toBeVisible();
   await expect
     .poll(async () => {
-      return page.locator("#feature-list tbody tr").count();
+      return page.locator("#feature-list .feature-row").count();
     }, { timeout: 30000 })
     .toBeGreaterThanOrEqual(minRows);
 }

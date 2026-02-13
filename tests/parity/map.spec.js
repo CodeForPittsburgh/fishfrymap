@@ -33,7 +33,7 @@ test("overlay toggle hides and restores sidebar rows", async ({ page }) => {
   await expect(overlayToggle).not.toBeChecked();
   await expect
     .poll(async () => {
-      return page.locator("#feature-list tbody tr").count();
+      return page.locator("#feature-list .feature-row").count();
     })
     .toBe(0);
 
@@ -63,13 +63,13 @@ test("sidebar rows resync after map moveend from feature focus", async ({ page }
   await page.goto("/");
   await waitForSidebarData(page, 2);
 
-  const initialRows = await page.locator("#feature-list tbody tr").count();
-  await page.locator("#feature-list tbody tr").first().click();
+  const initialRows = await page.locator("#feature-list .feature-row").count();
+  await page.locator("#feature-list .feature-row").first().click();
   await expect(page.locator("#feature-title")).toBeVisible({ timeout: 10000 });
 
   await expect
     .poll(async () => {
-      return page.locator("#feature-list tbody tr").count();
+      return page.locator("#feature-list .feature-row").count();
     })
     .not.toBe(initialRows);
 });

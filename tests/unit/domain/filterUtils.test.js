@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-import { computeGoodFriday } from "../../../src/domain/dateUtils";
 import {
   featureIsInBounds,
   filterFeature,
@@ -17,7 +16,8 @@ const baseFeature = {
     alcohol: false,
     take_out: true,
     handicap: true,
-    events: [{ dt_start: "2026-04-03T12:00:00", dt_end: "2026-04-03T14:00:00" }]
+    GoodFriday: true,
+    AshWednesday: false
   },
   geometry: {
     coordinates: [-79.99, 40.44]
@@ -32,18 +32,16 @@ const allOff = {
   take_out: false,
   handicap: false,
   GoodFriday: false,
+  AshWednesday: false,
   publish: false
 };
 
 describe("filterUtils", () => {
   it("returns true when no filters are active", () => {
-    const goodFriday = computeGoodFriday(2026);
-    expect(filterFeature(baseFeature, allOff, goodFriday)).toBe(true);
+    expect(filterFeature(baseFeature, allOff)).toBe(true);
   });
 
   it("matches direct property filters", () => {
-    const goodFriday = computeGoodFriday(2026);
-
     expect(
       filterFeature(
         baseFeature,
@@ -51,8 +49,7 @@ describe("filterUtils", () => {
           ...allOff,
           publish: true,
           drive_thru: true
-        },
-        goodFriday
+        }
       )
     ).toBe(true);
 
@@ -62,33 +59,43 @@ describe("filterUtils", () => {
         {
           ...allOff,
           lunch: true
-        },
-        goodFriday
+        }
       )
     ).toBe(false);
   });
 
-  it("uses GoodFriday computed filter", () => {
-    const goodFriday = computeGoodFriday(2026);
-
-    expect(filterFeature(baseFeature, { ...allOff, GoodFriday: true }, goodFriday)).toBe(true);
+  it("matches liturgical day filters from feature properties", () => {
+    expect(filterFeature(baseFeature, { ...allOff, GoodFriday: true })).toBe(true);
+    expect(filterFeature(baseFeature, { ...allOff, AshWednesday: true })).toBe(false);
     expect(
       filterFeature(
         {
           ...baseFeature,
           properties: {
             ...baseFeature.properties,
-            events: []
+            GoodFriday: false,
+            AshWednesday: true
           }
         },
-        { ...allOff, GoodFriday: true },
-        goodFriday
+        { ...allOff, GoodFriday: true }
       )
     ).toBe(false);
+    expect(
+      filterFeature(
+        {
+          ...baseFeature,
+          properties: {
+            ...baseFeature.properties,
+            GoodFriday: false,
+            AshWednesday: true
+          }
+        },
+        { ...allOff, AshWednesday: true }
+      )
+    ).toBe(true);
   });
 
   it("filters collections and detects active filters", () => {
-    const goodFriday = computeGoodFriday(2026);
     const features = [
       baseFeature,
       {
@@ -100,7 +107,7 @@ describe("filterUtils", () => {
       }
     ];
 
-    const filtered = filterFeatures(features, { ...allOff, publish: true }, goodFriday);
+    const filtered = filterFeatures(features, { ...allOff, publish: true });
     expect(filtered.length).toBe(1);
     expect(hasActiveFilters(allOff)).toBe(false);
     expect(hasActiveFilters({ ...allOff, publish: true })).toBe(true);

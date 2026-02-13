@@ -1,6 +1,4 @@
-import { isOpenOnGoodFriday } from "@/domain/dateUtils";
-
-export function filterFeature(feature, filters, goodFridayDate) {
+export function filterFeature(feature, filters) {
   let noFiltersApplied = true;
   const results = [];
 
@@ -13,12 +11,7 @@ export function filterFeature(feature, filters, goodFridayDate) {
       return;
     }
 
-    let propValue = false;
-    if (key === "GoodFriday") {
-      propValue = isOpenOnGoodFriday(feature?.properties?.events, goodFridayDate);
-    } else {
-      propValue = feature?.properties?.[key];
-    }
+    const propValue = feature?.properties?.[key];
 
     results.push(checked === propValue);
   });
@@ -30,8 +23,8 @@ export function filterFeature(feature, filters, goodFridayDate) {
   return !results.includes(false);
 }
 
-export function filterFeatures(features, filters, goodFridayDate) {
-  return features.filter((feature) => filterFeature(feature, filters, goodFridayDate));
+export function filterFeatures(features, filters) {
+  return features.filter((feature) => filterFeature(feature, filters));
 }
 
 export function hasActiveFilters(filters) {

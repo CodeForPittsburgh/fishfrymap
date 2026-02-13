@@ -26,15 +26,47 @@ export function computeGoodFriday(year) {
   return moment(easter(year)).subtract(2, "d");
 }
 
-export function isOpenOnGoodFriday(events, goodFridayDate) {
-  if (!Array.isArray(events)) {
-    return false;
-  }
-
-  return events.some((event) => moment(event?.dt_start).isSame(goodFridayDate, "day"));
+export function computeAshWednesday(year) {
+  return moment(easter(year)).subtract(46, "d");
 }
 
-export function parseDateTimes(events, nowMoment, goodFridayDate) {
+export function deriveLiturgicalOpenFlags(events) {
+  if (!Array.isArray(events)) {
+    return {
+      GoodFriday: false,
+      AshWednesday: false
+    };
+  }
+
+  let openGoodFriday = false;
+  let openAshWednesday = false;
+
+  events.forEach((event) => {
+    const start = moment(event?.dt_start);
+    if (!start.isValid()) {
+      return;
+    }
+
+    const eventYear = start.year();
+    const goodFridayDate = computeGoodFriday(eventYear);
+    const ashWednesdayDate = computeAshWednesday(eventYear);
+
+    if (start.isSame(goodFridayDate, "day")) {
+      openGoodFriday = true;
+    }
+
+    if (start.isSame(ashWednesdayDate, "day")) {
+      openAshWednesday = true;
+    }
+  });
+
+  return {
+    GoodFriday: openGoodFriday,
+    AshWednesday: openAshWednesday
+  };
+}
+
+export function parseDateTimes(events, nowMoment) {
   const now = nowMoment || moment();
   const sortList = [];
   const eventList = Array.isArray(events) ? events : [];
@@ -66,8 +98,10 @@ export function parseDateTimes(events, nowMoment, goodFridayDate) {
   sortList.forEach((pair) => {
     const start = pair[0];
     const end = pair[1];
+    const goodFridayDate = computeGoodFriday(start.year());
+    const isGoodFridayEvent = start.isSame(goodFridayDate, "day");
 
-    if (moment(start).isSame(goodFridayDate, "day")) {
+    if (isGoodFridayEvent) {
       openGoodFriday = true;
     }
 
@@ -77,7 +111,7 @@ export function parseDateTimes(events, nowMoment, goodFridayDate) {
     }
 
     let label;
-    if (openGoodFriday) {
+    if (isGoodFridayEvent) {
       label = `Open Good ${start.format("dddd, MMMM Do")}, ${start.format("h:mm a")} to ${end.format(
         "h:mm a"
       )}`;

@@ -4,7 +4,7 @@ const { waitForSidebarData, openFilterModal } = require("./helpers");
 test("filter state toggles and persists in sidebar CTA", async ({ page }) => {
   await page.goto("/");
   await waitForSidebarData(page);
-  const initialRows = await page.locator("#feature-list tbody tr").count();
+  const initialRows = await page.locator("#feature-list .feature-row").count();
 
   await openFilterModal(page);
   await expect(page.getByText("Find those Fish Fries!")).toBeVisible();
@@ -16,13 +16,13 @@ test("filter state toggles and persists in sidebar CTA", async ({ page }) => {
   await expect(page.locator("#filterSidebar-btn")).toHaveClass(/btn-primary/);
   await expect
     .poll(async () => {
-      return page.locator("#feature-list tbody tr").count();
+      return page.locator("#feature-list .feature-row").count();
     })
     .toBeLessThanOrEqual(initialRows);
 
-  const filteredRows = await page.locator("#feature-list tbody tr").count();
+  const filteredRows = await page.locator("#feature-list .feature-row").count();
   if (filteredRows > 0) {
-    await page.locator("#feature-list tbody tr").first().click();
+    await page.locator("#feature-list .feature-row").first().click();
     await expect(page.locator("#feature-title")).toBeVisible({ timeout: 10000 });
     await expect(page.getByText("has not yet been verified this year")).toHaveCount(0);
     await page.locator(".modal.show").getByRole("button", { name: "Close" }).last().click();
@@ -38,7 +38,7 @@ test("filter state toggles and persists in sidebar CTA", async ({ page }) => {
 test("good friday filter can be toggled without breaking results", async ({ page }) => {
   await page.goto("/");
   await waitForSidebarData(page);
-  const before = await page.locator("#feature-list tbody tr").count();
+  const before = await page.locator("#feature-list .feature-row").count();
 
   await openFilterModal(page);
   await page.locator("input#GoodFriday").check();
@@ -47,12 +47,34 @@ test("good friday filter can be toggled without breaking results", async ({ page
   await expect(page.locator("#filterSidebar-btn")).toContainText("Filtered");
   await expect
     .poll(async () => {
-      return page.locator("#feature-list tbody tr").count();
+      return page.locator("#feature-list .feature-row").count();
     })
     .toBeLessThanOrEqual(before);
 
   await page.locator("#filterSidebar-btn").click();
   await page.locator("input#GoodFriday").uncheck();
+  await page.getByRole("button", { name: "Find those Fish Fries!" }).click();
+  await expect(page.locator("#filterSidebar-btn")).toContainText("Filter");
+});
+
+test("ash wednesday filter can be toggled without breaking results", async ({ page }) => {
+  await page.goto("/");
+  await waitForSidebarData(page);
+  const before = await page.locator("#feature-list .feature-row").count();
+
+  await openFilterModal(page);
+  await page.locator("input#AshWednesday").check();
+  await page.getByRole("button", { name: "Find those Fish Fries!" }).click();
+
+  await expect(page.locator("#filterSidebar-btn")).toContainText("Filtered");
+  await expect
+    .poll(async () => {
+      return page.locator("#feature-list .feature-row").count();
+    })
+    .toBeLessThanOrEqual(before);
+
+  await page.locator("#filterSidebar-btn").click();
+  await page.locator("input#AshWednesday").uncheck();
   await page.getByRole("button", { name: "Find those Fish Fries!" }).click();
   await expect(page.locator("#filterSidebar-btn")).toContainText("Filter");
 });

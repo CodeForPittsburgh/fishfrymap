@@ -5,7 +5,7 @@ test("fishfry search suggestions open and selecting one opens feature modal", as
   await page.goto("/");
   await waitForSidebarData(page);
 
-  const firstName = (await page.locator("#feature-list tbody tr .feature-name").first().innerText()).trim();
+  const firstName = (await page.locator("#feature-list .feature-row .feature-name").first().innerText()).trim();
   const query = firstName.slice(0, Math.min(5, firstName.length));
 
   await page.locator("#searchbox").fill(query);

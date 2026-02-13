@@ -43,7 +43,7 @@ function BooleanPanel({ label, value }) {
   );
 }
 
-const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) => {
+const FeatureModal = ({ show, onHide, feature, currentYear }) => {
   const events = useMemo(() => {
     if (!feature) {
       return {
@@ -53,8 +53,8 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
       };
     }
 
-    return parseDateTimes(feature.properties.events, moment(), goodFridayDate);
-  }, [feature, goodFridayDate]);
+    return parseDateTimes(feature.properties.events, moment());
+  }, [feature]);
 
   if (!feature) {
     return null;
@@ -66,7 +66,8 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
     { label: "Homemade Pierogies", value: feature.properties.homemade_pierogies },
     { label: "Alcohol Served", value: feature.properties.alcohol },
     { label: "Lunch Served", value: feature.properties.lunch },
-    { label: "Open Good Friday", value: events.GoodFriday },
+    { label: "Open Good Friday", value: feature.properties.GoodFriday },
+    { label: "Open Ash Wednesday", value: feature.properties.AshWednesday },
     { label: "Drive-Thru Available", value: feature.properties.drive_thru },
     { label: "Take-Out Available", value: feature.properties.take_out },
     { label: "Handicap Accessible", value: feature.properties.handicap }

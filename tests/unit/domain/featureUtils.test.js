@@ -34,6 +34,16 @@ describe("featureUtils", () => {
       properties: {
         publish: true,
         venue_type: "Church",
+        events: [
+          {
+            dt_start: "2026-02-18T16:00:00",
+            dt_end: "2026-02-18T19:00:00"
+          },
+          {
+            dt_start: "2026-04-03T16:00:00",
+            dt_end: "2026-04-03T19:00:00"
+          }
+        ],
         website: "example.com",
         menu: {
           url: "menu.example.com",
@@ -51,6 +61,8 @@ describe("featureUtils", () => {
     expect(normalized.properties.website).toBe("http://example.com");
     expect(normalized.properties.menu.url).toBe("http://menu.example.com");
     expect(normalized.properties.menu.text).toBe("");
+    expect(normalized.properties.GoodFriday).toBe(true);
+    expect(normalized.properties.AshWednesday).toBe(true);
     expect(normalized.properties.icon).toBe(iconLookup.Church);
   });
 
@@ -109,6 +121,7 @@ describe("featureUtils", () => {
       "take_out",
       "handicap",
       "GoodFriday",
+      "AshWednesday",
       "publish"
     ]);
   });

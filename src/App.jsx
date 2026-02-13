@@ -19,7 +19,6 @@ import { uiActions } from "@/store/slices/uiSlice";
 import { filtersActions } from "@/store/slices/filtersSlice";
 import { selectionActions } from "@/store/slices/selectionSlice";
 
-import { computeGoodFriday } from "@/domain/dateUtils";
 import { normalizeFeatureCollection, matchesSearch } from "@/domain/featureUtils";
 import { featureIsInBounds, filterFeatures } from "@/domain/filterUtils";
 import { logClientError } from "@/utils/errorLogging";
@@ -37,8 +36,6 @@ const App = () => {
   const { data, isLoading, isFetching, error } = useGetFishfriesQuery();
   const dataSource = data?.__source || "primary";
 
-  const goodFridayDate = useMemo(() => computeGoodFriday(moment().year()), []);
-
   const allFeatures = useMemo(() => {
     return normalizeFeatureCollection(data).sort((left, right) => {
       return (left.properties.venue_name || "").localeCompare(right.properties.venue_name || "");
@@ -54,8 +51,8 @@ const App = () => {
   }, [allFeatures]);
 
   const filteredFeatures = useMemo(() => {
-    return filterFeatures(allFeatures, filters, goodFridayDate);
-  }, [allFeatures, filters, goodFridayDate]);
+    return filterFeatures(allFeatures, filters);
+  }, [allFeatures, filters]);
 
   const visibleFeatures = useMemo(() => {
     if (!mapState.overlayVisible) {
@@ -176,7 +173,6 @@ const App = () => {
             dispatch(selectionActions.setHighlightedFeatureId(null));
           }}
           feature={selectedFeature}
-          goodFridayDate={goodFridayDate}
           currentYear={moment().year()}
         />
       </ModalErrorBoundary>

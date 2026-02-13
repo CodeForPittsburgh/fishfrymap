@@ -41,7 +41,7 @@ const Sidebar = ({ features }) => {
         <Card id="features" className="h-100 border-0 rounded-0">
           <Card.Header>
             <h3 className="h5 mt-3 d-flex align-items-center justify-content-between">
-              <span>Fish Fry Filter</span>
+              <span>Fish Fry Venues <span className="small text-muted">({features.length})</span></span>
               <Button
                 type="button"
                 variant="primary"
