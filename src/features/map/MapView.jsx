@@ -1,34 +1,72 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { LeafletController } from "@/features/map/LeafletController";
+import { mapActions } from "@/store/slices/mapSlice";
+import { selectionActions } from "@/store/slices/selectionSlice";
+import { uiActions } from "@/store/slices/uiSlice";
 import { logClientError } from "@/utils/errorLogging";
 
-const MapView = ({
-  features,
-  filteredFeatures,
-  overlayVisible,
-  activeBasemap,
-  highlightedFeatureId,
-  openFeatureRequest,
-  focusFeatureRequest,
-  setViewRequest,
-  sidebarVisible,
-  onMoveEnd,
-  onOverlayChange,
-  onBasemapChange,
-  onFeatureClick,
-  onMapClick,
-  onOpenHandled,
-  onFocusHandled,
-  onSetViewHandled
-}) => {
+const MapView = ({ features, filteredFeatures }) => {
+  const dispatch = useDispatch();
+  const overlayVisible = useSelector((state) => state.map.overlayVisible);
+  const activeBasemap = useSelector((state) => state.map.activeBasemap);
+  const highlightedFeatureId = useSelector((state) => state.selection.highlightedFeatureId);
+  const openFeatureRequest = useSelector((state) => state.selection.openFeatureRequest);
+  const focusFeatureRequest = useSelector((state) => state.selection.focusFeatureRequest);
+  const setViewRequest = useSelector((state) => state.selection.setViewRequest);
+  const sidebarVisible = useSelector((state) => state.ui.sidebarVisible);
+
+  const onMoveEnd = useCallback(
+    ({ bounds, center, zoom }) => {
+      dispatch(
+        mapActions.setMapViewState({
+          bounds,
+          center: {
+            lat: center.lat,
+            lng: center.lng
+          },
+          zoom
+        })
+      );
+    },
+    [dispatch]
+  );
+
+  const onOverlayChange = useCallback(
+    ({ visible }) => {
+      dispatch(mapActions.setOverlayVisible(visible));
+    },
+    [dispatch]
+  );
+
+  const onBasemapChange = useCallback(
+    ({ id }) => {
+      dispatch(mapActions.setActiveBasemap(id));
+    },
+    [dispatch]
+  );
+
+  const onFeatureClick = useCallback(
+    ({ featureId }) => {
+      dispatch(selectionActions.setSelectedFeatureId(featureId));
+      dispatch(selectionActions.setHighlightedFeatureId(featureId));
+      dispatch(uiActions.setFeatureModalOpen(true));
+    },
+    [dispatch]
+  );
+
+  const onMapClick = useCallback(() => {
+    dispatch(selectionActions.setHighlightedFeatureId(null));
+  }, [dispatch]);
+
   const mapRef = useRef(null);
   const controllerRef = useRef(null);
   const [ready, setReady] = useState(false);
   const handlersRef = useRef({
     onMoveEnd,
     onOverlayChange,
-    onBasemapChange: onBasemapChange || (() => {}),
+    onBasemapChange,
     onFeatureClick,
     onMapClick
   });
@@ -41,7 +79,7 @@ const MapView = ({
     handlersRef.current = {
       onMoveEnd,
       onOverlayChange,
-      onBasemapChange: onBasemapChange || (() => {}),
+      onBasemapChange,
       onFeatureClick,
       onMapClick
     };
@@ -134,8 +172,8 @@ const MapView = ({
 
     lastOpenSeq.current = openFeatureRequest.seq;
     controllerRef.current.openFeature(openFeatureRequest.id);
-    onOpenHandled();
-  }, [openFeatureRequest, onOpenHandled, ready]);
+    dispatch(selectionActions.acknowledgeOpenFeature());
+  }, [dispatch, openFeatureRequest, ready]);
 
   useEffect(() => {
     if (!ready || !controllerRef.current || !focusFeatureRequest) {
@@ -148,8 +186,8 @@ const MapView = ({
 
     lastFocusSeq.current = focusFeatureRequest.seq;
     controllerRef.current.focusFeature(focusFeatureRequest.id, focusFeatureRequest.zoom);
-    onFocusHandled();
-  }, [focusFeatureRequest, onFocusHandled, ready]);
+    dispatch(selectionActions.acknowledgeFocusFeature());
+  }, [dispatch, focusFeatureRequest, ready]);
 
   useEffect(() => {
     if (!ready || !controllerRef.current || !setViewRequest) {
@@ -162,8 +200,8 @@ const MapView = ({
 
     lastViewSeq.current = setViewRequest.seq;
     controllerRef.current.setView(setViewRequest.lat, setViewRequest.lng, setViewRequest.zoom);
-    onSetViewHandled();
-  }, [onSetViewHandled, ready, setViewRequest]);
+    dispatch(selectionActions.acknowledgeSetView());
+  }, [dispatch, ready, setViewRequest]);
 
   useEffect(() => {
     if (!ready || !controllerRef.current) {

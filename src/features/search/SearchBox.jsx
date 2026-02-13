@@ -1,20 +1,18 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, InputGroup } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 
 import { faMagnifyingGlass, faSpinner } from "@/icons/fontAwesome";
+import { searchActions } from "@/store/slices/searchSlice";
+import { handleSuggestionSelected } from "@/store/thunks/searchThunks";
 import "./SearchBox.css";
 
-const SearchBox = ({
-  query,
-  onQueryChange,
-  suggestionsOpen,
-  onSuggestionsOpen,
-  fishSuggestions,
-  placeSuggestions,
-  onSelectSuggestion,
-  isSearching
-}) => {
+const SearchBox = ({ fishSuggestions, placeSuggestions, isSearching }) => {
+  const dispatch = useDispatch();
+  const query = useSelector((state) => state.search.query);
+  const suggestionsOpen = useSelector((state) => state.search.suggestionsOpen);
+
   const hasResults = fishSuggestions.length > 0 || placeSuggestions.length > 0;
   const showMenu = suggestionsOpen && query.trim().length >= 3;
 
@@ -27,12 +25,12 @@ const SearchBox = ({
           placeholder="Search All Fish Fries"
           value={query}
           onChange={(event) => {
-            onQueryChange(event.target.value);
-            onSuggestionsOpen(true);
+            dispatch(searchActions.setQuery(event.target.value));
+            dispatch(searchActions.setSuggestionsOpen(true));
           }}
-          onFocus={() => onSuggestionsOpen(true)}
+          onFocus={() => dispatch(searchActions.setSuggestionsOpen(true))}
           onBlur={() => {
-            window.setTimeout(() => onSuggestionsOpen(false), 120);
+            window.setTimeout(() => dispatch(searchActions.setSuggestionsOpen(false)), 120);
           }}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
@@ -54,7 +52,7 @@ const SearchBox = ({
               className="tt-suggestion"
               onMouseDown={(event) => {
                 event.preventDefault();
-                onSelectSuggestion(suggestion);
+                dispatch(handleSuggestionSelected(suggestion));
               }}
             >
               {suggestion.name}
@@ -70,7 +68,7 @@ const SearchBox = ({
               className="tt-suggestion"
               onMouseDown={(event) => {
                 event.preventDefault();
-                onSelectSuggestion(suggestion);
+                dispatch(handleSuggestionSelected(suggestion));
               }}
             >
               {suggestion.name}

@@ -2,18 +2,39 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight, faFilter } from "@/icons/fontAwesome";
 import { Button, Card, Table } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import "./Sidebar.css";
+import { hasActiveFilters } from "@/domain/filterUtils";
+import { uiActions } from "@/store/slices/uiSlice";
+import { selectionActions } from "@/store/slices/selectionSlice";
 
-const Sidebar = ({
-  visible,
-  features,
-  hasActiveFilters,
-  onOpenFilter,
-  onHide,
-  onRowClick,
-  onRowMouseOver,
-  onRowMouseOut
-}) => {
+const Sidebar = ({ features }) => {
+  const dispatch = useDispatch();
+  const visible = useSelector((state) => state.ui.sidebarVisible);
+  const filters = useSelector((state) => state.filters);
+  const selectedFeatureId = useSelector((state) => state.selection.selectedFeatureId);
+  const filtersActive = hasActiveFilters(filters);
+
+  const onOpenFilter = () => {
+    dispatch(uiActions.setFilterModalOpen(true));
+  };
+
+  const onHide = () => {
+    dispatch(uiActions.toggleSidebar());
+  };
+
+  const onRowClick = (featureId) => {
+    dispatch(selectionActions.requestOpenFeature({ id: featureId }));
+  };
+
+  const onRowMouseOver = (featureId) => {
+    dispatch(selectionActions.setHighlightedFeatureId(featureId));
+  };
+
+  const onRowMouseOut = () => {
+    dispatch(selectionActions.setHighlightedFeatureId(selectedFeatureId));
+  };
+
   return (
     <div id="sidebar" className={visible ? "sidebar-visible" : "sidebar-hidden"}>
       <div className="sidebar-wrapper">
@@ -37,12 +58,12 @@ const Sidebar = ({
             <Button
               type="button"
               size="sm"
-              variant={hasActiveFilters ? "primary" : "outline-primary"}
+              variant={filtersActive ? "primary" : "outline-primary"}
               className="w-100"
               id="filterSidebar-btn"
               onClick={onOpenFilter}
             >
-              <FontAwesomeIcon icon={faFilter} /> {hasActiveFilters ? "Filtered" : "Filter"}
+              <FontAwesomeIcon icon={faFilter} /> {filtersActive ? "Filtered" : "Filter"}
             </Button>
             </div>
           <div className="sidebar-table mt-3">

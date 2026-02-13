@@ -1,19 +1,36 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Container, Form, Nav, Navbar } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import "./TopNav.css";
 
 import SearchBox from "@/features/search/SearchBox";
 import { faBars, faCircleQuestion, faDatabase, faFilter } from "@/icons/fontAwesome";
+import { uiActions } from "@/store/slices/uiSlice";
 
-const TopNav = ({
-  navbarExpanded,
-  onToggleNavbar,
-  onToggleSidebar,
-  onOpenAbout,
-  onOpenFilterModal,
-  searchProps
-}) => {
+const TopNav = ({ fishSuggestions, placeSuggestions, isSearching }) => {
+  const dispatch = useDispatch();
+  const navbarExpanded = useSelector((state) => state.ui.navbarExpanded);
+
+  const onToggleNavbar = () => {
+    dispatch(uiActions.setNavbarExpanded(!navbarExpanded));
+  };
+
+  const onToggleSidebar = () => {
+    dispatch(uiActions.toggleSidebar());
+    dispatch(uiActions.setNavbarExpanded(false));
+  };
+
+  const onOpenAbout = () => {
+    dispatch(uiActions.setAboutModalOpen(true));
+    dispatch(uiActions.setNavbarExpanded(false));
+  };
+
+  const onOpenFilterModal = () => {
+    dispatch(uiActions.setFilterModalOpen(true));
+    dispatch(uiActions.setNavbarExpanded(false));
+  };
+
   return (
     <Navbar fixed="top" expand="md" expanded={navbarExpanded} className="fishfry-navbar">
       <Container fluid>
@@ -80,7 +97,7 @@ const TopNav = ({
             </Nav.Item>
           </Nav>
           <Form className="fishfry-search-form" role="search" onSubmit={(event) => event.preventDefault()}>
-            <SearchBox {...searchProps} />
+            <SearchBox fishSuggestions={fishSuggestions} placeSuggestions={placeSuggestions} isSearching={isSearching} />
           </Form>
         </Navbar.Collapse>
       </Container>

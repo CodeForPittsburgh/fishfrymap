@@ -17,13 +17,11 @@ import { useGetFishfriesQuery } from "@/store/api/fishfryApi";
 import { useSearchPlacesQuery } from "@/store/api/geocodeApi";
 import { uiActions } from "@/store/slices/uiSlice";
 import { filtersActions } from "@/store/slices/filtersSlice";
-import { mapActions } from "@/store/slices/mapSlice";
-import { searchActions } from "@/store/slices/searchSlice";
 import { selectionActions } from "@/store/slices/selectionSlice";
 
 import { computeGoodFriday } from "@/domain/dateUtils";
 import { normalizeFeatureCollection, matchesSearch } from "@/domain/featureUtils";
-import { featureIsInBounds, filterFeatures, hasActiveFilters } from "@/domain/filterUtils";
+import { featureIsInBounds, filterFeatures } from "@/domain/filterUtils";
 import { logClientError } from "@/utils/errorLogging";
 
 const App = () => {
@@ -33,13 +31,12 @@ const App = () => {
   const ui = useSelector((state) => state.ui);
   const filters = useSelector((state) => state.filters);
   const mapState = useSelector((state) => state.map);
-  const searchState = useSelector((state) => state.search);
+  const searchQuery = useSelector((state) => state.search.query);
   const selection = useSelector((state) => state.selection);
 
   const { data, isLoading, isFetching, error } = useGetFishfriesQuery();
   const dataSource = data?.__source || "primary";
 
-  const searchQuery = searchState.query;
   const goodFridayDate = useMemo(() => computeGoodFriday(moment().year()), []);
 
   const allFeatures = useMemo(() => {
@@ -131,126 +128,16 @@ const App = () => {
     };
   }, []);
 
-  const onFeatureClick = ({ featureId }) => {
-    dispatch(selectionActions.setSelectedFeatureId(featureId));
-    dispatch(selectionActions.setHighlightedFeatureId(featureId));
-    dispatch(uiActions.setFeatureModalOpen(true));
-  };
-
-  const onMoveEnd = ({ bounds, center, zoom }) => {
-    dispatch(
-      mapActions.setMapViewState({
-        bounds,
-        center: {
-          lat: center.lat,
-          lng: center.lng
-        },
-        zoom
-      })
-    );
-  };
-
-  const onOverlayChange = ({ visible }) => {
-    dispatch(mapActions.setOverlayVisible(visible));
-  };
-
-  const onBasemapChange = ({ id }) => {
-    dispatch(mapActions.setActiveBasemap(id));
-  };
-
-  const onMapClick = () => {
-    dispatch(selectionActions.setHighlightedFeatureId(null));
-  };
-
-  const onSelectSuggestion = (suggestion) => {
-    if (suggestion.source === "FishFrys") {
-      dispatch(mapActions.setOverlayVisible(true));
-      dispatch(selectionActions.requestOpenFeature({ id: suggestion.id }));
-    } else {
-      dispatch(
-        selectionActions.requestSetView({
-          lat: suggestion.lat,
-          lng: suggestion.lng,
-          zoom: 17
-        })
-      );
-    }
-
-    dispatch(searchActions.setSuggestionsOpen(false));
-    dispatch(uiActions.setNavbarExpanded(false));
-  };
   const mapboxAlertOffsetClass = dataSource === "fallback" ? "fishfry-error--offset-116" : "fishfry-error--offset-64";
 
   return (
     <>
-      <TopNav
-        navbarExpanded={ui.navbarExpanded}
-        onToggleNavbar={() => {
-          dispatch(uiActions.setNavbarExpanded(!ui.navbarExpanded));
-        }}
-        onToggleSidebar={() => {
-          dispatch(uiActions.toggleSidebar());
-          dispatch(uiActions.setNavbarExpanded(false));
-        }}
-        onOpenAbout={() => {
-          dispatch(uiActions.setAboutModalOpen(true));
-          dispatch(uiActions.setNavbarExpanded(false));
-        }}
-        onOpenFilterModal={() => {
-          dispatch(uiActions.setFilterModalOpen(true));
-          dispatch(uiActions.setNavbarExpanded(false));
-        }}
-        searchProps={{
-          query: searchQuery,
-          onQueryChange: (value) => dispatch(searchActions.setQuery(value)),
-          suggestionsOpen: searchState.suggestionsOpen,
-          onSuggestionsOpen: (open) => dispatch(searchActions.setSuggestionsOpen(open)),
-          fishSuggestions,
-          placeSuggestions,
-          onSelectSuggestion,
-          isSearching: isGeocoding
-        }}
-      />
+      <TopNav fishSuggestions={fishSuggestions} placeSuggestions={placeSuggestions} isSearching={isGeocoding} />
 
       <div id="container" className="app-container">
-        <Sidebar
-          visible={ui.sidebarVisible}
-          features={visibleFeatures}
-          hasActiveFilters={hasActiveFilters(filters)}
-          onOpenFilter={() => {
-            dispatch(uiActions.setFilterModalOpen(true));
-          }}
-          onHide={() => dispatch(uiActions.toggleSidebar())}
-          onRowClick={(featureId) => {
-            dispatch(selectionActions.requestOpenFeature({ id: featureId }));
-          }}
-          onRowMouseOver={(featureId) => {
-            dispatch(selectionActions.setHighlightedFeatureId(featureId));
-          }}
-          onRowMouseOut={() => {
-            dispatch(selectionActions.setHighlightedFeatureId(selection.selectedFeatureId));
-          }}
-        />
+        <Sidebar features={visibleFeatures} />
 
-        <MapView
-          features={allFeatures}
-          filteredFeatures={filteredFeatures}
-          overlayVisible={mapState.overlayVisible}
-          activeBasemap={mapState.activeBasemap}
-          highlightedFeatureId={selection.highlightedFeatureId}
-          openFeatureRequest={selection.openFeatureRequest}
-          focusFeatureRequest={selection.focusFeatureRequest}
-          setViewRequest={selection.setViewRequest}
-          sidebarVisible={ui.sidebarVisible}
-          onMoveEnd={onMoveEnd}
-          onOverlayChange={onOverlayChange}
-          onBasemapChange={onBasemapChange}
-          onFeatureClick={onFeatureClick}
-          onMapClick={onMapClick}
-          onOpenHandled={() => dispatch(selectionActions.acknowledgeOpenFeature())}
-          onFocusHandled={() => dispatch(selectionActions.acknowledgeFocusFeature())}
-          onSetViewHandled={() => dispatch(selectionActions.acknowledgeSetView())}
-        />
+        <MapView features={allFeatures} filteredFeatures={filteredFeatures} />
       </div>
 
       <LoadingOverlay show={isLoading || isFetching} />
