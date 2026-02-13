@@ -46,18 +46,16 @@ const AboutModal = ({ show, onHide }) => {
               <h3>Built with Open Source Software</h3>
               <p>
                 The Fish Fry Map is open-source software, meaning that you can see how we made it and, if so inclined,
-                use the source for you own projects. We built it with{" "}
-                <a href="https://github.com/bmcbride">Bootleaf</a>, an amazing, simple, responsive template for
-                building web mapping applications with <a href="http://getbootstrap.com/">Bootstrap 3</a>,{" "}
+                use the source for your own projects. The current app is built with React, Redux Toolkit, Vite,{" "}
+                <a href="http://getbootstrap.com/" target="_blank" rel="noreferrer">
+                  Bootstrap
+                </a>{" "}
+                and{" "}
                 <a href="http://leafletjs.com/" target="_blank" rel="noreferrer">
                   Leaflet
                 </a>
-                , and{" "}
-                <a href="http://twitter.github.io/typeahead.js/" target="_blank" rel="noreferrer">
-                  typeahead.js
-                </a>
                 . Open source, MIT licensed, and available on{" "}
-                <a href="https://github.com/bmcbride/bootleaf" target="_blank" rel="noreferrer">
+                <a href="https://github.com/CodeForPittsburgh/fishfrymap" target="_blank" rel="noreferrer">
                   GitHub
                 </a>
                 .

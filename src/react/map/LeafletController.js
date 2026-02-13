@@ -69,6 +69,23 @@ export class LeafletController {
     this.activeBasemap = "light";
   }
 
+  getBasemapIdForLayer(layer) {
+    if (!layer) {
+      return null;
+    }
+
+    const byIdentity = Object.entries(this.baseLayers).find(([, candidate]) => candidate === layer)?.[0];
+    if (byIdentity) {
+      return byIdentity;
+    }
+
+    return (
+      Object.entries(this.baseLayers).find(([, candidate]) => {
+        return candidate?._url === layer?._url;
+      })?.[0] || null
+    );
+  }
+
   async init(containerEl) {
     await ensureLeafletPlugins();
 
@@ -211,6 +228,17 @@ export class LeafletController {
         this.overlayVisible = false;
         this.emit("overlaychange", { visible: false });
       }
+    });
+
+    this.map.on("baselayerchange", (event) => {
+      const layer = event?.layer || event;
+      const id = this.getBasemapIdForLayer(layer);
+      if (!id) {
+        return;
+      }
+
+      this.activeBasemap = id;
+      this.emit("basemapchange", { id });
     });
 
     this.map.on("moveend", () => {
@@ -363,6 +391,10 @@ export class LeafletController {
 
   setBasemap(id) {
     if (!this.map || !this.baseLayers[id]) {
+      return;
+    }
+
+    if (this.activeBasemap === id && this.map.hasLayer(this.baseLayers[id])) {
       return;
     }
 

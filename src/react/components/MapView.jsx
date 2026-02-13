@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { LeafletController } from "../map/LeafletController";
+import { logClientError } from "../utils/errorLogging";
 
 const MapView = ({
   features,
   filteredFeatures,
   overlayVisible,
+  activeBasemap,
   highlightedFeatureId,
   openFeatureRequest,
   focusFeatureRequest,
@@ -13,6 +15,7 @@ const MapView = ({
   sidebarVisible,
   onMoveEnd,
   onOverlayChange,
+  onBasemapChange,
   onFeatureClick,
   onMapClick,
   onOpenHandled,
@@ -25,6 +28,7 @@ const MapView = ({
   const handlersRef = useRef({
     onMoveEnd,
     onOverlayChange,
+    onBasemapChange: onBasemapChange || (() => {}),
     onFeatureClick,
     onMapClick
   });
@@ -37,10 +41,11 @@ const MapView = ({
     handlersRef.current = {
       onMoveEnd,
       onOverlayChange,
+      onBasemapChange: onBasemapChange || (() => {}),
       onFeatureClick,
       onMapClick
     };
-  }, [onFeatureClick, onMapClick, onMoveEnd, onOverlayChange]);
+  }, [onBasemapChange, onFeatureClick, onMapClick, onMoveEnd, onOverlayChange]);
 
   useEffect(() => {
     let cancelled = false;
@@ -56,14 +61,14 @@ const MapView = ({
 
         controller.on("moveend", (payload) => handlersRef.current.onMoveEnd(payload));
         controller.on("overlaychange", (payload) => handlersRef.current.onOverlayChange(payload));
+        controller.on("basemapchange", (payload) => handlersRef.current.onBasemapChange(payload));
         controller.on("featureclick", (payload) => handlersRef.current.onFeatureClick(payload));
         controller.on("mapclick", (payload) => handlersRef.current.onMapClick(payload));
 
         setReady(true);
       })
       .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error("Leaflet controller initialization failed", error);
+        logClientError("map.init", error);
       });
 
     return () => {
@@ -95,6 +100,14 @@ const MapView = ({
 
     controllerRef.current.setOverlayVisible("Fish Fries", overlayVisible);
   }, [overlayVisible, ready]);
+
+  useEffect(() => {
+    if (!ready || !controllerRef.current) {
+      return;
+    }
+
+    controllerRef.current.setBasemap(activeBasemap);
+  }, [activeBasemap, ready]);
 
   useEffect(() => {
     if (!ready || !controllerRef.current) {

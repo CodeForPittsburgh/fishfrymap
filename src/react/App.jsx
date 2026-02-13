@@ -9,6 +9,7 @@ import AboutModal from "./components/AboutModal";
 import FilterModal from "./components/FilterModal";
 import FeatureModal from "./components/FeatureModal";
 import LoadingOverlay from "./components/LoadingOverlay";
+import ModalErrorBoundary from "./components/ModalErrorBoundary";
 
 import { useGetFishfriesQuery } from "./store/api/fishfryApi";
 import { useSearchPlacesQuery } from "./store/api/geocodeApi";
@@ -33,6 +34,7 @@ const App = () => {
   const selection = useSelector((state) => state.selection);
 
   const { data, isLoading, isFetching, error } = useGetFishfriesQuery();
+  const dataSource = data?.__source || "primary";
 
   const searchQuery = searchState.query;
   const goodFridayDate = useMemo(() => computeGoodFriday(moment().year()), []);
@@ -118,6 +120,10 @@ const App = () => {
     dispatch(mapActions.setOverlayVisible(visible));
   };
 
+  const onBasemapChange = ({ id }) => {
+    dispatch(mapActions.setActiveBasemap(id));
+  };
+
   const onMapClick = () => {
     dispatch(selectionActions.setHighlightedFeatureId(null));
   };
@@ -200,6 +206,7 @@ const App = () => {
           features={allFeatures}
           filteredFeatures={filteredFeatures}
           overlayVisible={mapState.overlayVisible}
+          activeBasemap={mapState.activeBasemap}
           highlightedFeatureId={selection.highlightedFeatureId}
           openFeatureRequest={selection.openFeatureRequest}
           focusFeatureRequest={selection.focusFeatureRequest}
@@ -207,6 +214,7 @@ const App = () => {
           sidebarVisible={ui.sidebarVisible}
           onMoveEnd={onMoveEnd}
           onOverlayChange={onOverlayChange}
+          onBasemapChange={onBasemapChange}
           onFeatureClick={onFeatureClick}
           onMapClick={onMapClick}
           onOpenHandled={() => dispatch(selectionActions.acknowledgeOpenFeature())}
@@ -217,34 +225,44 @@ const App = () => {
 
       <LoadingOverlay show={isLoading || isFetching} />
 
-      <AboutModal
-        show={ui.aboutModalOpen}
-        onHide={() => {
-          dispatch(uiActions.setAboutModalOpen(false));
-        }}
-      />
+      <ModalErrorBoundary name="about" label="About dialog" resetKey={`about-${ui.aboutModalOpen}`}>
+        <AboutModal
+          show={ui.aboutModalOpen}
+          onHide={() => {
+            dispatch(uiActions.setAboutModalOpen(false));
+          }}
+        />
+      </ModalErrorBoundary>
 
-      <FilterModal
-        show={ui.filterModalOpen}
-        onHide={() => {
-          dispatch(uiActions.setFilterModalOpen(false));
-        }}
-        filters={filters}
-        onChange={(key, value) => {
-          dispatch(filtersActions.setFilter({ key, value }));
-        }}
-      />
+      <ModalErrorBoundary name="filter" label="Filter dialog" resetKey={`filter-${ui.filterModalOpen}`}>
+        <FilterModal
+          show={ui.filterModalOpen}
+          onHide={() => {
+            dispatch(uiActions.setFilterModalOpen(false));
+          }}
+          filters={filters}
+          onChange={(key, value) => {
+            dispatch(filtersActions.setFilter({ key, value }));
+          }}
+        />
+      </ModalErrorBoundary>
 
-      <FeatureModal
-        show={ui.featureModalOpen}
-        onHide={() => {
-          dispatch(uiActions.setFeatureModalOpen(false));
-          dispatch(selectionActions.setHighlightedFeatureId(null));
-        }}
-        feature={selectedFeature}
-        goodFridayDate={goodFridayDate}
-        currentYear={moment().year()}
-      />
+      <ModalErrorBoundary
+        name="feature"
+        label="Feature details dialog"
+        resetKey={`feature-${ui.featureModalOpen}-${selection.selectedFeatureId || "none"}`}
+      >
+        <FeatureModal
+          show={ui.featureModalOpen}
+          onHide={() => {
+            dispatch(uiActions.setFeatureModalOpen(false));
+            dispatch(selectionActions.setHighlightedFeatureId(null));
+          }}
+          feature={selectedFeature}
+          goodFridayDate={goodFridayDate}
+          currentYear={moment().year()}
+        />
+      </ModalErrorBoundary>
 
       {error ? (
         <div className="fishfry-error alert alert-warning" role="alert">
@@ -252,8 +270,18 @@ const App = () => {
         </div>
       ) : null}
 
-      {!hasMapboxToken && searchQuery.trim().length >= 3 ? (
+      {!error && dataSource === "fallback" ? (
         <div className="fishfry-error alert alert-info" role="alert" style={{ bottom: "64px" }}>
+          Primary API is unreachable; showing fallback data.
+        </div>
+      ) : null}
+
+      {!hasMapboxToken && searchQuery.trim().length >= 3 ? (
+        <div
+          className="fishfry-error alert alert-info"
+          role="alert"
+          style={{ bottom: dataSource === "fallback" ? "116px" : "64px" }}
+        >
           Mapbox geocoding is disabled because <code>VITE_MAPBOX_TOKEN</code> is not set.
         </div>
       ) : null}
