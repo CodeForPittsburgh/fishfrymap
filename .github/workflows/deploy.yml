@@ -34,6 +34,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Configure git author
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Publish to gh-pages branch
         run: npx gh-pages -d dist -r https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         env:
