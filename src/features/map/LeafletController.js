@@ -152,7 +152,10 @@ export class LeafletController {
     this.map.addControl(
       L.control.basemaps({
         position: "topright",
-        basemaps: [this.baseLayers.dark, this.baseLayers.light],
+        basemaps: [
+          this.baseLayers.dark, 
+          this.baseLayers.light,
+        ],
         tileX: 4550,
         tileY: 6176,
         tileZ: 14

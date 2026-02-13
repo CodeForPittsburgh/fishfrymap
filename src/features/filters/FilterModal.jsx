@@ -1,7 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, ListGroup, Modal, Row } from "react-bootstrap";
 import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair } from "@/icons/fontAwesome";
+import "./FilterModal.css";
 
 const FILTER_FIELDS = [
   { key: "drive_thru", label: "Drive-Thru Available" },
@@ -60,35 +61,52 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
       <Modal.Body className="p-4">
         <Row>
           <Col >
-            {FILTER_FIELDS.map((filter) => (
-              <Form.Group className="mb-3" key={filter.key}>
-                <h4>
-                  <Form.Check
-                    className="filter"
-                    inline
-                    id={filter.key}
-                    type="checkbox"
-                    checked={Boolean(filters[filter.key])}
-                    onChange={(event) => onChange(filter.key, event.target.checked)}
-                    label={filter.label}
-                  />
-                </h4>
-                <hr />
-              </Form.Group>
-            ))}
+            <ListGroup className="filter-field-list mb-3">
+              {FILTER_FIELDS.map((filter) => {
+                const isChecked = Boolean(filters[filter.key]);
+
+                return (
+                  <ListGroup.Item
+                    as="label"
+                    action
+                    className={`filter-field-item ${isChecked ? "is-checked" : ""}`}
+                    htmlFor={filter.key}
+                    key={filter.key}
+                  >
+                    <Form.Check.Input
+                      className="filter-field-checkbox"
+                      id={filter.key}
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={(event) => onChange(filter.key, event.target.checked)}
+                    />
+                    <span className="filter-field-item-label">{filter.label}</span>
+                  </ListGroup.Item>
+                );
+              })}
+            </ListGroup>
           </Col>
         </Row>
         
         <Row>
-          <Col className="bg-primary rounded py-2 my-2">
-            <Form.Check
-              className="filter"
-              id="publish"
-              type="checkbox"
-              checked={Boolean(filters.publish)}
-              onChange={(event) => onChange("publish", event.target.checked)}
-              label={`Show only those verified for ${thisYear}.`}
-            />
+          <Col>
+            <ListGroup className="publish-filter-list my-2">
+              <ListGroup.Item
+                as="label"
+                action
+                className={`filter-field-item ${Boolean(filters.publish) ? "is-checked" : ""}`}
+                htmlFor="publish"
+              >
+                <Form.Check.Input
+                  className="filter-field-checkbox"
+                  id="publish"
+                  type="checkbox"
+                  checked={Boolean(filters.publish)}
+                  onChange={(event) => onChange("publish", event.target.checked)}
+                />
+                <span className="filter-field-item-label">Show only those verified for {thisYear}.</span>
+              </ListGroup.Item>
+            </ListGroup>
           </Col>
         </Row>
         <Row>

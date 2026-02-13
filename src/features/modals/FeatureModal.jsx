@@ -174,7 +174,7 @@ const FeatureModal = ({ show, onHide, feature, goodFridayDate, currentYear }) =>
           </Col>
         </Row>
 
-        <Row xs={1} sm={2} md={3} lg={5} xl={12} className="g-2 mb-3">
+        <Row xs={2} sm={2} md={3} lg={5} xl={12} className="g-2 mb-3">
           {booleanPanels.map((panel) => (
             <Col key={panel.label}>
               <BooleanPanel label={panel.label} value={panel.value} />
