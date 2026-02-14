@@ -22,7 +22,8 @@ import {
   faUpDownLeftRight,
   faUtensils,
   faWheelchair,
-  faXmark
+  faXmark,
+  faList
 } from "@fortawesome/free-solid-svg-icons";
 
 export {
@@ -48,7 +49,8 @@ export {
   faUpDownLeftRight,
   faUtensils,
   faWheelchair,
-  faXmark
+  faXmark,
+  faList
 };
 
 export function iconHtml(iconDefinition, options = {}) {

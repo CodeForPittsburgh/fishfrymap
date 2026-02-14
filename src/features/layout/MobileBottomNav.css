@@ -1,0 +1,30 @@
+.mobile-bottom-nav {
+  background-color: #303030;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  min-height: calc(var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-top: 0px;
+  z-index: 1030;
+}
+
+.mobile-bottom-nav__content {
+  min-height: var(--mobile-bottom-nav-height);
+}
+
+.mobile-bottom-nav__actions {
+  flex: 0 0 auto;
+}
+
+.mobile-bottom-nav__button {
+  min-width: 2.5rem;
+  white-space: nowrap;
+}
+
+.mobile-bottom-nav__button-label {
+  margin-left: 6px;
+}
+
+.mobile-bottom-nav__search {
+  flex: 1 1 auto;
+  min-width: 0;
+}

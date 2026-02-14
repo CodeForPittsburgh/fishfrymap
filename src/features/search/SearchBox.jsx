@@ -10,7 +10,7 @@ import "./SearchBox.css";
 
 const MAX_VISIBLE_SUGGESTIONS = 6;
 
-const SearchBox = ({ fishSuggestions, placeSuggestions, isSearching }) => {
+const SearchBox = ({ fishSuggestions, placeSuggestions, isSearching, menuPlacement = "down", inputId = "searchbox" }) => {
   const dispatch = useDispatch();
   const query = useSelector((state) => state.search.query);
   const suggestionsOpen = useSelector((state) => state.search.suggestionsOpen);
@@ -28,6 +28,7 @@ const SearchBox = ({ fishSuggestions, placeSuggestions, isSearching }) => {
     [fishSuggestions, placeSuggestions]
   );
   const activeSuggestion = activeIndex >= 0 ? suggestions[activeIndex] : null;
+  const searchClassName = `fishfry-search ${menuPlacement === "up" ? "fishfry-search--menu-up" : ""}`;
 
   React.useEffect(() => {
     if (!showMenu || suggestions.length === 0) {
@@ -90,10 +91,10 @@ const SearchBox = ({ fishSuggestions, placeSuggestions, isSearching }) => {
   );
 
   return (
-    <div className="fishfry-search">
+    <div className={searchClassName}>
       <InputGroup>
         <Form.Control
-          id="searchbox"
+          id={inputId}
           type="text"
           placeholder="Search All Fish Fries"
           value={query}

@@ -11,6 +11,13 @@
   z-index: 1100;
 }
 
+.fishfry-search--menu-up .fishfry-search__menu {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
 #searchicon {
   border-left: 0;
 }

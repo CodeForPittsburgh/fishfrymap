@@ -1,3 +1,7 @@
+:root {
+  --mobile-bottom-nav-height: 72px;
+}
+
 .app-container {
   margin-top: 10px;
   padding-bottom: 10px;
@@ -16,4 +20,22 @@
 
 .fishfry-error--offset-116 {
   bottom: 116px;
+}
+
+@media (max-width: 767.98px) {
+  .leaflet-bottom.leaflet-right {
+    bottom: calc(var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom, 0px) + 8px);
+  }
+
+  .fishfry-error {
+    bottom: calc(12px + var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .fishfry-error--offset-64 {
+    bottom: calc(64px + var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .fishfry-error--offset-116 {
+    bottom: calc(116px + var(--mobile-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  }
 }

@@ -6,6 +6,7 @@ import "./App.css";
 
 import TopNav from "@/features/layout/TopNav";
 import Sidebar from "@/features/layout/Sidebar";
+import MobileBottomNav from "@/features/layout/MobileBottomNav";
 import MapView from "@/features/map/MapView";
 import AboutModal from "@/features/modals/AboutModal";
 import FilterModal from "@/features/filters/FilterModal";
@@ -124,6 +125,7 @@ const App = () => {
   return (
     <>
       <TopNav fishSuggestions={fishSuggestions} placeSuggestions={placeSuggestions} isSearching={isGeocoding} />
+      <MobileBottomNav fishSuggestions={fishSuggestions} placeSuggestions={placeSuggestions} isSearching={isGeocoding} />
 
       <div id="container" className="app-container">
         <Sidebar features={visibleFeatures} />
