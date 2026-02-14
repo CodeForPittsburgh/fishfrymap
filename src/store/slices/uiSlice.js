@@ -1,10 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const getDefaultSidebarVisible = () => {
+  if (typeof window === "undefined") {
+    return true;
+  }
+
+  return window.innerWidth >= 768;
+};
+
 const initialState = {
   aboutModalOpen: false,
   filterModalOpen: false,
   featureModalOpen: false,
-  sidebarVisible: true,
+  sidebarVisible: getDefaultSidebarVisible(),
   navbarExpanded: false
 };
 

@@ -89,12 +89,6 @@ const App = () => {
     : null;
 
   useEffect(() => {
-    if (document.body.clientWidth <= 767) {
-      dispatch(uiActions.setSidebarVisible(false));
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
     const onWindowError = (event) => {
       const fallbackError = new Error(event.message || "Unhandled window error");
       logClientError("window.error", event.error || fallbackError, {

@@ -29,6 +29,15 @@
 @media (max-width: 767px) {
   #sidebar {
     display: none;
+    position: fixed;
+    top: 56px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    float: none;
+    z-index: 1020;
   }
 
   #sidebar.sidebar-visible {
