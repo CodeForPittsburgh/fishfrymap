@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWarning } from "@fortawesome/free-solid-svg-icons"
 import { faLocationArrow } from "@/icons/fontAwesome";
 import moment from "moment";
 import { Alert, Button, Card, Col, Modal, Row, Table } from "react-bootstrap";
@@ -107,7 +108,9 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
                 Get Directions <FontAwesomeIcon icon={faLocationArrow}></FontAwesomeIcon>
               </Button>
             </Col>
-          </Row>        
+          </Row>
+
+        
 
         {!feature.properties.publish ? (
           <Alert variant="info" className="my-3">
@@ -119,11 +122,11 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
         ) : null}
 
         {feature.properties.procedures ? (
-          <Alert variant="info">
-            <h4>Something to note about this Fish Fry:</h4>
-            <p>{feature.properties.procedures}</p>
+          <Alert variant="warning">
+            <p> <FontAwesomeIcon icon={faWarning}/> Something important to note about this Fish Fry:</p>
+            <p className="fs-4">{feature.properties.procedures}</p>
           </Alert>
-        ) : null}
+        ) : null}          
 
         {events.today.length > 0 ? (
           <h2>
