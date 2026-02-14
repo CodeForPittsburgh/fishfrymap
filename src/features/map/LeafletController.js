@@ -54,6 +54,15 @@ function serializeBounds(bounds) {
   };
 }
 
+function hasValidBounds(bounds) {
+  return (
+    Number.isFinite(bounds?.north) &&
+    Number.isFinite(bounds?.south) &&
+    Number.isFinite(bounds?.east) &&
+    Number.isFinite(bounds?.west)
+  );
+}
+
 export class LeafletController {
   constructor() {
     this.map = null;
@@ -461,6 +470,31 @@ export class LeafletController {
     }
 
     this.map.setView([lat, lng], zoom);
+  }
+
+  fitToBounds(bounds, options = {}) {
+    if (!this.map || !hasValidBounds(bounds)) {
+      return false;
+    }
+
+    const leafletBounds = L.latLngBounds(
+      [bounds.south, bounds.west],
+      [bounds.north, bounds.east]
+    );
+
+    if (!leafletBounds.isValid()) {
+      return false;
+    }
+
+    const padding = Array.isArray(options.padding) ? options.padding : [24, 24];
+    const maxZoom = Number.isFinite(options.maxZoom) ? options.maxZoom : 10;
+
+    this.map.fitBounds(leafletBounds, {
+      padding,
+      maxZoom
+    });
+
+    return true;
   }
 
   destroy() {

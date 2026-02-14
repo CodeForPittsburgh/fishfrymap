@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  getFeatureBounds,
   featureIsInBounds,
   filterFeature,
   filterFeatures,
@@ -111,6 +112,26 @@ describe("filterUtils", () => {
     expect(filtered.length).toBe(1);
     expect(hasActiveFilters(allOff)).toBe(false);
     expect(hasActiveFilters({ ...allOff, publish: true })).toBe(true);
+  });
+
+  it("computes bounds from valid coordinates only", () => {
+    const bounds = getFeatureBounds([
+      { geometry: { coordinates: [-80, 40] } },
+      { geometry: { coordinates: [-79.5, 42] } },
+      { geometry: { coordinates: [-81, 41] } },
+      { geometry: { coordinates: ["bad", 41] } },
+      { geometry: { coordinates: [] } },
+      {}
+    ]);
+
+    expect(bounds).toEqual({
+      north: 42,
+      south: 40,
+      east: -79.5,
+      west: -81
+    });
+    expect(getFeatureBounds([])).toBeNull();
+    expect(getFeatureBounds([{ geometry: { coordinates: [] } }, {}])).toBeNull();
   });
 
   it("checks geographic bounds correctly", () => {

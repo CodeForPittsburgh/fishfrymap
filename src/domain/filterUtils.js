@@ -31,6 +31,42 @@ export function hasActiveFilters(filters) {
   return Object.values(filters).some(Boolean);
 }
 
+export function getFeatureBounds(features) {
+  if (!Array.isArray(features) || features.length === 0) {
+    return null;
+  }
+
+  let north = -Infinity;
+  let south = Infinity;
+  let east = -Infinity;
+  let west = Infinity;
+  let hasValidCoordinate = false;
+
+  features.forEach((feature) => {
+    const [lng, lat] = feature?.geometry?.coordinates || [];
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+      return;
+    }
+
+    hasValidCoordinate = true;
+    north = Math.max(north, lat);
+    south = Math.min(south, lat);
+    east = Math.max(east, lng);
+    west = Math.min(west, lng);
+  });
+
+  if (!hasValidCoordinate) {
+    return null;
+  }
+
+  return {
+    north,
+    south,
+    east,
+    west
+  };
+}
+
 export function featureIsInBounds(feature, bounds) {
   if (!bounds) {
     return true;

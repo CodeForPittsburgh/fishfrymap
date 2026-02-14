@@ -100,3 +100,48 @@ test("marker cluster layer stays active across zoom changes", async ({ page }) =
     })
     .toBeGreaterThan(0);
 });
+
+test("initial map extent fits all features from loaded geojson", async ({ page }) => {
+  await page.route(/\/api\/fishfries\/?(\?.*)?$/, (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        type: "FeatureCollection",
+        features: [
+          {
+            id: "pittsburgh-point",
+            type: "Feature",
+            properties: {
+              venue_name: "Pittsburgh Point",
+              publish: true
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [-79.9959, 40.4406]
+            }
+          },
+          {
+            id: "san-francisco-point",
+            type: "Feature",
+            properties: {
+              venue_name: "San Francisco Point",
+              publish: true
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [-122.4194, 37.7749]
+            }
+          }
+        ]
+      })
+    })
+  );
+
+  await page.goto("/");
+  await waitForSidebarData(page, 2);
+
+  await expect
+    .poll(async () => page.locator("#feature-list .feature-row").count())
+    .toBe(2);
+});

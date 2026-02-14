@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { getFeatureBounds } from "@/domain/filterUtils";
 import { LeafletController } from "@/features/map/LeafletController";
 import { mapActions } from "@/store/slices/mapSlice";
 import { selectionActions } from "@/store/slices/selectionSlice";
@@ -16,6 +17,7 @@ const MapView = ({ features, filteredFeatures }) => {
   const focusFeatureRequest = useSelector((state) => state.selection.focusFeatureRequest);
   const setViewRequest = useSelector((state) => state.selection.setViewRequest);
   const sidebarVisible = useSelector((state) => state.ui.sidebarVisible);
+  const allFeatureBounds = useMemo(() => getFeatureBounds(features), [features]);
 
   const onMoveEnd = useCallback(
     ({ bounds, center, zoom }) => {
@@ -74,6 +76,7 @@ const MapView = ({ features, filteredFeatures }) => {
   const lastOpenSeq = useRef(null);
   const lastFocusSeq = useRef(null);
   const lastViewSeq = useRef(null);
+  const hasAppliedInitialFit = useRef(false);
 
   useEffect(() => {
     handlersRef.current = {
@@ -136,6 +139,16 @@ const MapView = ({ features, filteredFeatures }) => {
 
     controllerRef.current.setFilteredFeatures(filteredFeatures);
   }, [filteredFeatures, ready]);
+
+  useEffect(() => {
+    if (!ready || !controllerRef.current || hasAppliedInitialFit.current || !allFeatureBounds) {
+      return;
+    }
+
+    if (controllerRef.current.fitToBounds(allFeatureBounds)) {
+      hasAppliedInitialFit.current = true;
+    }
+  }, [allFeatureBounds, ready]);
 
   useEffect(() => {
     if (!ready || !controllerRef.current) {
