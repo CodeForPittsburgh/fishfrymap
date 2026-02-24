@@ -1,16 +1,10 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBagShopping,
-  faBeerMugEmpty,
   faCheck,
-  faClock,
   faLocationArrow,
-  faPlus,
   faQuestion,
   faWarning,
-  faUtensils,
-  faWheelchair,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
@@ -19,16 +13,8 @@ import { Alert, Button, Card, Col, Modal, Row, Table } from "react-bootstrap";
 import { attrClean, boolValue } from "@/domain/featureUtils";
 import { parseDateTimes } from "@/domain/dateUtils";
 import { FEATURE_BOOLEAN_FIELD_CONFIG } from "@/domain/filterFieldConfig";
+import { getPrimaryFilterFieldIcon } from "@/icons/filterFieldIcons";
 import "./FeatureModal.css";
-
-const TRUE_ICON_LOOKUP = {
-  bagShopping: faBagShopping,
-  beerMugEmpty: faBeerMugEmpty,
-  clock: faClock,
-  plus: faPlus,
-  utensils: faUtensils,
-  wheelchair: faWheelchair
-};
 
 function BooleanPanel({ label, value, trueIcon }) {
   const isTrue = boolValue(value);
@@ -85,7 +71,7 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
   const booleanPanels = FEATURE_BOOLEAN_FIELD_CONFIG.map((field) => ({
     key: field.key,
     label: field.label,
-    trueIcon: TRUE_ICON_LOOKUP[field.filterIconKeys[0]] || null,
+    trueIcon: getPrimaryFilterFieldIcon(field),
     value: feature.properties[field.key]
   }));
 

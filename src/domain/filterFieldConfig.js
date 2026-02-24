@@ -2,7 +2,7 @@ export const FIELD_CONFIG = [
   {
     key: "drive_thru",
     label: "Drive-Thru Available",
-    filterIconKeys: [],
+    filterIconKeys: ['car'],
     showInFilter: true,
     showInFeatureModal: true,
     labelKind: "static"
@@ -10,15 +10,15 @@ export const FIELD_CONFIG = [
   {
     key: "lunch",
     label: "Open for Lunch",
-    filterIconKeys: ["utensils", "clock"],
+    filterIconKeys: ["clock"],
     showInFilter: true,
     showInFeatureModal: true,
     labelKind: "static"
   },
   {
     key: "homemade_pierogies",
-    label: "Homemade Pierogies !!!",
-    filterIconKeys: [],
+    label: "Homemade Pierogies",
+    filterIconKeys: ['fire'],
     showInFilter: true,
     showInFeatureModal: true,
     labelKind: "static"
@@ -50,7 +50,7 @@ export const FIELD_CONFIG = [
   {
     key: "AshWednesday",
     label: "Open Ash Wednesday",
-    filterIconKeys: ["plus"],
+    filterIconKeys: ["church"],
     showInFilter: true,
     showInFeatureModal: true,
     labelKind: "static"
@@ -58,7 +58,7 @@ export const FIELD_CONFIG = [
   {
     key: "GoodFriday",
     label: "Open Good Friday",
-    filterIconKeys: ["plus"],
+    filterIconKeys: ["church"],
     showInFilter: true,
     showInFeatureModal: true,
     labelKind: "static"
