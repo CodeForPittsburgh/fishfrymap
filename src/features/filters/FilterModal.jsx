@@ -13,8 +13,7 @@ function renderFilterFieldLabel(field, year) {
   }
 
   return (
-    <>
-      {label}
+    <div className="ps-2">
       {field.filterIconKeys.map((iconKey) => {
         const icon = getFilterFieldIcon(iconKey);
         if (!icon) {
@@ -23,12 +22,14 @@ function renderFilterFieldLabel(field, year) {
 
         return (
           <React.Fragment key={`${field.key}-${iconKey}`}>
-            {" "}
+            
             <FontAwesomeIcon icon={icon} aria-hidden="true" />
+            {" "}
           </React.Fragment>
         );
       })}
-    </>
+      <span className="ps-2">{label}</span>
+    </div>
   );
 }
 
@@ -54,7 +55,7 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
                   <ListGroup.Item
                     as="label"
                     action
-                    className={`filter-field-item ${isChecked ? "is-checked" : ""}`}
+                    className={`py-3 filter-field-item ${isChecked ? "is-checked" : ""}`}
                     htmlFor={field.key}
                     key={field.key}
                   >
@@ -63,6 +64,7 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
                       id={field.key}
                       type="checkbox"
                       checked={isChecked}
+                      size='xl'
                       onChange={(event) => onChange(field.key, event.target.checked)}
                     />
                     <span className="filter-field-item-label">{label}</span>

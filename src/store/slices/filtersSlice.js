@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { FILTER_KEYS } from "@/domain/filterFieldConfig";
 
 const initialFilters = FILTER_KEYS.reduce((acc, key) => {
-  acc[key] = false;
+  acc[key] = key === "publish";
   return acc;
 }, {});
 

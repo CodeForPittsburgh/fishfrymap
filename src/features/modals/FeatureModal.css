@@ -3,6 +3,34 @@
   max-width: 1100px;
 }
 
+#feature-info-content {
+  position: relative;
+}
+
+#feature-info-content.is-unpublished::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(48, 48, 48, 0.6);
+  pointer-events: none;
+  z-index: 2;
+}
+
+#feature-info-content.is-unpublished::after {
+  content: "UNVERIFIED";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  color: rgba(255, 255, 255, 0.25);
+  font-size: clamp(2rem, 8vw, 5rem);
+  font-weight: 800;
+  letter-spacing: 0.35rem;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 3;
+}
+
 .bool-card-true {
   background-color: #fcb82e;
   color: #000000;

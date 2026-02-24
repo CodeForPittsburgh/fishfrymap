@@ -49,6 +49,42 @@ function BooleanPanel({ label, value, trueIcon }) {
   );
 }
 
+const ContactTable = ({feature}) => (
+  <Row>
+    <Col sm={12}>
+      <h4>Contact</h4>
+      <Table size="sm" striped bordered>
+        <tbody>
+          <tr>
+            <th>Phone</th>
+            <td>{attrClean(feature.properties.phone)}</td>
+          </tr>
+          <tr>
+            <th>Venue Website</th>
+            <td>
+              {feature.properties.website ? (
+                <a className="url-break" href={feature.properties.website} target="_blank" rel="noreferrer">
+                  Venue Website
+                </a>
+              ) : null}
+            </td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td>
+              {feature.properties.email ? (
+                <a className="url-break" href={`mailto:${feature.properties.email}`}>
+                  {feature.properties.email}
+                </a>
+              ) : null}
+            </td>
+          </tr>
+        </tbody>
+      </Table>
+    </Col>
+  </Row>  
+)
+
 const FeatureModal = ({ show, onHide, feature, currentYear }) => {
   const events = useMemo(() => {
     if (!feature) {
@@ -122,118 +158,108 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
           </Alert>
         ) : null}
 
-        {feature.properties.procedures ? (
-          <Alert variant="warning">
-            <p> <FontAwesomeIcon icon={faWarning}/> Something important to note about this Fish Fry:</p>
-            <p className="fs-4">{feature.properties.procedures}</p>
-          </Alert>
-        ) : null}          
+        {feature.properties.publish ? null : (
+          // if it's not published, we show the contact info up here instead of at the bottom
+          <div className="mb-3 pb-3 border-bottom border-secondary">
+            <ContactTable feature={feature} />
+          </div>
+        )}
 
-        {events.today.length > 0 ? (
-          <h2>
-            Open Today:{" "}
-            {events.today.map((event) => (
-              <span key={event}>{event} </span>
-            ))}
-          </h2>
-        ) : null}
 
-        <Row className="mb-3">
-          <Col lg={7}>
-            <h2>Menu</h2>
-            {feature.properties.menu?.url ? (
-              <h4>
-                <small>
-                  <a className="url-break" href={feature.properties.menu.url} target="_blank" rel="noreferrer">
-                    View menu/listing
-                  </a>
-                </small>
-              </h4>
-            ) : null}
-            {feature.properties.menu?.text ? (
-              <p>{feature.properties.menu.text}</p>
-            ) : (
-              <p className="small text-muted">
-                {feature.properties.menu?.url
-                  ? "Check the link for menu!"
-                  : "Nothing here? We may not have gotten around to recording this information yet. Check with the venue for their menu."}
-              </p>
-            )}
-          </Col>
-          <Col lg={5}>
-            <h3>{events.today.length > 0 ? "Upcoming Dates" : "Upcoming Date(s)"}</h3>
-            <ul className="list-unstyled">
-              {events.future.length > 0 ? (
-                events.future.map((event) => (
-                  <li key={event}>
-                    <small>{event}</small>
-                  </li>
-                ))
+        {/* if the feature is not published everything in this div is faded out */}
+        <div
+          id="feature-info-content"
+          className={!feature.properties.publish ? "is-unpublished" : ""}
+        >        
+
+          {feature.properties.procedures ? (
+            <Alert variant="warning">
+              <p> <FontAwesomeIcon icon={faWarning}/> Something important to note about this Fish Fry:</p>
+              <p className="fs-4">{feature.properties.procedures}</p>
+            </Alert>
+          ) : null}          
+
+          {events.today.length > 0 && feature.properties.publish ? (
+            <h2>
+              Open Today:{" "}
+              {events.today.map((event) => (
+                <span key={event}>{event} </span>
+              ))}
+            </h2>
+          ) : null}
+
+
+
+          <Row className="mb-3">
+            <Col lg={7}>
+              <h2>Menu</h2>
+              {feature.properties.menu?.url ? (
+                <h4>
+                  <small>
+                    <a className="url-break" href={feature.properties.menu.url} target="_blank" rel="noreferrer">
+                      View menu/listing
+                    </a>
+                  </small>
+                </h4>
+              ) : null}
+              {feature.properties.menu?.text ? (
+                <p>{feature.properties.menu.text}</p>
               ) : (
-                <li className="small text-muted">
-                  Nothing here? We may not have gotten around to recording this information yet. If it&apos;s not in the
-                  notes below, check with the venue for dates/times.
-                </li>
+                <p className="small text-muted">
+                  {feature.properties.menu?.url
+                    ? "Check the link for menu!"
+                    : "Nothing here? We may not have gotten around to recording this information yet. Check with the venue for their menu."}
+                </p>
               )}
-            </ul>
-          </Col>
-        </Row>
-
-        <Row xs={2} sm={2} md={3} lg={5} xl={12} className="g-2 mb-3">
-          {booleanPanels.map((panel) => (
-            <Col key={panel.key}>
-              <BooleanPanel label={panel.label} value={panel.value} trueIcon={panel.trueIcon} />
             </Col>
-          ))}
-        </Row>
-
-        {feature.properties.etc || feature.properties.venue_notes ? (
-
-          <Row>
-            <Col sm={12}>
-              <h4>Notes</h4>
-              {feature.properties.etc ? <p>{feature.properties.etc}</p> : null}
-              {feature.properties.venue_notes ? <p>{feature.properties.venue_notes}</p> : null}
+            <Col lg={5}>
+              <h3>{events.today.length > 0 ? "Upcoming Dates" : "Upcoming Date(s)"}</h3>
+              <ul className="list-unstyled">
+                {events.future.length > 0 ? (
+                  events.future.map((event) => (
+                    <li key={event}>
+                      <small>{event}</small>
+                    </li>
+                  ))
+                ) : (
+                  <li className="small text-muted">
+                    Nothing here? We may not have gotten around to recording this information yet. If it&apos;s not in the
+                    notes below, check with the venue for dates/times.
+                  </li>
+                )}
+              </ul>
             </Col>
           </Row>
 
-        ) : (null)
-        }
+          <Row xs={2} sm={2} md={3} lg={5} xl={12} className="g-2 mb-3">
+            {booleanPanels.map((panel) => (
+              <Col key={panel.key}>
+                <BooleanPanel label={panel.label} value={panel.value} trueIcon={panel.trueIcon} />
+              </Col>
+            ))}
+          </Row>
+
+          {feature.properties.etc || feature.properties.venue_notes ? (
+
+            <Row>
+              <Col sm={12}>
+                <h4>Notes</h4>
+                {feature.properties.etc ? <p>{feature.properties.etc}</p> : null}
+                {feature.properties.venue_notes ? <p>{feature.properties.venue_notes}</p> : null}
+              </Col>
+            </Row>
+
+          ) : (null)
+          }
+
+        </div>
 
 
-        <Row>
-          <Col sm={12}>
-            <h4>Contact</h4>
-            <Table size="sm" striped bordered>
-              <tbody>
-                <tr>
-                  <th>Phone</th>
-                  <td>{attrClean(feature.properties.phone)}</td>
-                </tr>
-                <tr>
-                  <th>Venue Website</th>
-                  <td>
-                    {feature.properties.website ? (
-                      <a className="url-break" href={feature.properties.website} target="_blank" rel="noreferrer">
-                        Venue Website
-                      </a>
-                    ) : null}
-                  </td>
-                </tr>
-                <tr>
-                  <th>Email</th>
-                  <td>
-                    {feature.properties.email ? (
-                      <a className="url-break" href={`mailto:${feature.properties.email}`}>
-                        {feature.properties.email}
-                      </a>
-                    ) : null}
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
+        {!feature.properties.publish ? null : (
+          <ContactTable feature={feature} />
+        )}
+        
+
       </Modal.Body>
       <Modal.Footer>
         <p className="small text-muted">

@@ -39,8 +39,8 @@ const AboutModal = ({ show, onHide }) => {
             <Tab.Pane eventKey="about">
               <h3>Fish Fry Map</h3>
               <p>
-                The Pittsburgh Lenten Fish Fry Map is the brainchild of Hollen Barmer, who has tirelessly dedicated
-                time the past few years to inventorying the rich array of Lenten Fish Fry events that occur every
+                The Pittsburgh Lenten Fish Fry Map is the labor of love of Hollen Barmer, who has tirelessly dedicated
+                time the past decade-plus inventorying the rich array of Lenten Fish Fry events that occur every
                 spring in Western Pennsylvania. Again this year, Friends of Fish Fries are helping.
               </p>
 
@@ -58,8 +58,9 @@ const AboutModal = ({ show, onHide }) => {
                 . Open source, MIT licensed, and available on{" "}
                 <a href="https://github.com/CodeForPittsburgh/fishfrymap" target="_blank" rel="noreferrer">
                   GitHub
-                </a>
-                .
+                </a>. The server and database are hosted by <a href="https://www.civicmapper.com" target="_blank" rel="noreferrer">
+                  CivicMapper
+                </a>.
               </p>
             </Tab.Pane>
 
@@ -73,14 +74,11 @@ const AboutModal = ({ show, onHide }) => {
             </Tab.Pane>
 
             <Tab.Pane eventKey="contact">
-              <Card body bg="light">
+              <Card body bg="info">
                 <Row>
                   <Col md={12}>
-                    <p>
-                      Head over to our{" "}
-                      <a href="https://www.facebook.com/PittsburghLentenFishFryMap/">Facebook page</a> to suggest a
+                      Head over to our <a href="https://www.facebook.com/PittsburghLentenFishFryMap/">Facebook page</a> to suggest a
                       Fish Fry, share Fish Fry photos and news, and discuss all things Fish Fry!
-                    </p>
                   </Col>
                 </Row>
               </Card>
