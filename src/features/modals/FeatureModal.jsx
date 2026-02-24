@@ -71,7 +71,7 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
     { label: "Open Ash Wednesday", value: feature.properties.AshWednesday },
     { label: "Drive-Thru Available", value: feature.properties.drive_thru },
     { label: "Take-Out Available", value: feature.properties.take_out },
-    { label: "Handicap Accessible", value: feature.properties.handicap }
+    { label: "Accessible", value: feature.properties.handicap }
   ];
 
   return (

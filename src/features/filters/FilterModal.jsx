@@ -36,7 +36,7 @@ const FILTER_FIELDS = [
     key: "handicap",
     label: (
       <>
-        Handicap Accessible <FontAwesomeIcon icon={faWheelchair} aria-hidden="true" />
+        Accessible <FontAwesomeIcon icon={faWheelchair} aria-hidden="true" />
       </>
     )
   },
