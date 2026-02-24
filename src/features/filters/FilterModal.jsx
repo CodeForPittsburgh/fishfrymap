@@ -22,7 +22,6 @@ function renderFilterFieldLabel(field, year) {
 
         return (
           <React.Fragment key={`${field.key}-${iconKey}`}>
-            
             <FontAwesomeIcon icon={icon} aria-hidden="true" />
             {" "}
           </React.Fragment>

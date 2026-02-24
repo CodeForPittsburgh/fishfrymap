@@ -8,6 +8,8 @@ import {
   faUpDownLeftRight
 } from "@fortawesome/free-solid-svg-icons";
 
+const mapboxAccessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+
 function iconHtml(iconDefinition, options = {}) {
   return icon(iconDefinition, options).html.join("");
 }
@@ -133,8 +135,6 @@ export class LeafletController {
     //   }
     // );
 
-
-
     // this.baseLayers.esriDark = L.tileLayer(
     //   "https://static-map-tiles-api.arcgis.com/arcgis/rest/services/static-basemap-tiles-service/v1/open/dark-gray/static/tile/{z}/{y}/{x}",
     //   {
@@ -145,20 +145,36 @@ export class LeafletController {
     // )
 
     this.baseLayers.mapboxDark = L.tileLayer(
-      "https://api.mapbox.com/styles/v1/civicmapper/cmm14av13009y01s2ax9dcjto/tiles/512/{z}/{x}/{y}",
+      // `https://api.mapbox.com/styles/v1/civicmapper/cmm14av13009y01s2ax9dcjto/tiles/512/{z}/{x}/{y}?access_token=${mapboxAccessToken}`,
+      `https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}?access_token=${mapboxAccessToken}`,
+      
       {
+        tileSize: 512,
+        zoomOffset: -1,        
         maxZoom: 19,
         attribution:
           '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }
     );
 
+    this.baseLayers.mapboxLight = L.tileLayer(
+      `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/512/{z}/{x}/{y}?access_token=${mapboxAccessToken}`,
+      
+      {
+        tileSize: 512,
+        zoomOffset: -1,        
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }
+    );    
+
     this.highlightLayer = L.geoJson(null);
     this.markerClusters = new L.MarkerClusterGroup({
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
-      disableClusteringAtZoom: 6
+      disableClusteringAtZoom: 8
     });
 
     this.map = L.map(containerEl, {
@@ -186,9 +202,10 @@ export class LeafletController {
       L.control.basemaps({
         position: "topright",
         basemaps: [
-          this.baseLayers.dark, 
-          this.baseLayers.light,
-          // this.baseLayers.esriDark,
+          // this.baseLayers.dark, 
+          this.baseLayers.mapboxDark,
+          this.baseLayers.mapboxLight,
+          // this.baseLayers.light,
         ],
         tileX: 4550,
         tileY: 6176,

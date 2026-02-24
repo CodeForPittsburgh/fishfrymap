@@ -58,7 +58,7 @@ const AboutModal = ({ show, onHide }) => {
                 . Open source, MIT licensed, and available on{" "}
                 <a href="https://github.com/CodeForPittsburgh/fishfrymap" target="_blank" rel="noreferrer">
                   GitHub
-                </a>. The server and database are hosted by <a href="https://www.civicmapper.com" target="_blank" rel="noreferrer">
+                </a>. The server, database, and basemap services have been donated by <a href="https://www.civicmapper.com" target="_blank" rel="noreferrer">
                   CivicMapper
                 </a>.
               </p>
