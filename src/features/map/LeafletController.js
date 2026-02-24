@@ -1,12 +1,16 @@
 import L from "leaflet";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 import {
   faLocationArrow,
   faMinus,
   faPlus,
   faSpinner,
-  faUpDownLeftRight,
-  iconHtml
-} from "@/icons/fontAwesome";
+  faUpDownLeftRight
+} from "@fortawesome/free-solid-svg-icons";
+
+function iconHtml(iconDefinition, options = {}) {
+  return icon(iconDefinition, options).html.join("");
+}
 
 let pluginsLoaded = false;
 

@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWarning } from "@fortawesome/free-solid-svg-icons"
 import {
   faBagShopping,
   faBeerMugEmpty,
@@ -9,10 +8,11 @@ import {
   faLocationArrow,
   faPlus,
   faQuestion,
+  faWarning,
   faUtensils,
   faWheelchair,
   faXmark
-} from "@/icons/fontAwesome";
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { Alert, Button, Card, Col, Modal, Row, Table } from "react-bootstrap";
 

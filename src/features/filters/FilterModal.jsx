@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair, faChurch } from "@fortawesome/free-solid-svg-icons";
 import { Button, Col, Form, ListGroup, Modal, Row } from "react-bootstrap";
-import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair, faPlus } from "@/icons/fontAwesome";
 import { FILTER_FIELD_CONFIG, getFieldLabel } from "@/domain/filterFieldConfig";
 import "./FilterModal.css";
 
@@ -11,7 +11,7 @@ const FILTER_FIELD_ICON_LOOKUP = {
   clock: faClock,
   utensils: faUtensils,
   wheelchair: faWheelchair,
-  plus: faPlus
+  plus: faChurch
 };
 
 function renderFilterFieldLabel(field, year) {

@@ -1,9 +1,9 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Dropdown, Form, InputGroup } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 
-import { faMagnifyingGlass, faSpinner } from "@/icons/fontAwesome";
 import { searchActions } from "@/store/slices/searchSlice";
 import { handleSuggestionSelected } from "@/store/thunks/searchThunks";
 import "./SearchBox.css";

@@ -1,11 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleQuestion, faDatabase, faFilter, faList } from "@fortawesome/free-solid-svg-icons";
 import { Container, Form, Nav, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import "./TopNav.css";
 
 import SearchBox from "@/features/search/SearchBox";
-import { faCircleQuestion, faDatabase, faFilter, faList } from "@/icons/fontAwesome";
 import { uiActions } from "@/store/slices/uiSlice";
 
 const TopNav = ({ fishSuggestions, placeSuggestions, isSearching }) => {

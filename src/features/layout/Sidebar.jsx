@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faChevronRight, faFilter } from "@/icons/fontAwesome";
+import { faChevronLeft, faChevronRight, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { Button, Card, ListGroup } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import "./Sidebar.css";

@@ -1,10 +1,10 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilter, faList } from "@fortawesome/free-solid-svg-icons";
 import { Button, Container, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 
 import SearchBox from "@/features/search/SearchBox";
-import { faFilter, faList, faLocationArrow } from "@/icons/fontAwesome";
 import { uiActions } from "@/store/slices/uiSlice";
 import "./MobileBottomNav.css";
 
