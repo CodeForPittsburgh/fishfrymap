@@ -1,17 +1,36 @@
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons"
-import { faLocationArrow } from "@/icons/fontAwesome";
+import {
+  faBagShopping,
+  faBeerMugEmpty,
+  faCheck,
+  faClock,
+  faLocationArrow,
+  faPlus,
+  faQuestion,
+  faUtensils,
+  faWheelchair,
+  faXmark
+} from "@/icons/fontAwesome";
 import moment from "moment";
 import { Alert, Button, Card, Col, Modal, Row, Table } from "react-bootstrap";
 
 import { attrClean, boolValue } from "@/domain/featureUtils";
 import { parseDateTimes } from "@/domain/dateUtils";
-import { faCheck, faQuestion, faXmark } from "@/icons/fontAwesome";
+import { FEATURE_BOOLEAN_FIELD_CONFIG } from "@/domain/filterFieldConfig";
 import "./FeatureModal.css";
-import { faRoute } from "@fortawesome/free-solid-svg-icons";
 
-function BooleanPanel({ label, value }) {
+const TRUE_ICON_LOOKUP = {
+  bagShopping: faBagShopping,
+  beerMugEmpty: faBeerMugEmpty,
+  clock: faClock,
+  plus: faPlus,
+  utensils: faUtensils,
+  wheelchair: faWheelchair
+};
+
+function BooleanPanel({ label, value, trueIcon }) {
   const isTrue = boolValue(value);
   const isFalse = value === false || ["false", "False", 0, "No", "no"].includes(value);
 
@@ -20,7 +39,7 @@ function BooleanPanel({ label, value }) {
   let variantClass = "";
 
   if (isTrue) {
-    icon = <FontAwesomeIcon icon={faCheck} size="2x" aria-hidden="true" />;
+    icon = <FontAwesomeIcon icon={trueIcon || faCheck} size="2x" aria-hidden="true" />;
     text = "Yes";
     variantClass = "bool-card-true";
   } else if (isFalse) {
@@ -63,16 +82,12 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
 
   const address = attrClean(feature.properties.venue_address);
   const directionsUrl = `https://www.google.com/maps/dir//${encodeURIComponent(address)}`;
-  const booleanPanels = [
-    { label: "Homemade Pierogies", value: feature.properties.homemade_pierogies },
-    { label: "Alcohol Served", value: feature.properties.alcohol },
-    { label: "Lunch Served", value: feature.properties.lunch },
-    { label: "Open Good Friday", value: feature.properties.GoodFriday },
-    { label: "Open Ash Wednesday", value: feature.properties.AshWednesday },
-    { label: "Drive-Thru Available", value: feature.properties.drive_thru },
-    { label: "Take-Out Available", value: feature.properties.take_out },
-    { label: "Accessible", value: feature.properties.handicap }
-  ];
+  const booleanPanels = FEATURE_BOOLEAN_FIELD_CONFIG.map((field) => ({
+    key: field.key,
+    label: field.label,
+    trueIcon: TRUE_ICON_LOOKUP[field.filterIconKeys[0]] || null,
+    value: feature.properties[field.key]
+  }));
 
   return (
     <Modal 
@@ -180,8 +195,8 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
 
         <Row xs={2} sm={2} md={3} lg={5} xl={12} className="g-2 mb-3">
           {booleanPanels.map((panel) => (
-            <Col key={panel.label}>
-              <BooleanPanel label={panel.label} value={panel.value} />
+            <Col key={panel.key}>
+              <BooleanPanel label={panel.label} value={panel.value} trueIcon={panel.trueIcon} />
             </Col>
           ))}
         </Row>

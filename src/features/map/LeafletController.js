@@ -111,21 +111,41 @@ export class LeafletController {
       }
     );
 
-    this.baseLayers.gold = L.tileLayer(
-      "https://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png",
-      {
-        attribution:
-          '<a style="color:black" href="http://stamen.com">Stamen Design</a> under <a style="color:black" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license + <a style="color:black" href="http://openstreetmap.org">OpenStreetMap</a> under <a style="color:black" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.',
-        maxZoom: 18
-      }
-    );
-
     this.baseLayers.light = L.tileLayer(
       "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
       {
         maxZoom: 19,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      }
+    );    
+
+    // this.baseLayers.gold = L.tileLayer(
+    //   "https://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png",
+    //   {
+    //     attribution:
+    //       '<a style="color:black" href="http://stamen.com">Stamen Design</a> under <a style="color:black" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> license + <a style="color:black" href="http://openstreetmap.org">OpenStreetMap</a> under <a style="color:black" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a> license.',
+    //     maxZoom: 18
+    //   }
+    // );
+
+
+
+    // this.baseLayers.esriDark = L.tileLayer(
+    //   "https://static-map-tiles-api.arcgis.com/arcgis/rest/services/static-basemap-tiles-service/v1/open/dark-gray/static/tile/{z}/{y}/{x}",
+    //   {
+    //     maxZoom: 19,
+    //     attribution:
+    //       '&copy; <a href="https://www.esri.com/">Esri</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    //   }
+    // )
+
+    this.baseLayers.mapboxDark = L.tileLayer(
+      "https://api.mapbox.com/styles/v1/civicmapper/cmm14av13009y01s2ax9dcjto/tiles/512/{z}/{x}/{y}",
+      {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }
     );
 
@@ -164,6 +184,7 @@ export class LeafletController {
         basemaps: [
           this.baseLayers.dark, 
           this.baseLayers.light,
+          // this.baseLayers.esriDark,
         ],
         tileX: 4550,
         tileY: 6176,

@@ -1,4 +1,5 @@
 import { deriveLiturgicalOpenFlags } from "@/domain/dateUtils";
+export { FILTER_KEYS } from "@/domain/filterFieldConfig";
 
 const iconPath = `${import.meta.env.BASE_URL}assets/img/`;
 
@@ -12,18 +13,6 @@ export const iconLookup = {
   "": `${iconPath}Unsure_NA.png`,
   unpublished: `${iconPath}yellowpoint75.png`
 };
-
-export const FILTER_KEYS = [
-  "drive_thru",
-  "lunch",
-  "homemade_pierogies",
-  "alcohol",
-  "take_out",
-  "handicap",
-  "GoodFriday",
-  "AshWednesday",
-  "publish"
-];
 
 export function attrClean(value) {
   return value || "";

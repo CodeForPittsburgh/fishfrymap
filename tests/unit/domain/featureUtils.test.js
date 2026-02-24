@@ -120,8 +120,8 @@ describe("featureUtils", () => {
       "alcohol",
       "take_out",
       "handicap",
-      "GoodFriday",
       "AshWednesday",
+      "GoodFriday",
       "publish"
     ]);
   });

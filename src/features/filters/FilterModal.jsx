@@ -2,64 +2,49 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Col, Form, ListGroup, Modal, Row } from "react-bootstrap";
 import { faBagShopping, faBeerMugEmpty, faClock, faUtensils, faWheelchair, faPlus } from "@/icons/fontAwesome";
+import { FILTER_FIELD_CONFIG, getFieldLabel } from "@/domain/filterFieldConfig";
 import "./FilterModal.css";
 
-const FILTER_FIELDS = [
-  { key: "drive_thru", label: "Drive-Thru Available" },
-  {
-    key: "lunch",
-    label: (
-      <>
-        Open for Lunch <FontAwesomeIcon icon={faUtensils} aria-hidden="true" />{" "}
-        <FontAwesomeIcon icon={faClock} aria-hidden="true" />
-      </>
-    )
-  },
-  { key: "homemade_pierogies", label: "Homemade Pierogies !!!" },
-  {
-    key: "alcohol",
-    label: (
-      <>
-        Serves Alcohol <FontAwesomeIcon icon={faBeerMugEmpty} aria-hidden="true" />
-      </>
-    )
-  },
-  {
-    key: "take_out",
-    label: (
-      <>
-        Takeout Available <FontAwesomeIcon icon={faBagShopping} aria-hidden="true" />
-      </>
-    )
-  },
-  {
-    key: "handicap",
-    label: (
-      <>
-        Accessible <FontAwesomeIcon icon={faWheelchair} aria-hidden="true" />
-      </>
-    )
-  },
-  {
-    key: "AshWednesday",
-    label: (
-      <>
-        Open Ash Wednesday <FontAwesomeIcon icon={faPlus} aria-hidden="true" />
-      </>
-    )
-  },  
-  {
-    key: "GoodFriday",
-    label: (
-      <>
-        Open Good Friday <FontAwesomeIcon icon={faPlus} aria-hidden="true" />
-      </>
-    )
-  },
-];
+const FILTER_FIELD_ICON_LOOKUP = {
+  bagShopping: faBagShopping,
+  beerMugEmpty: faBeerMugEmpty,
+  clock: faClock,
+  utensils: faUtensils,
+  wheelchair: faWheelchair,
+  plus: faPlus
+};
+
+function renderFilterFieldLabel(field, year) {
+  const label = getFieldLabel(field, { year });
+
+  if (!field.filterIconKeys.length) {
+    return label;
+  }
+
+  return (
+    <>
+      {label}
+      {field.filterIconKeys.map((iconKey) => {
+        const icon = FILTER_FIELD_ICON_LOOKUP[iconKey];
+        if (!icon) {
+          return null;
+        }
+
+        return (
+          <React.Fragment key={`${field.key}-${iconKey}`}>
+            {" "}
+            <FontAwesomeIcon icon={icon} aria-hidden="true" />
+          </React.Fragment>
+        );
+      })}
+    </>
+  );
+}
 
 const FilterModal = ({ show, onHide, filters, onChange }) => {
   const thisYear = new Date().getFullYear();
+  const standardFields = FILTER_FIELD_CONFIG.filter((field) => field.key !== "publish");
+  const publishField = FILTER_FIELD_CONFIG.find((field) => field.key === "publish");
 
   return (
     <Modal show={show} onHide={onHide} id="filterModal">
@@ -70,25 +55,26 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
         <Row>
           <Col >
             <ListGroup className="filter-field-list mb-3">
-              {FILTER_FIELDS.map((filter) => {
-                const isChecked = Boolean(filters[filter.key]);
+              {standardFields.map((field) => {
+                const label = renderFilterFieldLabel(field, thisYear);
+                const isChecked = Boolean(filters[field.key]);
 
                 return (
                   <ListGroup.Item
                     as="label"
                     action
                     className={`filter-field-item ${isChecked ? "is-checked" : ""}`}
-                    htmlFor={filter.key}
-                    key={filter.key}
+                    htmlFor={field.key}
+                    key={field.key}
                   >
                     <Form.Check.Input
                       className="filter-field-checkbox"
-                      id={filter.key}
+                      id={field.key}
                       type="checkbox"
                       checked={isChecked}
-                      onChange={(event) => onChange(filter.key, event.target.checked)}
+                      onChange={(event) => onChange(field.key, event.target.checked)}
                     />
-                    <span className="filter-field-item-label">{filter.label}</span>
+                    <span className="filter-field-item-label">{label}</span>
                   </ListGroup.Item>
                 );
               })}
@@ -96,27 +82,30 @@ const FilterModal = ({ show, onHide, filters, onChange }) => {
           </Col>
         </Row>
 
-        <Row>
-          <Col>
-            <ListGroup className="publish-filter-list my-2">
-              <ListGroup.Item
-                as="label"
-                action
-                className={`filter-field-item ${Boolean(filters.publish) ? "is-checked" : ""}`}
-                htmlFor="publish"
-              >
-                <Form.Check.Input
-                  className="filter-field-checkbox"
-                  id="publish"
-                  type="checkbox"
-                  checked={Boolean(filters.publish)}
-                  onChange={(event) => onChange("publish", event.target.checked)}
-                />
-                <span className="filter-field-item-label">Show only those verified for {thisYear}.</span>
-              </ListGroup.Item>
-            </ListGroup>
-          </Col>
-        </Row>
+        {publishField ? (
+          <Row>
+            <Col>
+              <ListGroup className="publish-filter-list my-2">
+                <ListGroup.Item
+                  as="label"
+                  action
+                  className={`filter-field-item ${Boolean(filters[publishField.key]) ? "is-checked" : ""}`}
+                  htmlFor={publishField.key}
+                >
+                  <Form.Check.Input
+                    className="filter-field-checkbox"
+                    id={publishField.key}
+                    type="checkbox"
+                    checked={Boolean(filters[publishField.key])}
+                    onChange={(event) => onChange(publishField.key, event.target.checked)}
+                  />
+                  <span className="filter-field-item-label">{renderFilterFieldLabel(publishField, thisYear)}</span>
+                </ListGroup.Item>
+              </ListGroup>
+            </Col>
+          </Row>
+        ) : null}
+
         <Row>
           <Col >
             <p>
