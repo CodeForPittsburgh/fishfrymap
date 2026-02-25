@@ -29,7 +29,7 @@ const BooleanPanel = ({ label, value, trueIcon }) => {
   if (isTrue) {
     icon = <FontAwesomeIcon icon={trueIcon || faCheck} size="2x" aria-hidden="true" />;
     text = "Yes";
-    variantClass = "bool-card-true";
+    variantClass = "text-bg-primary"
   } else if (isFalse) {
     icon = <FontAwesomeIcon icon={faXmark} size="2x" aria-hidden="true" />;
     text = "No";
@@ -96,23 +96,24 @@ const UpcomingDateTime = ({ dateKey, time, venueName, venueAddress, description 
     return <p className="my-0">{time}</p>;
   }
 
-  const handleICS = (event) => {
-    event.preventDefault();
-    downloadICS({
-      title: `${venueName} Fish Fry`,
-      location: venueAddress,
-      description,
-      startDateTime: range.start,
-      endDateTime: range.end,
-    });
-  };
+  // const handleICS = (event) => {
+  //   event.preventDefault();
+  //   downloadICS({
+  //     title: `${venueName} Fish Fry`,
+  //     location: venueAddress,
+  //     description,
+  //     startDateTime: range.start,
+  //     endDateTime: range.end,
+  //   });
+  // };
 
   return (
-    <div class="d-grid gap-2">
-      <a class="btn btn-outline-primary btn-sm my-1" href="#" role="button" onClick={handleICS} title="Add to calendar">
-        {time}
-      </a>
-    </div>
+    <p class="my-0">{time}</p>
+    // <div class="d-grid gap-2">
+    //   <a class="btn btn-outline-primary btn-sm my-1" href="#" role="button" onClick={handleICS} title="Add to calendar">
+    //     {time}
+    //   </a>
+    // </div>
   );
 };
 
@@ -121,7 +122,7 @@ const UpcomingDatesColumn = ({ events, hasOpenToday, venueName, venueAddress, me
 
   return (
     <div id="upcoming-dates-column">
-      <h3>{hasOpenToday ? "Upcoming Dates" : "Upcoming Date(s)"}</h3>
+      <h2>{hasOpenToday ? "Upcoming Dates" : "Upcoming Date(s)"}</h2>
       <ListGroup className="mb-3 shadow">
         {events.futureGroups.length > 0 || events.closedOnGoodFriday ? (
           <>
@@ -281,16 +282,14 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
 
 
           <Row className="mb-3">
-            <Col lg={hasMenuText ? 7 : 4}>
+            <Col lg={hasMenuText ? 7 : 5}>
               <h2>Menu</h2>
               {feature.properties.menu?.url ? (
-                <h4>
-                  <small>
-                    <a className="url-break" href={feature.properties.menu.url} target="_blank" rel="noreferrer">
+                <p class="fs-4">
+                    <a className="btn btn-primary" role="button" href={feature.properties.menu.url} target="_blank" rel="noreferrer">
                       View menu/listing
                     </a>
-                  </small>
-                </h4>
+                </p>
               ) : null}
               {feature.properties.menu?.text ? (
                 <p>{feature.properties.menu.text}</p>
@@ -302,7 +301,7 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
                 </p>
               )}
             </Col>
-            <Col lg={hasMenuText ? 5 : 8}>
+            <Col lg={hasMenuText ? 5 : 7}>
               <UpcomingDatesColumn
                 events={events}
                 hasOpenToday={hasOpenToday}

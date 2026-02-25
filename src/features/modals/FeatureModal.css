@@ -31,11 +31,6 @@
   z-index: 3;
 }
 
-.bool-card-true {
-  background-color: #fcb82e;
-  color: #000000;
-}
-
 #featureModal .bool-panel-card {
   border-radius: 0.5rem;
 }
