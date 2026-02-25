@@ -8,7 +8,35 @@ import {
   faUpDownLeftRight
 } from "@fortawesome/free-solid-svg-icons";
 
+const BASEMAP_PROVIDER_CARTO = "carto";
+const BASEMAP_PROVIDER_MAPBOX = "mapbox";
+
 const mapboxAccessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+const normalizedMapboxAccessToken = mapboxAccessToken?.trim() || "";
+const configuredBasemapProvider = import.meta.env.VITE_LEAFLET_BASEMAP_PROVIDER;
+
+function getBasemapProvider() {
+  const normalized = configuredBasemapProvider?.trim().toLowerCase();
+  if (normalized === BASEMAP_PROVIDER_MAPBOX) {
+    if (!normalizedMapboxAccessToken) {
+      console.warn(
+        "VITE_LEAFLET_BASEMAP_PROVIDER=mapbox requires VITE_MAPBOX_TOKEN. Falling back to CARTO basemaps."
+      );
+      return BASEMAP_PROVIDER_CARTO;
+    }
+
+    return BASEMAP_PROVIDER_MAPBOX;
+  }
+
+  if (!normalized || normalized === BASEMAP_PROVIDER_CARTO) {
+    return BASEMAP_PROVIDER_CARTO;
+  }
+
+  console.warn(
+    `Unsupported VITE_LEAFLET_BASEMAP_PROVIDER value "${configuredBasemapProvider}". Falling back to CARTO basemaps.`
+  );
+  return BASEMAP_PROVIDER_CARTO;
+}
 
 function iconHtml(iconDefinition, options = {}) {
   return icon(iconDefinition, options).html.join("");
@@ -82,6 +110,7 @@ export class LeafletController {
     this.overlayVisible = true;
     this.baseLayers = {};
     this.activeBasemap = "light";
+    this.basemapProvider = BASEMAP_PROVIDER_CARTO;
   }
 
   getBasemapIdForLayer(layer) {
@@ -108,23 +137,49 @@ export class LeafletController {
       return;
     }
 
-    this.baseLayers.dark = L.tileLayer(
-      "https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png",
-      {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
-      }
-    );
+    this.basemapProvider = getBasemapProvider();
 
-    this.baseLayers.light = L.tileLayer(
-      "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
-      {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
-      }
-    );    
+    if (this.basemapProvider === BASEMAP_PROVIDER_MAPBOX) {
+      this.baseLayers.dark = L.tileLayer(
+        `https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}?access_token=${normalizedMapboxAccessToken}`,
+        {
+          tileSize: 512,
+          zoomOffset: -1,
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }
+      );
+
+      this.baseLayers.light = L.tileLayer(
+        `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/512/{z}/{x}/{y}?access_token=${normalizedMapboxAccessToken}`,
+        {
+          tileSize: 512,
+          zoomOffset: -1,
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }
+      );
+    } else {
+      this.baseLayers.dark = L.tileLayer(
+        "https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png",
+        {
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }
+      );
+
+      this.baseLayers.light = L.tileLayer(
+        "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+        {
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }
+      );
+    }
 
     // this.baseLayers.gold = L.tileLayer(
     //   "https://{s}.sm.mapstack.stamen.com/((terrain-background,$000[@30],$fff[hsl-saturation@80],$1b334b[hsl-color],mapbox-water[destination-in]),(watercolor,$fff[difference],$000000[hsl-color],mapbox-water[destination-out]),(terrain-background,$000[@40],$000000[hsl-color],mapbox-water[destination-out])[screen@60],(streets-and-labels,$fedd9a[hsl-color])[@50])/{z}/{x}/{y}.png",
@@ -143,31 +198,6 @@ export class LeafletController {
     //       '&copy; <a href="https://www.esri.com/">Esri</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     //   }
     // )
-
-    this.baseLayers.mapboxDark = L.tileLayer(
-      // `https://api.mapbox.com/styles/v1/civicmapper/cmm14av13009y01s2ax9dcjto/tiles/512/{z}/{x}/{y}?access_token=${mapboxAccessToken}`,
-      `https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}?access_token=${mapboxAccessToken}`,
-      
-      {
-        tileSize: 512,
-        zoomOffset: -1,        
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }
-    );
-
-    this.baseLayers.mapboxLight = L.tileLayer(
-      `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/512/{z}/{x}/{y}?access_token=${mapboxAccessToken}`,
-      
-      {
-        tileSize: 512,
-        zoomOffset: -1,        
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }
-    );    
 
     this.highlightLayer = L.geoJson(null);
     this.markerClusters = new L.MarkerClusterGroup({
@@ -202,10 +232,8 @@ export class LeafletController {
       L.control.basemaps({
         position: "topright",
         basemaps: [
-          // this.baseLayers.dark, 
-          this.baseLayers.mapboxDark,
-          this.baseLayers.mapboxLight,
-          // this.baseLayers.light,
+          this.baseLayers.dark,
+          this.baseLayers.light
         ],
         tileX: 4550,
         tileY: 6176,

@@ -33,7 +33,8 @@ Current variables:
 
 - `VITE_FISHFRY_API_URL=https://data.pghfishfry.org/api/fishfries/`
 - `VITE_FISHFRY_FALLBACK_URL=/data/fishfrymap.geojson`
-- `VITE_MAPBOX_TOKEN=` (optional, enables Mapbox geocoding suggestions)
+- `VITE_LEAFLET_BASEMAP_PROVIDER=carto` (`carto` or `mapbox`; `mapbox` requires `VITE_MAPBOX_TOKEN`)
+- `VITE_MAPBOX_TOKEN=` (optional for geocoding; required when `VITE_LEAFLET_BASEMAP_PROVIDER=mapbox`)
 - `VITE_CLIENT_ERROR_DSN=` (optional, client-side error reporting target)
 - `VITE_CLIENT_ERROR_SAMPLE_RATE=1` (`0..1`)
 
