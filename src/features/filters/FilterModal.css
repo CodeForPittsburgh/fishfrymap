@@ -1,4 +1,5 @@
 #filterModal .filter-field-list,
+#filterModal .venue-type-filter-list,
 #filterModal .publish-filter-list {
   border-radius: 0.5rem;
   overflow: hidden;

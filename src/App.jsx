@@ -154,6 +154,9 @@ const App = () => {
           onChange={(key, value) => {
             dispatch(filtersActions.setFilter({ key, value }));
           }}
+          onVenueTypeToggle={(venueType) => {
+            dispatch(filtersActions.toggleVenueType(venueType));
+          }}
         />
       </ModalErrorBoundary>
 

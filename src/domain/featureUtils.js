@@ -1,4 +1,5 @@
 import { deriveLiturgicalOpenFlags } from "@/domain/dateUtils";
+import { canonicalizeVenueType } from "@/domain/venueTypeConfig";
 export { FILTER_KEYS } from "@/domain/filterFieldConfig";
 
 const iconPath = `${import.meta.env.BASE_URL}assets/img/`;
@@ -54,6 +55,7 @@ export function normalizeFeature(rawFeature, index = 0) {
       ...properties,
       GoodFriday: liturgicalFlags.GoodFriday,
       AshWednesday: liturgicalFlags.AshWednesday,
+      venue_type_canonical: canonicalizeVenueType(properties.venue_type),
       website: normalizeUrl(properties.website),
       menu: {
         text: properties?.menu?.text || "",

@@ -63,7 +63,23 @@ describe("featureUtils", () => {
     expect(normalized.properties.menu.text).toBe("");
     expect(normalized.properties.GoodFriday).toBe(true);
     expect(normalized.properties.AshWednesday).toBe(true);
+    expect(normalized.properties.venue_type_canonical).toBe("church");
     expect(normalized.properties.icon).toBe(iconLookup.Church);
+  });
+
+  it("normalizes misspelled venue types to canonical values", () => {
+    const normalized = normalizeFeature({
+      properties: {
+        publish: true,
+        venue_type: "Resturant"
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [0, 0]
+      }
+    });
+
+    expect(normalized.properties.venue_type_canonical).toBe("restaurant");
   });
 
   it("normalizes feature collections", () => {

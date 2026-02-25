@@ -1,26 +1,35 @@
-export function filterFeature(feature, filters) {
-  let noFiltersApplied = true;
-  const results = [];
+import { canonicalizeVenueType } from "@/domain/venueTypeConfig";
 
-  Object.entries(filters).forEach(([key, checked]) => {
-    if (checked) {
-      noFiltersApplied = false;
+export function filterFeature(feature, filters) {
+  const venueTypes = Array.isArray(filters?.venueTypes) ? filters.venueTypes : [];
+  let noBooleanFiltersApplied = true;
+  const booleanResults = [];
+
+  Object.entries(filters || {}).forEach(([key, checked]) => {
+    if (key === "venueTypes") {
+      return;
     }
 
-    if (!checked) {
+    const isChecked = Boolean(checked);
+    if (isChecked) {
+      noBooleanFiltersApplied = false;
+    }
+
+    if (!isChecked) {
       return;
     }
 
     const propValue = feature?.properties?.[key];
 
-    results.push(checked === propValue);
+    booleanResults.push(isChecked === propValue);
   });
 
-  if (noFiltersApplied) {
-    return true;
-  }
+  const passBooleanFilters = noBooleanFiltersApplied || !booleanResults.includes(false);
+  const featureVenueType =
+    feature?.properties?.venue_type_canonical || canonicalizeVenueType(feature?.properties?.venue_type);
+  const passVenueTypeFilters = venueTypes.length === 0 || venueTypes.includes(featureVenueType);
 
-  return !results.includes(false);
+  return passBooleanFilters && passVenueTypeFilters;
 }
 
 export function filterFeatures(features, filters) {
@@ -28,7 +37,12 @@ export function filterFeatures(features, filters) {
 }
 
 export function hasActiveFilters(filters) {
-  return Object.values(filters).some(Boolean);
+  const venueTypeFilters = Array.isArray(filters?.venueTypes) ? filters.venueTypes : [];
+  if (venueTypeFilters.length > 0) {
+    return true;
+  }
+
+  return Object.entries(filters || {}).some(([key, value]) => key !== "venueTypes" && Boolean(value));
 }
 
 export function getFeatureBounds(features) {

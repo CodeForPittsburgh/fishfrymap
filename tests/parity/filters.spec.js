@@ -78,3 +78,25 @@ test("ash wednesday filter can be toggled without breaking results", async ({ pa
   await page.getByRole("button", { name: "Find those Fish Fries!" }).click();
   await expect(page.locator("#filterSidebar-btn")).toContainText("Filter");
 });
+
+test("venue type filter can be toggled without breaking results", async ({ page }) => {
+  await page.goto("/");
+  await waitForSidebarData(page);
+  const before = await page.locator("#feature-list .feature-row").count();
+
+  await openFilterModal(page);
+  await page.locator("input#venue-type-fire_department").check();
+  await page.getByRole("button", { name: "Find those Fish Fries!" }).click();
+
+  await expect(page.locator("#filterSidebar-btn")).toContainText("Filtered");
+  await expect
+    .poll(async () => {
+      return page.locator("#feature-list .feature-row").count();
+    })
+    .toBeLessThanOrEqual(before);
+
+  await page.locator("#filterSidebar-btn").click();
+  await page.locator("input#venue-type-fire_department").uncheck();
+  await page.getByRole("button", { name: "Find those Fish Fries!" }).click();
+  await expect(page.locator("#filterSidebar-btn")).toContainText("Filter");
+});

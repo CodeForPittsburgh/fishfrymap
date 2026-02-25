@@ -11,6 +11,7 @@ import {
 const baseFeature = {
   properties: {
     publish: true,
+    venue_type_canonical: "church",
     drive_thru: true,
     lunch: false,
     homemade_pierogies: true,
@@ -34,7 +35,8 @@ const allOff = {
   handicap: false,
   GoodFriday: false,
   AshWednesday: false,
-  publish: false
+  publish: false,
+  venueTypes: []
 };
 
 describe("filterUtils", () => {
@@ -63,6 +65,12 @@ describe("filterUtils", () => {
         }
       )
     ).toBe(false);
+  });
+
+  it("filters by selected venue types", () => {
+    expect(filterFeature(baseFeature, { ...allOff, venueTypes: ["church"] })).toBe(true);
+    expect(filterFeature(baseFeature, { ...allOff, venueTypes: ["fire_department"] })).toBe(false);
+    expect(filterFeature(baseFeature, { ...allOff, venueTypes: ["church", "restaurant"] })).toBe(true);
   });
 
   it("matches liturgical day filters from feature properties", () => {
@@ -112,6 +120,29 @@ describe("filterUtils", () => {
     expect(filtered.length).toBe(1);
     expect(hasActiveFilters(allOff)).toBe(false);
     expect(hasActiveFilters({ ...allOff, publish: true })).toBe(true);
+    expect(hasActiveFilters({ ...allOff, venueTypes: ["church"] })).toBe(true);
+  });
+
+  it("combines venue types with boolean filters using AND semantics", () => {
+    const matchingFeature = {
+      ...baseFeature,
+      properties: {
+        ...baseFeature.properties,
+        drive_thru: true,
+        venue_type_canonical: "church"
+      }
+    };
+    const nonMatchingBoolean = {
+      ...baseFeature,
+      properties: {
+        ...baseFeature.properties,
+        drive_thru: false,
+        venue_type_canonical: "church"
+      }
+    };
+
+    expect(filterFeature(matchingFeature, { ...allOff, drive_thru: true, venueTypes: ["church"] })).toBe(true);
+    expect(filterFeature(nonMatchingBoolean, { ...allOff, drive_thru: true, venueTypes: ["church"] })).toBe(false);
   });
 
   it("computes bounds from valid coordinates only", () => {
