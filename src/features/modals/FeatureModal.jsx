@@ -1,3 +1,4 @@
+
 import React, { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,15 +9,16 @@ import {
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
-import { Alert, Button, Card, Col, Modal, Row, Table } from "react-bootstrap";
+import { Alert, Button, Card, Col, Modal, Row, Table, ListGroup, ListGroupItem } from "react-bootstrap";
 
 import { attrClean, boolValue } from "@/domain/featureUtils";
-import { parseDateTimes } from "@/domain/dateUtils";
+import { parseDateTimes, downloadICS, parseEventRange } from "@/domain/dateUtils";
 import { FEATURE_BOOLEAN_FIELD_CONFIG } from "@/domain/filterFieldConfig";
 import { getPrimaryFilterFieldIcon } from "@/icons/filterFieldIcons";
 import "./FeatureModal.css";
 
-function BooleanPanel({ label, value, trueIcon }) {
+// Sub-component to display a boolean value with an icon and label
+const BooleanPanel = ({ label, value, trueIcon }) => {
   const isTrue = boolValue(value);
   const isFalse = value === false || ["false", "False", 0, "No", "no"].includes(value);
 
@@ -49,7 +51,8 @@ function BooleanPanel({ label, value, trueIcon }) {
   );
 }
 
-const ContactTable = ({feature}) => (
+// Sub-component to display the contact information in a table
+const ContactTable = ({ feature }) => (
   <Row>
     <Col sm={12}>
       <h4>Contact</h4>
@@ -82,19 +85,104 @@ const ContactTable = ({feature}) => (
         </tbody>
       </Table>
     </Col>
-  </Row>  
+  </Row>
 )
 
+// Sub-component to display one upcoming time with an ICS link when parseable
+const UpcomingDateTime = ({ dateKey, time, venueName, venueAddress, description }) => {
+  const range = parseEventRange(dateKey, time);
+
+  if (!range) {
+    return <p className="my-0">{time}</p>;
+  }
+
+  const handleICS = (event) => {
+    event.preventDefault();
+    downloadICS({
+      title: `${venueName} Fish Fry`,
+      location: venueAddress,
+      description,
+      startDateTime: range.start,
+      endDateTime: range.end,
+    });
+  };
+
+  return (
+    <div class="d-grid gap-2">
+      <a class="btn btn-outline-primary btn-sm my-1" href="#" role="button" onClick={handleICS} title="Add to calendar">
+        {time}
+      </a>
+    </div>
+  );
+};
+
+const UpcomingDatesColumn = ({ events, hasOpenToday, venueName, venueAddress, menuUrl }) => {
+  const description = `Fish Fry at ${venueName}${menuUrl ? ` | Menu: ${menuUrl}` : ""}`;
+
+  return (
+    <div id="upcoming-dates-column">
+      <h3>{hasOpenToday ? "Upcoming Dates" : "Upcoming Date(s)"}</h3>
+      <ListGroup className="mb-3 shadow">
+        {events.futureGroups.length > 0 || events.closedOnGoodFriday ? (
+          <>
+            {events.futureGroups.map((group) => (
+              <ListGroupItem key={group.dateKey}>
+                <Row>
+                  <Col sm={6} className="d-flex align-items-center">
+                      <p className="fw-bold fs-5 mb-0">
+                        {group.isGoodFriday ? (
+                          <>
+                            Open Good Friday<br />
+                            {group.dateLabel}
+                          </>
+                        ) : group.dateLabel}
+                      </p>
+                  </Col>
+                  <Col sm={6}>
+                    {group.times.map((time, index) => (
+                      <UpcomingDateTime
+                        key={`${group.dateKey}-${index}`}
+                        dateKey={group.dateKey}
+                        time={time}
+                        venueName={venueName}
+                        venueAddress={venueAddress}
+                        description={description}
+                      />
+                    ))}
+                  </Col>
+                </Row>
+              </ListGroupItem>
+            ))}
+            {events.closedOnGoodFriday ? (
+              <ListGroupItem key="closed-on-good-friday">
+                <small>Closed on Good Friday</small>
+              </ListGroupItem>
+            ) : null}
+          </>
+        ) : (
+          <li className="list-group-item small text-muted">
+            Nothing here? We may not have gotten around to recording this information yet. If it's not in the
+            notes below, check with the venue for dates/times.
+          </li>
+        )}
+      </ListGroup>
+    </div>
+  );
+}
+
+// Main component to display the feature details in a modal
 const FeatureModal = ({ show, onHide, feature, currentYear }) => {
+
   const events = useMemo(() => {
     if (!feature) {
       return {
         today: [],
         future: [],
+        futureGroups: [],
+        closedOnGoodFriday: false,
         GoodFriday: false
       };
     }
-
     return parseDateTimes(feature.properties.events, moment());
   }, [feature]);
 
@@ -102,8 +190,12 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
     return null;
   }
 
-  const address = attrClean(feature.properties.venue_address);
-  const directionsUrl = `https://www.google.com/maps/dir//${encodeURIComponent(address)}`;
+  const venueName = attrClean(feature.properties.venue_name);
+  const venueAddress = attrClean(feature.properties.venue_address);
+  const menuUrl = feature.properties.menu?.url;
+  const hasOpenToday = events.today.length > 0;
+  const hasMenuText = !!feature.properties.menu?.text;
+  const directionsUrl = `https://www.google.com/maps/dir//${encodeURIComponent(venueAddress)}`;
   const booleanPanels = FEATURE_BOOLEAN_FIELD_CONFIG.map((field) => ({
     key: field.key,
     label: field.label,
@@ -112,10 +204,10 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
   }));
 
   return (
-    <Modal 
-      show={show} 
-      onHide={onHide} 
-      size="xl" 
+    <Modal
+      show={show}
+      onHide={onHide}
+      size="xl"
       fullscreen={'md-down'}
       id="featureModal"
       className="shadow-lg"
@@ -123,7 +215,7 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
       <Modal.Header closeButton>
         <div id="feature-info-header">
           <h3>
-            <span id="feature-title">{attrClean(feature.properties.venue_name)}</span>
+            <span id="feature-title">{venueName}</span>
           </h3>
           <span className="fs-6 text-secondary">
             {attrClean(feature.properties.venue_type)}
@@ -132,22 +224,20 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
       </Modal.Header>
       <Modal.Body className="p-3">
 
-          <Row className="mb-3 pb-3 border-bottom border-secondary">
-            <Col md={8}>
-              <span id="feature-subtitle" className="fs-5">{address}</span>
-            </Col>
-            <Col md={4}>
-              <Button
-                href={directionsUrl} target="_blank" rel="noreferrer"
-                className="w-100"
-                size="sm"
-              >
-                Get Directions <FontAwesomeIcon icon={faLocationArrow}></FontAwesomeIcon>
-              </Button>
-            </Col>
-          </Row>
-
-        
+        <Row className="mb-3 pb-3 border-bottom border-secondary">
+          <Col md={8}>
+            <span id="feature-subtitle" className="fs-5">{venueAddress}</span>
+          </Col>
+          <Col md={4}>
+            <Button
+              href={directionsUrl} target="_blank" rel="noreferrer"
+              className="w-100"
+              size="sm"
+            >
+              Get Directions <FontAwesomeIcon icon={faLocationArrow}></FontAwesomeIcon>
+            </Button>
+          </Col>
+        </Row>
 
         {!feature.properties.publish ? (
           <Alert variant="info" className="my-3">
@@ -170,16 +260,16 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
         <div
           id="feature-info-content"
           className={!feature.properties.publish ? "is-unpublished" : ""}
-        >        
+        >
 
           {feature.properties.procedures ? (
             <Alert variant="warning">
-              <p> <FontAwesomeIcon icon={faWarning}/> Something important to note about this Fish Fry:</p>
+              <p> <FontAwesomeIcon icon={faWarning} /> Something important to note about this Fish Fry:</p>
               <p className="fs-4">{feature.properties.procedures}</p>
             </Alert>
-          ) : null}          
+          ) : null}
 
-          {events.today.length > 0 && feature.properties.publish ? (
+          {hasOpenToday && feature.properties.publish ? (
             <h2>
               Open Today:{" "}
               {events.today.map((event) => (
@@ -191,7 +281,7 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
 
 
           <Row className="mb-3">
-            <Col lg={7}>
+            <Col lg={hasMenuText ? 7 : 4}>
               <h2>Menu</h2>
               {feature.properties.menu?.url ? (
                 <h4>
@@ -212,22 +302,14 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
                 </p>
               )}
             </Col>
-            <Col lg={5}>
-              <h3>{events.today.length > 0 ? "Upcoming Dates" : "Upcoming Date(s)"}</h3>
-              <ul className="list-unstyled">
-                {events.future.length > 0 ? (
-                  events.future.map((event) => (
-                    <li key={event}>
-                      <small>{event}</small>
-                    </li>
-                  ))
-                ) : (
-                  <li className="small text-muted">
-                    Nothing here? We may not have gotten around to recording this information yet. If it&apos;s not in the
-                    notes below, check with the venue for dates/times.
-                  </li>
-                )}
-              </ul>
+            <Col lg={hasMenuText ? 5 : 8}>
+              <UpcomingDatesColumn
+                events={events}
+                hasOpenToday={hasOpenToday}
+                venueName={venueName}
+                venueAddress={venueAddress}
+                menuUrl={menuUrl}
+              />
             </Col>
           </Row>
 
@@ -258,7 +340,7 @@ const FeatureModal = ({ show, onHide, feature, currentYear }) => {
         {!feature.properties.publish ? null : (
           <ContactTable feature={feature} />
         )}
-        
+
 
       </Modal.Body>
       <Modal.Footer>
