@@ -8,7 +8,7 @@ const initialState = {
   zoom: 10,
   bounds: null,
   overlayVisible: true,
-  activeBasemap: "light"
+  activeBasemap: "dark"
 };
 
 const mapSlice = createSlice({

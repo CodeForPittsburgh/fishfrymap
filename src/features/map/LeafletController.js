@@ -16,7 +16,7 @@ const normalizedMapboxAccessToken = mapboxAccessToken?.trim() || "";
 const configuredBasemapProvider = import.meta.env.VITE_LEAFLET_BASEMAP_PROVIDER;
 
 function getBasemapProvider() {
-  const normalized = configuredBasemapProvider?.trim().toLowerCase();
+  const normalized = configuredBasemapProvider?.trim().toLowerCase() || BASEMAP_PROVIDER_MAPBOX;
   if (normalized === BASEMAP_PROVIDER_MAPBOX) {
     if (!normalizedMapboxAccessToken) {
       console.warn(
@@ -28,7 +28,7 @@ function getBasemapProvider() {
     return BASEMAP_PROVIDER_MAPBOX;
   }
 
-  if (!normalized || normalized === BASEMAP_PROVIDER_CARTO) {
+  if (normalized === BASEMAP_PROVIDER_CARTO) {
     return BASEMAP_PROVIDER_CARTO;
   }
 
@@ -109,8 +109,8 @@ export class LeafletController {
     this.listeners = new Map();
     this.overlayVisible = true;
     this.baseLayers = {};
-    this.activeBasemap = "light";
-    this.basemapProvider = BASEMAP_PROVIDER_CARTO;
+    this.activeBasemap = "dark";
+    this.basemapProvider = BASEMAP_PROVIDER_MAPBOX;
   }
 
   getBasemapIdForLayer(layer) {
@@ -141,7 +141,7 @@ export class LeafletController {
 
     if (this.basemapProvider === BASEMAP_PROVIDER_MAPBOX) {
       this.baseLayers.dark = L.tileLayer(
-        `https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}?access_token=${normalizedMapboxAccessToken}`,
+        `https://api.mapbox.com/styles/v1/civicmapper/cmm14av13009y01s2ax9dcjto/tiles/512/{z}/{x}/{y}?access_token=${encodeURIComponent(normalizedMapboxAccessToken)}`,
         {
           tileSize: 512,
           zoomOffset: -1,
@@ -152,7 +152,7 @@ export class LeafletController {
       );
 
       this.baseLayers.light = L.tileLayer(
-        `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/512/{z}/{x}/{y}?access_token=${normalizedMapboxAccessToken}`,
+        `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/512/{z}/{x}/{y}?access_token=${encodeURIComponent(normalizedMapboxAccessToken)}`,
         {
           tileSize: 512,
           zoomOffset: -1,
@@ -210,7 +210,7 @@ export class LeafletController {
     this.map = L.map(containerEl, {
       zoom: 10,
       center: [40.4452, -79.9866],
-      layers: [this.baseLayers.light, this.markerClusters, this.highlightLayer],
+      layers: [this.baseLayers.dark, this.markerClusters, this.highlightLayer],
       zoomControl: false,
       attributionControl: false
     });

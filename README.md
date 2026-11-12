@@ -33,10 +33,12 @@ Current variables:
 
 - `VITE_FISHFRY_API_URL=https://data.pghfishfry.org/api/fishfries/`
 - `VITE_FISHFRY_FALLBACK_URL=/data/fishfrymap.geojson`
-- `VITE_LEAFLET_BASEMAP_PROVIDER=carto` (`carto` or `mapbox`; `mapbox` requires `VITE_MAPBOX_TOKEN`)
-- `VITE_MAPBOX_TOKEN=` (optional for geocoding; required when `VITE_LEAFLET_BASEMAP_PROVIDER=mapbox`)
+- `VITE_LEAFLET_BASEMAP_PROVIDER=mapbox` (default; `carto` is also supported)
+- `VITE_MAPBOX_TOKEN=` (public Mapbox token required for Mapbox basemaps and address search; included in the browser build)
 - `VITE_CLIENT_ERROR_DSN=` (optional, client-side error reporting target)
 - `VITE_CLIENT_ERROR_SAMPLE_RATE=1` (`0..1`)
+
+The map opens with the custom CivicMapper dark style `mapbox://styles/civicmapper/cmm14av13009y01s2ax9dcjto`. Mapbox Light v11 is available in the basemap switcher. If the Mapbox token is missing, the app falls back to CARTO. Restart the development server or rebuild the production bundle after changing environment variables.
 
 ### 3) Start local development server
 
@@ -126,7 +128,8 @@ The Fish Fry Map is built and maintained by members of Code for Pittsburgh.
 
 ### Basemaps
 
-- **Light** and **Dark** basemaps: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CARTO</a>, &copy; <a href="https://www.mapbox.com">Mapbox</a>
+- **Light**: Mapbox Light v11. **Dark**: custom CivicMapper style, served by Mapbox. &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com">Mapbox</a>.
+- Optional/fallback basemaps: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>.
 
 ### Icons
 
