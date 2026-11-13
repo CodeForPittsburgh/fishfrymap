@@ -38,7 +38,7 @@ Current variables:
 - `VITE_CLIENT_ERROR_DSN=` (optional, client-side error reporting target)
 - `VITE_CLIENT_ERROR_SAMPLE_RATE=1` (`0..1`)
 
-The map opens with the custom CivicMapper dark style `mapbox://styles/civicmapper/cmm14av13009y01s2ax9dcjto`. Mapbox Light v11 is available in the basemap switcher. If the Mapbox token is missing, the app falls back to CARTO. Restart the development server or rebuild the production bundle after changing environment variables.
+The map opens with Mapbox Dark v11. The custom CivicMapper style `mapbox://styles/civicmapper/cmm14av13009y01s2ax9dcjto` imports Mapbox Standard, which is not supported by the [Static Tiles API](https://docs.mapbox.com/api/maps/static-tiles/) used by Leaflet. To restore a custom dark style, publish one based on a compatible style such as Dark v11 and update the dark tile URL in `src/features/map/LeafletController.js`. Mapbox Light v11 is available in the basemap switcher. If the Mapbox token is missing, the app falls back to CARTO. Restart the development server or rebuild the production bundle after changing environment variables.
 
 ### 3) Start local development server
 
@@ -128,7 +128,7 @@ The Fish Fry Map is built and maintained by members of Code for Pittsburgh.
 
 ### Basemaps
 
-- **Light**: Mapbox Light v11. **Dark**: custom CivicMapper style, served by Mapbox. &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com">Mapbox</a>.
+- **Light**: Mapbox Light v11. **Dark**: Mapbox Dark v11. &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com">Mapbox</a>.
 - Optional/fallback basemaps: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>.
 
 ### Icons

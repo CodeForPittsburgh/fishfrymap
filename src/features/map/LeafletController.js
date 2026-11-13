@@ -140,8 +140,9 @@ export class LeafletController {
     this.basemapProvider = getBasemapProvider();
 
     if (this.basemapProvider === BASEMAP_PROVIDER_MAPBOX) {
+      // Static Tiles cannot render styles that import Mapbox Standard.
       this.baseLayers.dark = L.tileLayer(
-        `https://api.mapbox.com/styles/v1/civicmapper/cmm14av13009y01s2ax9dcjto/tiles/512/{z}/{x}/{y}?access_token=${encodeURIComponent(normalizedMapboxAccessToken)}`,
+        `https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/512/{z}/{x}/{y}?access_token=${encodeURIComponent(normalizedMapboxAccessToken)}`,
         {
           tileSize: 512,
           zoomOffset: -1,
