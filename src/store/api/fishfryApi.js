@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const DEFAULT_URL = "https://data.pghfishfry.org/api/fishfries/";
+const DEFAULT_URL = "https://pghfishfry.onrender.com/api/fishfries/";
 const DEFAULT_FALLBACK_URL = `${import.meta.env.BASE_URL}data/fishfrymap.geojson`;
 
 function withSource(data, source) {

@@ -4,7 +4,7 @@ The Pittsburgh Lenten Fish Fry Map is the brainchild of Hollen Barmer, who has t
 
 ## Where Does the Fish Fry data shown on the map come from?
 
-The raw data isn't here! That is by design. The map gets data from the Fish Fry API @ [fishfry.codeforpgh.com/api/fishfries](http://fishfry.codeforpgh.com/api/fishfries). Anyone can use that URL to get data to make their own fish fry map, or do things with the Fish Fry data that we haven't thought of. If you want to learn more about the database and API, head over to the [Fish Fry Form](https://github.com/CodeForPittsburgh/fishfryform) repository.
+The raw data isn't here! That is by design. The map gets data from the Fish Fry API @ [pghfishfry.onrender.com/api/fishfries/](https://pghfishfry.onrender.com/api/fishfries/). Anyone can use that URL to get data to make their own fish fry map, or do things with the Fish Fry data that we haven't thought of. If you want to learn more about the database and API, head over to the [Fish Fry Form](https://github.com/CodeForPittsburgh/fishfryform) repository.
 
 Occassional snapshots of the data are kept in `public/data` for local fallback and posterity.
 
@@ -31,7 +31,7 @@ cp .env.example .env
 
 Current variables:
 
-- `VITE_FISHFRY_API_URL=https://data.pghfishfry.org/api/fishfries/`
+- `VITE_FISHFRY_API_URL=https://pghfishfry.onrender.com/api/fishfries/`
 - `VITE_FISHFRY_FALLBACK_URL=/data/fishfrymap.geojson`
 - `VITE_LEAFLET_BASEMAP_PROVIDER=mapbox` (default; `carto` is also supported)
 - `VITE_MAPBOX_TOKEN=` (public Mapbox token required for Mapbox basemaps and address search; included in the browser build)
@@ -108,7 +108,7 @@ Primary brand color is set to `#fcb82e` in `src/styles/theme-overrides.css`.
 
 Map data is fetched from:
 
-- `https://data.pghfishfry.org/api/fishfries/`
+- `https://pghfishfry.onrender.com/api/fishfries/`
 
 If the primary API is unavailable, the app falls back to:
 

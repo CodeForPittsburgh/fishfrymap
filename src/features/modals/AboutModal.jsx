@@ -55,7 +55,11 @@ const AboutModal = ({ show, onHide }) => {
                 <a href="http://leafletjs.com/" target="_blank" rel="noreferrer">
                   Leaflet
                 </a>
-                . Open source, MIT licensed, and available on{" "}
+                . Licensed under the{" "}
+                <a href="https://github.com/CodeForPittsburgh/fishfrymap/blob/master/LICENSE" target="_blank" rel="noreferrer">
+                  GNU AGPL v3 only
+                </a>{" "}
+                and available on{" "}
                 <a href="https://github.com/CodeForPittsburgh/fishfrymap" target="_blank" rel="noreferrer">
                   GitHub
                 </a>. The server, database, and basemap services have been donated by <a href="https://www.civicmapper.com" target="_blank" rel="noreferrer">
@@ -93,7 +97,7 @@ const AboutModal = ({ show, onHide }) => {
                 <li>
                   Fish Fry Form: Fish Fry Curation Tool:{" "}
                   <a href="https://github.com/CodeForPittsburgh/fishfryform">Repository</a> |{" "}
-                  <a href="http://data.pghfishfry.org">Site</a>
+                  <a href="https://pghfishfry.onrender.com/">Site</a>
                 </li>
                 <li>
                   Fish Fry Map (this site):{" "}
@@ -112,7 +116,7 @@ const AboutModal = ({ show, onHide }) => {
                 </li>
                 <li>
                   Get the data as GeoJSON directly from the{" "}
-                  <a href="https://data.pghfishfry.org/api/fishfries/">Fish Fry API</a>. We have limited hosting
+                  <a href="https://pghfishfry.onrender.com/api/fishfries/">Fish Fry API</a>. We have limited hosting
                   resources. Please let us know if you plan on using the data on a high-traffic site.
                 </li>
               </ul>

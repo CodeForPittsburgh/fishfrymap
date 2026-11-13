@@ -52,7 +52,7 @@
         "pittsburgh"
     ],
     "author": "Christian Gass",
-    "license": "ISC",
+    "license": "AGPL-3.0-only",
     "bugs": {
         "url": "https://github.com/CodeForPittsburgh/fishfrymap/issues"
     },
